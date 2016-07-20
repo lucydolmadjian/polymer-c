@@ -151,21 +151,21 @@ int main( int argc, char *argv[] )
         deliveryMethod = atoi(argv[11]);
     printf("This is argument 11: %d\n", deliveryMethod);
     
-//    if(argv[12]) //hardcoded vs command line iSites
-//        commandiSites = atoi(argv[12]);
-//    printf("This is argument 12: %d/n", commandiSites);
-//
-//    if (commandiSites)
-//    {
-//        if(argv[13])
-//            iSiteTot=atoi(argv[13]);
-//        printf("This is argument 13: %d/n", iSiteTot);
-//        
-//        if(argv[14])
-//            strcpy(input,argv[14]);
-//            strcpy(iSiteLocations,argv[14]);
-//            printf("This is argument 14: %s and %s", iSiteLocations, input);
-//    }
+    if(argv[12]) //hardcoded vs command line iSites
+        commandiSites = atoi(argv[12]);
+    printf("This is argument 12: %d/n", commandiSites);
+
+    if (commandiSites)
+    {
+        if(argv[13])
+            iSiteTot=atoi(argv[13]);
+        printf("This is argument 13: %d/n", iSiteTot);
+        
+        if(argv[14])
+            strcpy(input,argv[14]);
+            strcpy(iSiteLocations,argv[14]);
+            printf("This is argument 14: %s and %s", iSiteLocations, input);
+    }
     
     
 	iseed = RanInitReturnIseed(0);
