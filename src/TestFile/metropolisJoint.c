@@ -1,5 +1,11 @@
 /*** Allard Group jun.allard@uci.edu                    ***/
 
+
+
+
+//Here I'm playing with things, just to play with them.
+
+
 void metropolisJoint();
 void stationarity();
 void appendBins();
