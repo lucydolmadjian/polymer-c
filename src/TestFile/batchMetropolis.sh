@@ -3,9 +3,9 @@
 
 NRequested=0            # initialize number of runs submitted
 
-NRODS=5
+NRODS=50
 
-RATIO=1
+RATIO=5
 
 FORCE=0
 
@@ -72,7 +72,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             echo "Line $ITERATIONS of file is $STIFFISITES"
 
             # run program with specified parameters
-            ./metropolis.out MultipleBinding.$ITERATIONS $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD &
+            ./metropolis.out MultipleBindingTestReeN50Ratio5.2 $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]

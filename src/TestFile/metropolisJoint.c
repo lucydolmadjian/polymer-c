@@ -1,11 +1,5 @@
 /*** Allard Group jun.allard@uci.edu                    ***/
 
-
-
-
-//Here I'm playing with things, just to play with them.
-
-
 void metropolisJoint();
 void stationarity();
 void appendBins();
@@ -13,235 +7,19 @@ void rotate(double *tIn, double *e1In, double *e2In, double *tOut, double *e1Out
 
 void metropolisJoint()
 {
-    
-    /********* INITIALIZE ISITES *******************/
-//    
-//    
-//    for (iy=0;iy<iSiteTot;iy++)
-//    {
-//        iSite[iy]=0;
-//    }
-    
-    //switch (commandiSites)
-    //{
-            //case 0:
-    
-                switch (testRun)
-                {
-                    case 0:  // iSites initialized for human CD3Zeta-Chain
-                        
-                        iSiteTot = 7;
-                        
-                        
-                        for (iy=0;iy<iSiteTot;iy++)
-                        {
-                            iSite[iy]=0;
-                        }
-                        
-                        iSite[0]=42;
-                        iSite[1]=50;
-                        iSite[2]=61;
-                        iSite[3]=89;
-                        iSite[4]=101;
-                        iSite[5]=120;
-                        iSite[6]=131;
-                        break;
-                        
-                    case 1: // iSites for formin //for testing - N=10
-                        
-                        iSiteTot = 3;
-                        
-                        for (iy=0;iy<iSiteTot;iy++)
-                        {
-                            iSite[iy]=0;
-                        }
-                        
-                        iSite[0]=0;
-                        iSite[1]=3;
-                        iSite[2]=7;
-                        break;
-                        
-                        
-                    case 2: //test case 2 - stiffen none, but test all iSites, make Ratio half of Ratio for case 1
-                        
-                        iSiteTot = 7;
-                        
-                        for (iy=0;iy<iSiteTot;iy++)
-                        {
-                            iSite[iy]=0;
-                        }
-                        
-                        iSite[0]=0;
-                        iSite[1]=1;
-                        iSite[2]=2;
-                        iSite[3]=3;
-                        iSite[4]=4;
-                        iSite[5]=5;
-                        iSite[6]=6;
-                        break;
-                        
-                    case 3:
-                        
-                        iSiteTot = 2;
-                        
-                        for(iy=0;iy<iSiteTot;iy++)
-                        {
-                            iSite[iy]=0;
-                        }
-                        
-                        iSite[0]=2;
-                        iSite[1]=4;
-                }
-            
-            //break;
-            
-            
-            
-//            case 1:
-//            
-//                for (iy=0;iy<iSiteTot;iy++)
-//                {
-//                    iSite[iy]=0;
-//                }
-//            
-//            printf("Total iSites: %ld", iSiteTot);
-//            
-//            //for debugging
-//            for(iy=0;iy<iSiteTot;iy++)
-//        {
-//            printf("iSite[%ld] = %ld", iy, iSite[iy]);
-//        }
-//            
-//                //char input[] = iSiteLocations;
-//                printf("I want to split this into tokens: %s", input);
-//                char* strArray[NMAX];
-//                char *token = strtok(input, " ");
-//                
-//                //for(int j = 0; j<NMAX;j++)
-//                //{
-//                //    strArray[j] = new char[4];
-//                //}
-//                
-//                while(token != NULL)
-//                {
-//                    strcpy(strArray[st],token);
-//                    printf("This is the next token: %s\n",token); //for debugging
-//                    token = strtok(NULL, " ");
-//                    st++;
-//                }
-//            
-//                //for debugging
-//            
-//                if (iSiteTot!=st)
-//                {
-//                    printf("Warning! iSite Total is %ld but Number of iSites in String is %ld ", iSiteTot, st);
-//                }
-//            
-//                //reassign strings as doubles
-//                for(iy=0;iy<st;iy++)
-//                {
-//                    iSite[iy]=atof(strArray[iy]);
-//                }
-//            
-//                //for debugging
-//                for(iy=0;iy<iSiteTot;iy++)
-//                {
-//                    printf("iSite[%ld] = %ld", iy, iSite[iy]);
-//                }
-//            
-//            break;
-//    }
 
-    /********* INITIALIZE BOUND ISITES *******************/
     
-    if (MULTIPLE)
-    {
+//    /********* INITIALIZE ISITES AND BSITES *******************/
+
+        getSites();
     
-    //switch () //add more cases later
-    //{
-        //case 0: // arbitrary subset are occupied
-            
-            boundTotal = 1; //total number of iSites bound
-            
-            iSiteBound[0]=2; //currently identifying by location
-            //what is the best way to do this - identify by location or identify by iSite number?
-            //pro for location - can specify locations other than iSites to be bound - but then might want to change name
-    //}
-    }
     
-    /********* STIFFEN SEGMENTS *******************/
-    
+        /********* STIFFEN SEGMENTS *******************/
     
     if (StiffenRange > -1) //stiffen only if StiffenRange is 0 or greater
     {
-    
-    
-        //initializes phosiSites to 0 (none phosphorylated)
-        for(ty=0;ty<iSiteTot;ty++)
-        {
-            phosiSites[ty]=0;
-        }
-    
-
-    
-        //initializes phosiSites to 0 (none phosphorylated)
-        for(ty=0;ty<iSiteTot;ty++)
-        {
-            phosiSites[ty]=0;
-        }
-    
-    
-        printf("This is a string: %s\n", phosphorylatediSites);
-    
-        //read string and assign to double vector
-    
-        // 1 is occupied iSite (phosphorylated), 0 is unoccupied
-    
-        switch (testRun)
-        {
-            case 0:
-        
-                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6]);
-                break;
-            
-            case 1:
-            
-                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
-                break;
-            
-            case 2:
-            
-                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
-                break;
-        }
-    
-    
-        for (iy=0;iy<iSiteTot;iy++)
-        {
-            printf("phosiSites[ %ld ] =  %f\n",iy, phosiSites[iy]);
-        }
-    
-        //initializes stiffened rods to 0 (none stiff)
-        for(i=0;i<N;i++)
-        {
-            Stiff[i] =0;
-        }
-    
-
-    
-        //Stiffen segments
-        for(ty=0;ty<iSiteTot;ty++)
-        {
-            if(phosiSites[ty]==1) //might want to check the truth value on this - equals for double?
-            {
-                for(i=(iSite[ty]-StiffenRange);i<(iSite[ty]+StiffenRange+1);i++) //can I even put this stuff in a for loop?
-                {
-                    Stiff[i]=1; //set that joint to "stiff"
-                }
-            }
-        }
+        initializeStiffSites();
     }
-    
     
     /********* INITIALIZE CONFIGURATION *******************/
 
@@ -268,11 +46,20 @@ void metropolisJoint()
 		
 		r[i][0]  = 0; 
 		r[i][1]  = 0;
-		r[i][2]  = 0;
+		r[i][2]  = i+1;
 		
 		t[i][0]  = 0;
 		t[i][1]  = 0;
 		t[i][2]  = 1;
+        
+        e1[i][0] = 1;  
+        e1[i][1] = 0;
+        e1[i][2] = 0;
+        
+        e2[i][0] = 0;
+        e2[i][1] = 1;
+        e2[i][2] = 0;
+        
 	}
     
 	
@@ -297,7 +84,7 @@ void metropolisJoint()
     initializeSummary();
 
     /********* BEGIN LOOP THROUGH ITERATIONS! *******************/
-    
+    //for (m=0;m<100;m++)
 	while(!convergedTF && nt < NTMAX) // Time loop!
     {
 
@@ -349,7 +136,10 @@ void metropolisJoint()
 		
 		
 		iPropose = floor(N*TWISTER); // Initialize. This is the joint we will adjust this time.
-        printf("This is the joint we are rotating: %ld", iPropose);
+        
+//        //iPropose=32;
+//        printf("This is the joint we are rotating: %ld\n", iPropose);
+//        fflush(stdout);
         
         
         //set joints to stiff based on which iSites are occupied and the stiffness range
@@ -376,7 +166,8 @@ void metropolisJoint()
         constraintProposalsTotal = 0;
         long rounds = 0;
 		constraintSatisfiedTF = 0;
-		while(!constraintSatisfiedTF) // keep generating proposal configurations until we get one that satisfies the constraint
+        //for(j=0;j<5;j++)
+		while(!constraintSatisfiedTF && constraintProposalsTotal < CPMAX) // keep generating proposal configurations until we get one that satisfies the constraint
         {
             iChi = floor(3*TWISTER);
 				
@@ -403,8 +194,12 @@ void metropolisJoint()
 
             // -- translate to proposal configuration --
             // rotate base
-            rotate(&tBase[0], &e1Base[0], &e2Base[0], &tPropose[0][0], &e1Propose[0][0], &e2Propose[0][0],
-                    phiPropose[0], thetaPropose[0], psiPropose[0]);
+            rotate(&tBase[0], &e1Base[0], &e2Base[0], &tPropose[0][0], &e1Propose[0][0], &e2Propose[0][0], phiPropose[0], thetaPropose[0], psiPropose[0]);
+            
+        
+//            printf("This is e1Propose: \n 1: %f\n 2: %f\n 3:%f\n", e1Propose[0][0],e1Propose[0][1],e1Propose[0][2]);
+            
+            
             for(ix=0;ix<3;ix++)
                 rPropose[0][ix] = rBase[ix] + tPropose[0][ix];
 				
@@ -441,10 +236,10 @@ void metropolisJoint()
                     rPropose[i][ix] = rPropose[i-1][ix] + tPropose[i][ix];
             }
             
-            
-            
-            printf("This is rPropose: \n %f\n 2: %f\n 3:%f\n", rPropose[42][0],rPropose[42][1],rPropose[42][2]);
-            printf("This is e1Propose: \n %f\n 2: %f\n 3:%f\n", e1Propose[42][0],e1Propose[42][1],e1Propose[42][2]);
+            //how does this work?  only returns first component of t, e1, e2? where are the other components?
+//            
+//            printf("This is rPropose: \n 1: %f\n 2: %f\n 3:%f\n", rPropose[4][0],rPropose[4][1],rPropose[4][2]);
+//            printf("This is e1Propose: \n 1: %f\n 2: %f\n 3:%f\n", e1Propose[4][0],e1Propose[4][1],e1Propose[4][2]);
 				
             /********* 2. Test constraints *******************/
             constraintSatisfiedTF=1;
@@ -462,25 +257,36 @@ void metropolisJoint()
             } //finished first constraint
             
             //if (MULTIPLE && constraintSatisfiedTF)
-            if (0)
+            if (1)
             {
                 
                 //printf("Testing bound ligands.");
                 
                 for(ib=0;ib<boundTotal;ib++) //for each bound iSite, find the center of the attached ligand
                 {
+                    
+                    if( (ib % 2) == 0 )
+                    {
                     currentBoundSite = iSiteBound[ib];
                     rLigandCenterBound[ib][0] = rPropose[currentBoundSite][0] + rLigand*e1Propose[currentBoundSite][0];
                     rLigandCenterBound[ib][1] = rPropose[currentBoundSite][1] + rLigand*e1Propose[currentBoundSite][1];
                     rLigandCenterBound[ib][2] = rPropose[currentBoundSite][2] + rLigand*e1Propose[currentBoundSite][2];
+                    }
+                    else
+                    {
+                        currentBoundSite = iSiteBound[ib];
+                        rLigandCenterBound[ib][0] = rPropose[currentBoundSite][0] + rLigand*e2Propose[currentBoundSite][0];
+                        rLigandCenterBound[ib][1] = rPropose[currentBoundSite][1] + rLigand*e2Propose[currentBoundSite][1];
+                        rLigandCenterBound[ib][2] = rPropose[currentBoundSite][2] + rLigand*e2Propose[currentBoundSite][2];
+                    }
 
                 }
                 
                 
                // printf("This is rPropose: \n %f\n 2: %f\n 3:%f\n", rPropose[42][0],rPropose[42][1],rPropose[42][2]);
                // printf("This is e1Propose: \n %f\n 2: %f\n 3:%f\n", e1Propose[42][0],e1Propose[42][1],e1Propose[42][2]);
-
-                printf("This is the center:\n 1: %f\n 2: %f\n 3:%f\n", rLigandCenterBound[0][0],rLigandCenterBound[0][1],rLigandCenterBound[0][2]);
+//
+//                printf("This is the center:\n 1: %f\n 2: %f\n 3:%f\n", rLigandCenterBound[0][0],rLigandCenterBound[0][1],rLigandCenterBound[0][2]);
                 for (ib=0;ib<boundTotal;ib++) //for each bound ligand
                 {
                     
@@ -502,12 +308,12 @@ void metropolisJoint()
                     }
                     
                     
-                    if (0) //if constraint is still satisfied, test ligand sphere with other ligands
+                    if (1) //if constraint is still satisfied, test ligand sphere with other ligands
                     {
                         //printf("Testing everything");
                         for (ib2=(ib+1);ib2<boundTotal;ib2++) //for each next ligand
                         {
-                            printf("Ooops!  There shouldn't be anything for me to test!");
+                            //printf("Ooops!  There shouldn't be anything for me to test!");
                             
                             if ((rLigandCenterBound[ib][0]-rLigandCenterBound[ib2][0])*(rLigandCenterBound[ib][0]-rLigandCenterBound[ib2][0])+(rLigandCenterBound[ib][1]-rLigandCenterBound[ib2][1])*(rLigandCenterBound[ib][1]-rLigandCenterBound[ib2][1])+(rLigandCenterBound[ib][2]-rLigandCenterBound[ib2][2])*(rLigandCenterBound[ib][2]-rLigandCenterBound[ib2][2])<= (2*rLigand)*(2*rLigand)) //if distance between centers is less than 2*rLigand, then ligands are intersecting
                                 
@@ -534,9 +340,21 @@ void metropolisJoint()
 //            }
             
         } // finished while-loop to impose constraint
+//        if (constraintProposalsTotal>1)
+//        {
+//            printf("Constraint Proposals Total: %ld\n", constraintProposalsTotal);
+//            fflush(stdout);
+//        }
+        //printf("YAY!  I'm done with the WHILE LOOP!\n");
         
-        printf("YAY!  I'm done with the WHILE LOOP!");
-        
+        if (constraintProposalsTotal >= CPMAX)
+        {
+            printf("Exceeded maximum proposals.\n");
+            fflush(stdout);
+            
+            exit(0);
+            
+        }
         /********* 3. Metropolis test *******************/
         // We now have a propsoal configuration that passes the constraints.
         // Step 3 is to see if it passes our acceptance test (Metropolis test).

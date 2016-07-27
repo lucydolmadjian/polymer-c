@@ -13,6 +13,7 @@
 #define KSCRITICAL 0.005
 #define MEMBRANE 0
 #define MULTIPLE 1
+#define CPMAX    1e8
 
 #include <math.h>
 #include <stdlib.h>
@@ -29,9 +30,9 @@
 
 char listName[100];
 FILE *fList;
-
-char listName2[100] = "TestOutput";
-FILE *fList2;
+//
+//char listName2[100] = "TestOutput";
+//FILE *fList2;
 
 long N, ntNextStationarityCheck, iBin;
 
@@ -63,6 +64,8 @@ int deliveryMethod;
 
 long boundToBaseDeliver[NMAX];
 
+long j,m;
+
 long constraintProposals, constraintProposalsTotal;
 
 //long commandiSites;
@@ -83,7 +86,10 @@ int convergedTF, constraintSatisfiedTF, verboseTF, testRun;
 /*******************************************************************************/
 
 #include "outputControl.c"
+#include "getSites.c"
+#include "initializeStiffSites.c"
 #include "metropolisJoint.c"
+
 
 /*******************************************************************************/
 //  MAIN
