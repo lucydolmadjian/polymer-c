@@ -36,7 +36,7 @@ FILE *fList;
 
 long N, ntNextStationarityCheck, iBin;
 
-long iSite[NMAX], iSiteTot, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
+long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
 double c0, c1, rLigand;
 double ree, rM, rH, ksStatistic;
 long rMCounts[NBINS], rMCountsPrevious[NBINS];
@@ -56,7 +56,7 @@ double StiffenRange,phosiSites[NMAX], Stiff[NMAX];
 char phosphorylatediSites[4*NMAX],phosphorylatediSitesNoSpace[NMAX];
 
 double rLigandCenterBound[NMAX][3];
-long iSiteBound[NMAX], boundTotal, currentBoundSite, ib, ib2;
+long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;
 
 double rLigandCenterBase[3], deliveryDistance;
 long stericOcclusionBase;
@@ -164,8 +164,8 @@ int main( int argc, char *argv[] )
 //    if (commandiSites)
 //    {
 //        if(argv[13])
-//            iSiteTot=atoi(argv[13]);
-//        printf("This is argument 13: %d/n", iSiteTot);
+//            iSiteTotal=atoi(argv[13]);
+//        printf("This is argument 13: %d/n", iSiteTotal);
 //        
 //        if(argv[14])
 //            strcpy(input,argv[14]);

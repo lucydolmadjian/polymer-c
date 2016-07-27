@@ -14,7 +14,7 @@ void initializeStiffSites()
 
         
         //initializes phosiSites to 0 (none phosphorylated)
-        for(ty=0;ty<iSiteTot;ty++)
+        for(ty=0;ty<iSiteTotal;ty++)
         {
             phosiSites[ty]=0;
         }
@@ -22,7 +22,7 @@ void initializeStiffSites()
         
         
         //initializes phosiSites to 0 (none phosphorylated)
-        for(ty=0;ty<iSiteTot;ty++)
+        for(ty=0;ty<iSiteTotal;ty++)
         {
             phosiSites[ty]=0;
         }
@@ -53,7 +53,7 @@ void initializeStiffSites()
         }
         
         
-        for (iy=0;iy<iSiteTot;iy++)
+        for (iy=0;iy<iSiteTotal;iy++)
         {
             printf("phosiSites[ %ld ] =  %f\n",iy, phosiSites[iy]);
         }
@@ -67,7 +67,7 @@ void initializeStiffSites()
         
         
         //Stiffen segments
-        for(ty=0;ty<iSiteTot;ty++)
+        for(ty=0;ty<iSiteTotal;ty++)
         {
             if(phosiSites[ty]==1) //might want to check the truth value on this - equals for double?
             {

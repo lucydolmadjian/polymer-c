@@ -262,22 +262,22 @@ void metropolisJoint()
                 
                 //printf("Testing bound ligands.");
                 
-                for(ib=0;ib<boundTotal;ib++) //for each bound iSite, find the center of the attached ligand
+                for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
                 {
                     
                     if( (ib % 2) == 0 )
                     {
-                    currentBoundSite = iSiteBound[ib];
-                    rLigandCenterBound[ib][0] = rPropose[currentBoundSite][0] + rLigand*e1Propose[currentBoundSite][0];
-                    rLigandCenterBound[ib][1] = rPropose[currentBoundSite][1] + rLigand*e1Propose[currentBoundSite][1];
-                    rLigandCenterBound[ib][2] = rPropose[currentBoundSite][2] + rLigand*e1Propose[currentBoundSite][2];
+                    bSiteCurrent = bSite[ib];
+                    rLigandCenterBound[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e1Propose[bSiteCurrent][0];
+                    rLigandCenterBound[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e1Propose[bSiteCurrent][1];
+                    rLigandCenterBound[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e1Propose[bSiteCurrent][2];
                     }
                     else
                     {
-                        currentBoundSite = iSiteBound[ib];
-                        rLigandCenterBound[ib][0] = rPropose[currentBoundSite][0] + rLigand*e2Propose[currentBoundSite][0];
-                        rLigandCenterBound[ib][1] = rPropose[currentBoundSite][1] + rLigand*e2Propose[currentBoundSite][1];
-                        rLigandCenterBound[ib][2] = rPropose[currentBoundSite][2] + rLigand*e2Propose[currentBoundSite][2];
+                        bSiteCurrent = bSite[ib];
+                        rLigandCenterBound[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
+                        rLigandCenterBound[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
+                        rLigandCenterBound[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
                     }
 
                 }
@@ -287,18 +287,18 @@ void metropolisJoint()
                // printf("This is e1Propose: \n %f\n 2: %f\n 3:%f\n", e1Propose[42][0],e1Propose[42][1],e1Propose[42][2]);
 //
 //                printf("This is the center:\n 1: %f\n 2: %f\n 3:%f\n", rLigandCenterBound[0][0],rLigandCenterBound[0][1],rLigandCenterBound[0][2]);
-                for (ib=0;ib<boundTotal;ib++) //for each bound ligand
+                for (ib=0;ib<bSiteTotal;ib++) //for each bound ligand
                 {
                     
-                    currentBoundSite = iSiteBound[ib];
-                    //printf("This is the current bound site: %ld", currentBoundSite);
+                    bSiteCurrent = bSite[ib];
+                    //printf("This is the current bound site: %ld", bSiteCurrent);
                     
                     for(i=0;i<N;i++)// for each joint
                     {
                         if ( (rLigandCenterBound[ib][0]-rPropose[i][0])*(rLigandCenterBound[ib][0]-rPropose[i][0]) +
                             (rLigandCenterBound[ib][1]-rPropose[i][1])*(rLigandCenterBound[ib][1]-rPropose[i][1]) +
                             (rLigandCenterBound[ib][2]-rPropose[i][2])*(rLigandCenterBound[ib][2]-rPropose[i][2]) <= rLigand*rLigand
-                            && i != iSiteBound[ib]) //if proposed joint is inside ligand sphere AND joint is not where ligand is attached
+                            && i != bSite[ib]) //if proposed joint is inside ligand sphere AND joint is not where ligand is attached
                         {
                             constraintSatisfiedTF=0; //constraint not satisfied
                             
@@ -311,7 +311,7 @@ void metropolisJoint()
                     if (1) //if constraint is still satisfied, test ligand sphere with other ligands
                     {
                         //printf("Testing everything");
-                        for (ib2=(ib+1);ib2<boundTotal;ib2++) //for each next ligand
+                        for (ib2=(ib+1);ib2<bSiteTotal;ib2++) //for each next ligand
                         {
                             //printf("Ooops!  There shouldn't be anything for me to test!");
                             
@@ -319,7 +319,7 @@ void metropolisJoint()
                                 
                             {
                                 constraintSatisfiedTF=0; //constraint not satisfied
-                                ib2=boundTotal; //shortcut out of loop
+                                ib2=bSiteTotal; //shortcut out of loop
                             }
                         }
                         
@@ -401,7 +401,7 @@ void metropolisJoint()
         // check if blocking sphere
         if (1)
         {
-            for(iy=0;iy<iSiteTot;iy++)
+            for(iy=0;iy<iSiteTotal;iy++)
             {
                 iSiteCurrent = iSite[iy];
                 rLigandCenter[iy][0] = r[iSiteCurrent][0] + rLigand*e1[iSiteCurrent][0];
@@ -418,14 +418,14 @@ void metropolisJoint()
 //            stericOcclusionBase = 0;
             
             
-            for(iy=0; iy<iSiteTot;iy++)
+            for(iy=0; iy<iSiteTotal;iy++)
             {
-                for (ib=0;ib<boundTotal;ib++)
+                for (ib=0;ib<bSiteTotal;ib++)
                 {
-                    if(iSite[iy]==iSiteBound[ib]) //test if iSite is bound already
+                    if(iSite[iy]==bSite[ib]) //test if iSite is bound already
                     {
                         stericOcclusion[iy]++;
-                        ib=boundTotal;
+                        ib=bSiteTotal;
                     }
                 }//didn't include base - assuming can't be bound to base
                 
@@ -467,13 +467,13 @@ void metropolisJoint()
                 }
                 if (MULTIPLE && (stericOcclusion[iy]==0)) //if there are multiple ligands and not occluded yet, test other ligands
                 {
-                    for(ib=0;ib<boundTotal;ib++) //for each bound iSite, find the center of the attached ligand
+                    for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
                     {
-                        currentBoundSite = iSiteBound[ib];
+                        bSiteCurrent = bSite[ib];
 
-                        rLigandCenterBound[ib][0] = r[currentBoundSite][0] + rLigand*e1[currentBoundSite][0];
-                        rLigandCenterBound[ib][1] = r[currentBoundSite][1] + rLigand*e1[currentBoundSite][1];
-                        rLigandCenterBound[ib][2] = r[currentBoundSite][2] + rLigand*e1[currentBoundSite][2];
+                        rLigandCenterBound[ib][0] = r[bSiteCurrent][0] + rLigand*e1[bSiteCurrent][0];
+                        rLigandCenterBound[ib][1] = r[bSiteCurrent][1] + rLigand*e1[bSiteCurrent][1];
+                        rLigandCenterBound[ib][2] = r[bSiteCurrent][2] + rLigand*e1[bSiteCurrent][2];
                         
                         //would it be better to reinitialize rLigandCenterBound before writing over it?
                     
@@ -482,7 +482,7 @@ void metropolisJoint()
                         
                         {
                             stericOcclusion[iy]++;
-                            ib=boundTotal; //shortcut out of the loop
+                            ib=bSiteTotal; //shortcut out of the loop
                         }
                     }
                 }
@@ -518,13 +518,13 @@ void metropolisJoint()
                 if (MULTIPLE && stericOcclusionBase==0)
                 {
                     //initialize
-                    for (ib=0;ib<boundTotal;ib++)
+                    for (ib=0;ib<bSiteTotal;ib++)
                     {
-                        currentBoundSite = iSiteBound[ib];
+                        bSiteCurrent = bSite[ib];
                         
-                        rLigandCenterBound[ib][0] = r[currentBoundSite][0] + rLigand*e1[currentBoundSite][0];
-                        rLigandCenterBound[ib][1] = r[currentBoundSite][1] + rLigand*e1[currentBoundSite][1];
-                        rLigandCenterBound[ib][2] = r[currentBoundSite][2] + rLigand*e1[currentBoundSite][2];
+                        rLigandCenterBound[ib][0] = r[bSiteCurrent][0] + rLigand*e1[bSiteCurrent][0];
+                        rLigandCenterBound[ib][1] = r[bSiteCurrent][1] + rLigand*e1[bSiteCurrent][1];
+                        rLigandCenterBound[ib][2] = r[bSiteCurrent][2] + rLigand*e1[bSiteCurrent][2];
                         
                         boundToBaseDeliver[ib]=0;
                     }
@@ -534,7 +534,7 @@ void metropolisJoint()
 //                    {
 //                            case 0:
                                 //for each bound iSite, test if bound ligand intersects with base ligand site
-                                for (ib=0; ib<boundTotal;ib++)
+                                for (ib=0; ib<bSiteTotal;ib++)
                                 {
                                     if ((rLigandCenterBase[0]-rLigandCenterBound[ib][0])*(rLigandCenterBase[0]-rLigandCenterBound[ib][0])+(rLigandCenterBase[1]-rLigandCenterBound[ib][1])*(rLigandCenterBase[1]-rLigandCenterBound[ib][1])+(rLigandCenterBase[2]-rLigandCenterBound[ib][2])*(rLigandCenterBase[2]-rLigandCenterBound[ib][2]) <= (2*rLigand)*(2*rLigand))
                                     {
@@ -547,7 +547,7 @@ void metropolisJoint()
 //                            case 1:
 //
 //                                //for each bound iSite, test if bound ligand is within "delivery" distance
-//                                for (ib=0;ib<boundTotal;ib++)
+//                                for (ib=0;ib<bSiteTotal;ib++)
 //                                {
 //                                    if ((rLigandCenterBound[ib][0])*(rLigandCenterBound[ib][0])+(rLigandCenterBound[ib][1])*(rLigandCenterBound[ib][1])+(rLigandCenterBound[ib][2])*(rLigandCenterBound[ib][2]) <= deliveryDistance)
 //                                    {

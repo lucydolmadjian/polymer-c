@@ -14,7 +14,7 @@ void getSites()
     /********* INITIALIZE ISITES *******************/
     //
     //
-    //    for (iy=0;iy<iSiteTot;iy++)
+    //    for (iy=0;iy<iSiteTotal;iy++)
     //    {
     //        iSite[iy]=0;
     //    }
@@ -27,10 +27,10 @@ void getSites()
     {
         case 0:  // iSites initialized for human CD3Zeta-Chain
             
-            iSiteTot = 7;
+            iSiteTotal = 7;
             
             
-            for (iy=0;iy<iSiteTot;iy++)
+            for (iy=0;iy<iSiteTotal;iy++)
             {
                 iSite[iy]=0;
             }
@@ -46,9 +46,9 @@ void getSites()
             
         case 1: // iSites for formin //for testing - N=10
             
-            iSiteTot = 3;
+            iSiteTotal = 3;
             
-            for (iy=0;iy<iSiteTot;iy++)
+            for (iy=0;iy<iSiteTotal;iy++)
             {
                 iSite[iy]=0;
             }
@@ -61,9 +61,9 @@ void getSites()
             
         case 2: //test case 2 - stiffen none, but test all iSites, make Ratio half of Ratio for case 1
             
-            iSiteTot = 7;
+            iSiteTotal = 7;
             
-            for (iy=0;iy<iSiteTot;iy++)
+            for (iy=0;iy<iSiteTotal;iy++)
             {
                 iSite[iy]=0;
             }
@@ -79,9 +79,9 @@ void getSites()
             
         case 3:
             
-            iSiteTot = 6;
+            iSiteTotal = 6;
             
-            for(iy=0;iy<iSiteTot;iy++)
+            for(iy=0;iy<iSiteTotal;iy++)
             {
                 iSite[iy]=0;
             }
@@ -101,15 +101,15 @@ void getSites()
     
     //            case 1:
     //
-    //                for (iy=0;iy<iSiteTot;iy++)
+    //                for (iy=0;iy<iSiteTotal;iy++)
     //                {
     //                    iSite[iy]=0;
     //                }
     //
-    //            printf("Total iSites: %ld", iSiteTot);
+    //            printf("Total iSites: %ld", iSiteTotal);
     //
     //            //for debugging
-    //            for(iy=0;iy<iSiteTot;iy++)
+    //            for(iy=0;iy<iSiteTotal;iy++)
     //        {
     //            printf("iSite[%ld] = %ld", iy, iSite[iy]);
     //        }
@@ -134,9 +134,9 @@ void getSites()
     //
     //                //for debugging
     //
-    //                if (iSiteTot!=st)
+    //                if (iSiteTotal!=st)
     //                {
-    //                    printf("Warning! iSite Total is %ld but Number of iSites in String is %ld ", iSiteTot, st);
+    //                    printf("Warning! iSite Total is %ld but Number of iSites in String is %ld ", iSiteTotal, st);
     //                }
     //
     //                //reassign strings as doubles
@@ -146,7 +146,7 @@ void getSites()
     //                }
     //
     //                //for debugging
-    //                for(iy=0;iy<iSiteTot;iy++)
+    //                for(iy=0;iy<iSiteTotal;iy++)
     //                {
     //                    printf("iSite[%ld] = %ld", iy, iSite[iy]);
     //                }
@@ -163,13 +163,13 @@ void getSites()
         //{
         //case 0: // arbitrary subset are occupied
         
-        boundTotal = 5; //total number of iSites bound
+        bSiteTotal = 5; //total number of iSites bound
         
-        iSiteBound[0]=2;
-        iSiteBound[1]=11;
-        iSiteBound[2]=23;
-        iSiteBound[3]=35;
-        iSiteBound[4]=45;
+        bSite[0]=2;
+        bSite[1]=11;
+        bSite[2]=23;
+        bSite[3]=35;
+        bSite[4]=45;
 
         
 

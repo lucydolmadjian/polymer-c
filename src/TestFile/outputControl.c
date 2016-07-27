@@ -18,13 +18,13 @@ void initializeSummary()
     // summary variables
     reeBar_sum   = 0;
     ree2Bar_sum  = 0;
-    for(iy=0;iy<iSiteTot;iy++)
+    for(iy=0;iy<iSiteTotal;iy++)
     {
     POcclude_sum[iy] = 0;
     //Prvec0_sum[iy]   = 0;
     }
     POccludeBase_sum = 0;
-//    for(ib=0; ib<boundTotal; ib++)
+//    for(ib=0; ib<bSiteTotal; ib++)
 //    {
 //        PDeliver[ib]=0;
 //    }
@@ -39,7 +39,7 @@ void finalizeSummary()
     reeBar = reeBar_sum/(double)(nt-NTCHECK);
     ree2Bar = ree2Bar_sum/(double)(nt-NTCHECK);
     
-    for(iy=0;iy<iSiteTot;iy++)
+    for(iy=0;iy<iSiteTotal;iy++)
     {
     POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
     //Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
@@ -47,7 +47,7 @@ void finalizeSummary()
     
     POccludeBase = (double)POccludeBase_sum/(double)(nt-NTCHECK);
     
-//    for(ib=0;ib<boundTotal;ib++)
+//    for(ib=0;ib<bSiteTotal;ib++)
 //    {
 //        PDeliver[ib] = (double)PDeliver_sum[ib]/(double)(nt-NTCHECK);
 //    }
@@ -77,7 +77,7 @@ void finalizeSummary()
                 ree2Bar,     // 9
                 rMBar);       //10
         
-        for (iy=0;iy<iSiteTot;iy++)
+        for (iy=0;iy<iSiteTotal;iy++)
         {
             fprintf(fList, " %ld %e %e",
                     
@@ -89,11 +89,11 @@ void finalizeSummary()
         
         fprintf(fList, " %s %e %e", "Base", POccludeBase, 1-POccludeBase);
         
-        for (ib=0;ib<boundTotal;ib++)
+        for (ib=0;ib<bSiteTotal;ib++)
         {
             fprintf(fList, " %ld",
                     
-                    iSiteBound[ib]);
+                    bSite[ib]);
                     //PDeliver[ib]);
                     
                     }
@@ -112,7 +112,7 @@ void dataRecording()
 	ree      = sqrt(  r[N-1][0]*r[N-1][0]       + r[N-1][1]*r[N-1][1]     + r[N-1][2]*r[N-1][2]);
 	
     // distance from base to iSite
-    for(iy=0;iy<iSiteTot;iy++)
+    for(iy=0;iy<iSiteTotal;iy++)
     {
         iSiteCurrent = iy;
         reeiSite[iy] = sqrt(r[iSiteCurrent][0]*r[iSiteCurrent][0] + r[iSiteCurrent][1]*r[iSiteCurrent][1] + r[iSiteCurrent][2]*r[iSiteCurrent][2]);
@@ -148,14 +148,14 @@ void dataRecording()
                 ksStatistic,     // 10
         constraintProposalsTotal);    //11
         
-        for(iy=0;iy<iSiteTot;iy++)
+        for(iy=0;iy<iSiteTotal;iy++)
         {
             fprintf(fList, " %ld",stericOcclusion[iy]);
         }
         
         fprintf(fList, " %ld", stericOcclusionBase);
         
-//        for(ib=0;ib<boundTotal;ib++)
+//        for(ib=0;ib<bSiteTotal;ib++)
 //        {
 //            fprintf(fList, " %ld", boundToBaseDeliver[ib]);
 //        }
@@ -171,7 +171,7 @@ void dataRecording()
         reeBar_sum   += ree;
         ree2Bar_sum  += ree*ree;
         
-        for(iy=0;iy<iSiteTot;iy++)
+        for(iy=0;iy<iSiteTotal;iy++)
         {
         POcclude_sum[iy] += (long)(stericOcclusion[iy]>0);
         //Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
