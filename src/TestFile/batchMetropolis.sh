@@ -5,7 +5,7 @@ NRequested=0            # initialize number of runs submitted
 
 NRODS=50
 
-RATIO=5
+RATIO=0
 
 FORCE=0
 
@@ -41,6 +41,9 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
+for ((RATIO=0;RATIO<100;RATIO=$RATIO+5))
+do
+
 while (( $ITERATIONS <= $TOTALITERATIONS ))
     do
 
@@ -72,7 +75,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             echo "Line $ITERATIONS of file is $STIFFISITES"
 
             # run program with specified parameters
-            ./metropolis.out MultipleBindingTestReeN50Ratio5.2 $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD &
+            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1.$RATIO $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -89,6 +92,8 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
     done
             echo "Done calling metropolis."
 done
+done
+
 
 # wait for all background processes to finish before concatenating files
 wait
