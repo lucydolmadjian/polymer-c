@@ -268,9 +268,17 @@ void metropolisJoint()
                     else
                     {
                         bSiteCurrent = bSite[ib];
-                        bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
-                        bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
-                        bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
+                        bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e1Propose[bSiteCurrent][0];
+                        bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e1Propose[bSiteCurrent][1];
+                        bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e1Propose[bSiteCurrent][2];
+                        
+                        
+                        
+                        
+//                        bSiteCurrent = bSite[ib];
+//                        bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
+//                        bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
+//                        bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
                     }
 
                 }
