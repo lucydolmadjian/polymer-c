@@ -3,4 +3,4 @@ all:
 
 	chmod a+x batchMetropolis.sh
 
-	./batchMetropolis.sh 4 v
+	./batchMetropolis.sh 6 v

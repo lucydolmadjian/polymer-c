@@ -325,7 +325,7 @@ void metropolisJoint()
             } //finished second constraint
             
             constraintProposalsTotal++;
-
+        } //finish constraint while loop
         
         if (constraintProposalsTotal >= CPMAX)
         {
@@ -467,6 +467,7 @@ void metropolisJoint()
                     }
                 }
             }
+        
         
 
             if (!MEMBRANE) //check occlusion at base if there is no membrane
