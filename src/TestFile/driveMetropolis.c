@@ -48,17 +48,17 @@ double r[NMAX][3],t[NMAX][3], e1[NMAX][3], e2[NMAX][3],
        rBase[3], tBase[3], e1Base[3], e2Base[3],
        rPropose[NMAX][3],tPropose[NMAX][3], e1Propose[NMAX][3], e2Propose[NMAX][3];
 double norm;
-double rLigandCenter[NMAX][3];
+double iLigandCenter[NMAX][3];
 double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 double StiffenRange,phosiSites[NMAX], Stiff[NMAX];
 char phosphorylatediSites[4*NMAX],phosphorylatediSitesNoSpace[NMAX];
 
-double rLigandCenterBound[NMAX][3];
+double bLigandCenter[NMAX][3];
 long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;
 
-double rLigandCenterBase[3], deliveryDistance;
+double baseLigandCenter[3], deliveryDistance;
 long stericOcclusionBase;
 int deliveryMethod;
 
@@ -66,7 +66,7 @@ long boundToBaseDeliver[NMAX];
 
 long j,m;
 
-long constraintProposals, constraintProposalsTotal;
+long constraintProposalsTotal;
 
 //long commandiSites;
 //char *iSiteLocations;
