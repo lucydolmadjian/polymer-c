@@ -44,6 +44,10 @@ NRequested=`ps | grep -c metropolis`
 for ((RATIO=0;RATIO<100;RATIO=$RATIO+5))
 do
 
+echo "Ratio = $RATIO"
+
+ITERATIONS=1
+
 while (( $ITERATIONS <= $TOTALITERATIONS ))
     do
 
