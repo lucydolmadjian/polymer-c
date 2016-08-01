@@ -41,7 +41,7 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-for ((RATIO=0;RATIO<100;RATIO=$RATIO+5))
+for ((RATIO=0;RATIO<2100;RATIO=$RATIO+100))
 do
 
 echo "Ratio = $RATIO"
