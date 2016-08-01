@@ -86,10 +86,10 @@ void getSites()
                 iSite[iy]=0;
             }
             
-            iSite[0]=2;
+            iSite[0]=10;
             iSite[1]=11;
             iSite[2]=23;
-            iSite[3]=25;
+            iSite[3]=40;
 
             break;
     }
@@ -165,9 +165,12 @@ void getSites()
         //{
         //case 0: // arbitrary subset are occupied
         
-        bSiteTotal = 1; //total number of iSites bound
+        bSiteTotal = 4; //total number of iSites bound
         
-        bSite[0]=25;
+        bSite[0]=10;
+        bSite[1]=10;
+        bSite[2]=40;
+        bSite[3]=40;
 
         
 

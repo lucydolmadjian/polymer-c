@@ -41,7 +41,7 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-for ((RATIO=0;RATIO<2100;RATIO=$RATIO+100))
+for ((RATIO=0;RATIO<15;RATIO++))
 do
 
 echo "Ratio = $RATIO"
@@ -108,12 +108,12 @@ echo "Done waiting for processes to finish."
 # for ((N=1; N<=$NRODSMAX; N++))
 # do
 
-IT=1
-
-for ((IT=1; IT<=$TOTALITERATIONS; IT++))
-do
-
-cat MultipleBinding.$IT >> MultipleBindingTest1.txt
-
-done
+#IT=1
+#
+#for ((IT=1; IT<=$TOTALITERATIONS; IT++))
+#do
+#
+#cat MultipleBinding.$IT >> MultipleBindingTest1.txt
+#
+#done
 # done
