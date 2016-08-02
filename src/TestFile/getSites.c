@@ -21,7 +21,7 @@ void getSites()
     
     switch (commandiSites)
     {
-    case 0:
+    case 0: //hardcode sites
     
     switch (testRun)
     {
@@ -93,10 +93,10 @@ void getSites()
 
             break;
 
+    }
+            break;
     
-    
-    
-                case 4:
+                case 1: //read input from user in batch script
     
                     for (iy=0;iy<iSiteTotal;iy++)
                     {
@@ -149,7 +149,32 @@ void getSites()
                     }
     
                 break;
+            
+        case 2: //read input from file
+            
+            iSiteList = fopen("iSiteList.txt", "r");
+            if (iSiteList==NULL)
+            {
+                printf("Error reading file.");
+            
+            }
+            else
+            {
+                while (
+                fscanf( iSiteList, "%ld", )
+            }
+            
         }
+    
+    
+    
+    //for debugging
+    
+    for (iy=0;iy<iSiteTotal;iy++)
+    {
+        printf("iSite: %ld\n", iSite[iy]);
+        fflush(stdout);
+    }
     
     /********* INITIALIZE BOUND ISITES *******************/
     

@@ -23,11 +23,11 @@ echo "Delivery Distance is: $DELIVERYDISTANCE "
 
 DELIVERYMETHOD=1 # 0 = test if ligand intersects base ligand site, 1 = test if within delivery distance
 
-#COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites
+COMMANDISITES=2 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
 
-#ISITETOTAL=4
+ISITETOTAL=4
 
-#ISITELOCATIONS="10 12 14 19" # string format "iSite iSite iSite....."
+ISITELOCATIONS="10 12 14 30" # string format "iSite iSite iSite....."
 
 TOTALITERATIONS=1 #for testing
 
@@ -41,10 +41,10 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-for ((RATIO=0;RATIO<15;RATIO++))
-do
+#for ((RATIO=0;RATIO<15;RATIO++))
+#do
 
-echo "Ratio = $RATIO"
+#echo "Ratio = $RATIO"
 
 ITERATIONS=1
 
@@ -79,7 +79,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             echo "Line $ITERATIONS of file is $STIFFISITES"
 
             # run program with specified parameters
-            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1.$RATIO $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD &
+            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1.$RATIO $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD $COMMANDISITES $ISITETOTAL $ISITELOCATIONS &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -96,7 +96,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
     done
             echo "Done calling metropolis."
 done
-done
+#done
 
 
 # wait for all background processes to finish before concatenating files
