@@ -16,6 +16,8 @@ void metropolisJoint()
     
     printf("Jun rulez!!!\n");
     
+    printf("Lara is cooler! \n");
+    
     
         /********* STIFFEN SEGMENTS *******************/
     
