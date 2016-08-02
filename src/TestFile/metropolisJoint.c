@@ -14,6 +14,9 @@ void metropolisJoint()
         getSites();
     
     
+    printf("Jun rulez!!!\n");
+    
+    
         /********* STIFFEN SEGMENTS *******************/
     
     if (StiffenRange > -1) //stiffen only if StiffenRange is 0 or greater
