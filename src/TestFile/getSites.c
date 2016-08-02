@@ -12,16 +12,16 @@ void getSites();
 void getSites()
 {
     /********* INITIALIZE ISITES *******************/
-    //
-    //
-    //    for (iy=0;iy<iSiteTotal;iy++)
-    //    {
-    //        iSite[iy]=0;
-    //    }
     
-    //switch (commandiSites)
-    //{
-    //case 0:
+    
+        for (iy=0;iy<iSiteTotal;iy++)
+        {
+            iSite[iy]=0;
+        }
+    
+    switch (commandiSites)
+    {
+    case 0:
     
     switch (testRun)
     {
@@ -92,66 +92,64 @@ void getSites()
             iSite[3]=40;
 
             break;
-    }
-    
-    //break;
+
     
     
     
-    //            case 1:
-    //
-    //                for (iy=0;iy<iSiteTotal;iy++)
-    //                {
-    //                    iSite[iy]=0;
-    //                }
-    //
-    //            printf("Total iSites: %ld", iSiteTotal);
-    //
-    //            //for debugging
-    //            for(iy=0;iy<iSiteTotal;iy++)
-    //        {
-    //            printf("iSite[%ld] = %ld", iy, iSite[iy]);
-    //        }
-    //
-    //                //char input[] = iSiteLocations;
-    //                printf("I want to split this into tokens: %s", input);
-    //                char* strArray[NMAX];
-    //                char *token = strtok(input, " ");
-    //
-    //                //for(int j = 0; j<NMAX;j++)
-    //                //{
-    //                //    strArray[j] = new char[4];
-    //                //}
-    //
-    //                while(token != NULL)
-    //                {
-    //                    strcpy(strArray[st],token);
-    //                    printf("This is the next token: %s\n",token); //for debugging
-    //                    token = strtok(NULL, " ");
-    //                    st++;
-    //                }
-    //
-    //                //for debugging
-    //
-    //                if (iSiteTotal!=st)
-    //                {
-    //                    printf("Warning! iSite Total is %ld but Number of iSites in String is %ld ", iSiteTotal, st);
-    //                }
-    //
-    //                //reassign strings as doubles
-    //                for(iy=0;iy<st;iy++)
-    //                {
-    //                    iSite[iy]=atof(strArray[iy]);
-    //                }
-    //
-    //                //for debugging
-    //                for(iy=0;iy<iSiteTotal;iy++)
-    //                {
-    //                    printf("iSite[%ld] = %ld", iy, iSite[iy]);
-    //                }
-    //
-    //            break;
-    //    }
+                case 4:
+    
+                    for (iy=0;iy<iSiteTotal;iy++)
+                    {
+                        iSite[iy]=0;
+                    }
+    
+                printf("Total iSites: %ld", iSiteTotal);
+    
+                //for debugging
+                for(iy=0;iy<iSiteTotal;iy++)
+            {
+                printf("iSite[%ld] = %ld", iy, iSite[iy]);
+            }
+    
+                    //char input[] = iSiteLocations;
+                    printf("I want to split this into tokens: %s", input);
+                    char* strArray[NMAX];
+                    char *token = strtok(input, " ");
+    
+                    //for(int j = 0; j<NMAX;j++)
+                    //{
+                    //    strArray[j] = new char[4];
+                    //}
+    
+                    while(token != NULL)
+                    {
+                        strcpy(strArray[st],token);
+                        printf("This is the next token: %s\n",token); //for debugging
+                        token = strtok(NULL, " ");
+                        st++;
+                    }
+    
+                    //for debugging
+    
+                    if (iSiteTotal!=st)
+                    {
+                        printf("Warning! iSite Total is %ld but Number of iSites in String is %ld ", iSiteTotal, st);
+                    }
+    
+                    //reassign strings as doubles
+                    for(iy=0;iy<st;iy++)
+                    {
+                        iSite[iy]=atof(strArray[iy]);
+                    }
+    
+                    //for debugging
+                    for(iy=0;iy<iSiteTotal;iy++)
+                    {
+                        printf("iSite[%ld] = %ld", iy, iSite[iy]);
+                    }
+    
+                break;
+        }
     
     /********* INITIALIZE BOUND ISITES *******************/
     

@@ -321,7 +321,7 @@ void metropolisJoint()
                         for (ib2=(ib+1);ib2<bSiteTotal;ib2++) //for each next ligand
                         {
                             
-                            if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*rLigand)*(2*rLigand)) //if distance between centers is less than 2*rLigand, then ligands are intersecting
+                            if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*rLigand)*(2*rLigand) && bSite[ib]!= bSite[ib2]) //if distance between centers is less than 2*rLigand, then ligands are intersecting, and ligands are not at same joint
                                 
                             {
                                 constraintSatisfiedTF=0; //constraint not satisfied
