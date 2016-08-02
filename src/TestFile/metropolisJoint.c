@@ -257,30 +257,41 @@ void metropolisJoint()
                 
                 for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
                 {
-                    
-                    if( (ib % 2) == 0 )
+                    switch (ib % 4)
                     {
+                            case 0:
+                    
                     bSiteCurrent = bSite[ib];
                     bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e1Propose[bSiteCurrent][0];
                     bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e1Propose[bSiteCurrent][1];
                     bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e1Propose[bSiteCurrent][2];
-                    }
-                    else
-                    {
+                            break;
+                            
+                            case 1:
+                            
                         bSiteCurrent = bSite[ib];
                         bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e1Propose[bSiteCurrent][0];
                         bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e1Propose[bSiteCurrent][1];
                         bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e1Propose[bSiteCurrent][2];
+                            break;
+                            
+                            case 2:
                         
-                        
-                        
-                        
-//                        bSiteCurrent = bSite[ib];
-//                        bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
-//                        bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
-//                        bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
+                        bSiteCurrent = bSite[ib];
+                        bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
+                        bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
+                        bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
+                            break;
+                            
+                            case 3:
+                            
+                            bSiteCurrent = bSite[ib];
+                            bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e2Propose[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e2Propose[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e2Propose[bSiteCurrent][2];
+                            break;
                     }
-
+                    
                 }
                 
 
@@ -325,7 +336,7 @@ void metropolisJoint()
             } //finished second constraint
             
             constraintProposalsTotal++;
-
+        } //finish constraint while loop
         
         if (constraintProposalsTotal >= CPMAX)
         {
@@ -467,6 +478,7 @@ void metropolisJoint()
                     }
                 }
             }
+        
         
 
             if (!MEMBRANE) //check occlusion at base if there is no membrane

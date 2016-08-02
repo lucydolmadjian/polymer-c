@@ -79,19 +79,18 @@ void getSites()
             
         case 3:
             
-            iSiteTotal = 6;
+            iSiteTotal = 4;
             
             for(iy=0;iy<iSiteTotal;iy++)
             {
                 iSite[iy]=0;
             }
             
-            iSite[0]=2;
+            iSite[0]=10;
             iSite[1]=11;
             iSite[2]=23;
-            iSite[3]=35;
-            iSite[4]=48;
-            iSite[5]=50;
+            iSite[3]=40;
+
             break;
     }
     
@@ -159,17 +158,19 @@ void getSites()
     if (MULTIPLE)
     {
         
+        
+        //add switch to be able to input 101010 etc to specify which iSites are bound/unbound
+        
         //switch () //add more cases later
         //{
         //case 0: // arbitrary subset are occupied
         
-        bSiteTotal = 5; //total number of iSites bound
+        bSiteTotal = 4; //total number of iSites bound
         
-        bSite[0]=2;
-        bSite[1]=11;
-        bSite[2]=23;
-        bSite[3]=35;
-        bSite[4]=45;
+        bSite[0]=10;
+        bSite[1]=10;
+        bSite[2]=40;
+        bSite[3]=40;
 
         
 
