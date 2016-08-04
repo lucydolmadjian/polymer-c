@@ -5,7 +5,7 @@ NRequested=0            # initialize number of runs submitted
 
 NRODS=50
 
-RATIO=0
+RATIO=2000
 
 FORCE=0
 
@@ -23,7 +23,7 @@ echo "Delivery Distance is: $DELIVERYDISTANCE "
 
 DELIVERYMETHOD=1 # 0 = test if ligand intersects base ligand site, 1 = test if within delivery distance
 
-COMMANDISITES=2 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
+COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
 
 ISITETOTAL=4
 
@@ -41,9 +41,9 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-#for ((RATIO=0;RATIO<15;RATIO++))
+#for ((RATIO=0;RATIO<2000;RATIO++))
 #do
-
+#
 #echo "Ratio = $RATIO"
 
 ITERATIONS=1
