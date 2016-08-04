@@ -134,7 +134,7 @@ void dataRecording()
     if (verboseTF)
     {
         
-        if ( (nt % 100) == 0)
+        if ( (nt % 100) == 0) //only output every 100 time steps
         {
         // output results to file
         fList = fopen(listName, "a");

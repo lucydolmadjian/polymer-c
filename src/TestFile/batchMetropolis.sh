@@ -13,21 +13,19 @@ STIFFENRANGE=-1 # -1 means don't stiffen
 
 VERBOSE=1
 
-TESTRUN=3 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
+TESTRUN=2 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
 ITERATIONS=1
 
 DELIVERYDISTANCE=$RATIO
 
-echo "Delivery Distance is: $DELIVERYDISTANCE "
-
 DELIVERYMETHOD=1 # 0 = test if ligand intersects base ligand site, 1 = test if within delivery distance
 
-COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
+#COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
 
-ISITETOTAL=4
+#ISITETOTAL=4
 
-ISITELOCATIONS="10 12 14 30" # string format "iSite iSite iSite....."
+#ISITELOCATIONS="10 12 14 30" # string format "iSite iSite iSite....."
 
 TOTALITERATIONS=1 #for testing
 
@@ -79,7 +77,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             echo "Line $ITERATIONS of file is $STIFFISITES"
 
             # run program with specified parameters
-            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1.$RATIO $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD $COMMANDISITES $ISITETOTAL $ISITELOCATIONS &
+            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1.$RATIO.bSite25 $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
