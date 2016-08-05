@@ -13,6 +13,7 @@
 #define KSCRITICAL 0.005
 #define MEMBRANE 0
 #define MULTIPLE 1
+#define STIFFEN  0
 #define CPMAX    1e8
 
 #include <math.h>
@@ -32,7 +33,7 @@ char listName[100];
 FILE *fList;
 //
 //char listName2[100] = "TestOutput";
-//FILE *fList2;
+FILE *iSiteList;
 
 long N, ntNextStationarityCheck, iBin;
 
@@ -68,9 +69,9 @@ long j,m;
 
 long constraintProposalsTotal;
 
-//long commandiSites;
-//char *iSiteLocations;
-//char input[4*NMAX];
+long commandiSites;
+char *iSiteLocations;
+char input[4*NMAX];
 
 long st;
 
@@ -159,13 +160,13 @@ int main( int argc, char *argv[] )
     
 //    if(argv[12]) //hardcoded vs command line iSites
 //        commandiSites = atoi(argv[12]);
-//    printf("This is argument 12: %d/n", commandiSites);
+//    printf("This is argument 12: %ld/n", commandiSites);
 //
-//    if (commandiSites)
+//    if (commandiSites==1)
 //    {
 //        if(argv[13])
 //            iSiteTotal=atoi(argv[13]);
-//        printf("This is argument 13: %d/n", iSiteTotal);
+//        printf("This is argument 13: %ld/n", iSiteTotal);
 //        
 //        if(argv[14])
 //            strcpy(input,argv[14]);

@@ -9,14 +9,15 @@ void metropolisJoint()
 {
 
     
-//    /********* INITIALIZE ISITES AND BSITES *******************/
+    /********* INITIALIZE ISITES AND BSITES *******************/
 
         getSites();
     
     
-        /********* STIFFEN SEGMENTS *******************/
+    /************* STIFFEN SEGMENTS *******************/
     
-    if (StiffenRange > -1) //stiffen only if StiffenRange is 0 or greater
+    //Ignore for Formin
+    if (STIFFEN) //stiffen only if STIFFEN is 1 in driveM
     {
         initializeStiffSites();
     }
@@ -84,7 +85,6 @@ void metropolisJoint()
     initializeSummary();
 
     /********* BEGIN LOOP THROUGH ITERATIONS! *******************/
-    //for (m=0;m<100;m++)
 	while(!convergedTF && nt < NTMAX) // Time loop!
     {
 
@@ -137,14 +137,19 @@ void metropolisJoint()
 		
 		iPropose = floor(N*TWISTER); // Initialize. This is the joint we will adjust this time.
         
+        
+        
         //set joints to stiff based on which iSites are occupied and the stiffness range
-        if (StiffenRange > -1) //stiffen only if StiffenRange is 0 or greater
+        //Ignore for formin
+        if (STIFFEN)
         {
             while(Stiff[iPropose]==1) //Test if proposed joint is stiff.
             {
                 iPropose = floor(N*TWISTER); //If stiff, propose new joint until propose one not stiff.
             }
         }
+        
+        
         
 		if(iPropose==0)
 		{
@@ -190,9 +195,6 @@ void metropolisJoint()
             // rotate base
             rotate(&tBase[0], &e1Base[0], &e2Base[0], &tPropose[0][0], &e1Propose[0][0], &e2Propose[0][0], phiPropose[0], thetaPropose[0], psiPropose[0]);
             
-        
-//            printf("This is e1Propose: \n 1: %f\n 2: %f\n 3:%f\n", e1Propose[0][0],e1Propose[0][1],e1Propose[0][2]);
-            
             
             for(ix=0;ix<3;ix++)
                 rPropose[0][ix] = rBase[ix] + tPropose[0][ix];
@@ -231,14 +233,13 @@ void metropolisJoint()
             }
             
             //how does this work?  only returns first component of t, e1, e2? where are the other components?
-//            
 
 				
             /********* 2. Test constraints *******************/
             constraintSatisfiedTF=1;
             if (MEMBRANE)
             {
-                printf("Testing Membrane");
+                //printf("Testing Membrane");
                 for(i=0;i<N;i++)
                 {
                     if (rPropose[i][2] < 0)
@@ -249,46 +250,47 @@ void metropolisJoint()
                 } // done checking constraint
             } //finished first constraint
             
-            //if (MULTIPLE && constraintSatisfiedTF)
-            if (1)
+            if (MULTIPLE && constraintSatisfiedTF) //only test if looking at multiple binding and if membrane constraint passed
             {
                 
                 //printf("Testing bound ligands.");
                 
+                
+                //NOTE:  If you change the orientation of the ligands here, be sure to change them down in Occlusion Testing to match!!
                 for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
                 {
-                    switch (ib % 4)
+                    switch (ib % 4) //currently changes orientation of ligand center based on where it is in list of bound sites
                     {
-                            case 0:
+                            case 0: //standard orientation - same as used for iSite Pocc calculations
                     
-                    bSiteCurrent = bSite[ib];
-                    bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e1Propose[bSiteCurrent][0];
-                    bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e1Propose[bSiteCurrent][1];
-                    bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e1Propose[bSiteCurrent][2];
+                                bSiteCurrent = bSite[ib];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e1Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e1Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e1Propose[bSiteCurrent][2];
                             break;
                             
-                            case 1:
+                            case 1: //180 degrees from standard
                             
-                        bSiteCurrent = bSite[ib];
-                        bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e1Propose[bSiteCurrent][0];
-                        bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e1Propose[bSiteCurrent][1];
-                        bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e1Propose[bSiteCurrent][2];
+                                bSiteCurrent = bSite[ib];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e1Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e1Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e1Propose[bSiteCurrent][2];
                             break;
                             
-                            case 2:
-                        
-                        bSiteCurrent = bSite[ib];
-                        bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
-                        bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
-                        bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
+                            case 2: //90 degrees from standard
+                            
+                                bSiteCurrent = bSite[ib];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
                             break;
                             
-                            case 3:
+                            case 3: //270 from standard
                             
-                            bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e2Propose[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e2Propose[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e2Propose[bSiteCurrent][2];
+                                bSiteCurrent = bSite[ib];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e2Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e2Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e2Propose[bSiteCurrent][2];
                             break;
                     }
                     
@@ -298,47 +300,43 @@ void metropolisJoint()
                 for (ib=0;ib<bSiteTotal;ib++) //for each bound ligand
                 {
                     
-                    bSiteCurrent = bSite[ib];
-                    //printf("This is the current bound site: %ld \n", bSiteCurrent);
-                    
                     for(i=0;i<N;i++)// for each joint
                     {
-                        if ( (bLigandCenter[ib][0]-rPropose[i][0])*(bLigandCenter[ib][0]-rPropose[i][0]) +
+                        if ( ((bLigandCenter[ib][0]-rPropose[i][0])*(bLigandCenter[ib][0]-rPropose[i][0]) +
                             (bLigandCenter[ib][1]-rPropose[i][1])*(bLigandCenter[ib][1]-rPropose[i][1]) +
-                            (bLigandCenter[ib][2]-rPropose[i][2])*(bLigandCenter[ib][2]-rPropose[i][2]) <= rLigand*rLigand
+                            (bLigandCenter[ib][2]-rPropose[i][2])*(bLigandCenter[ib][2]-rPropose[i][2]) <= rLigand*rLigand )
                             && i != bSite[ib]) //if proposed joint is inside ligand sphere AND joint is not where ligand is attached
                         {
                             constraintSatisfiedTF=0; //constraint not satisfied
-                            
-                            //printf("Constraint not satisfied");
-                            i=N; //shortcut out of loop
+                            i=N; //shortcut out of inner loop
+                            ib=bSiteTotal;// shortcut out of outer loop
                         }
                     }
                     
                     
-                    if (1) //if constraint is still satisfied, test ligand sphere with other ligands
+                    if (constraintSatisfiedTF) //if constraint is still satisfied, test ligand sphere with other ligands
                     {
                         for (ib2=(ib+1);ib2<bSiteTotal;ib2++) //for each next ligand
                         {
                             
-                            if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*rLigand)*(2*rLigand)) //if distance between centers is less than 2*rLigand, then ligands are intersecting
+                            if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*rLigand)*(2*rLigand) && bSite[ib]!= bSite[ib2]) //if distance between centers is less than 2*rLigand, then ligands are intersecting, and ligands are not at same joint
                                 
                             {
                                 constraintSatisfiedTF=0; //constraint not satisfied
                                 ib2=bSiteTotal; //shortcut out of loop
                             }
-                        }
+                         }
                         
-                    }
+                     }
                     
                 }
 
             } //finished second constraint
             
-            constraintProposalsTotal++;
+            constraintProposalsTotal++; //count number of times proposals are rejected this time step
         } //finish constraint while loop
         
-        if (constraintProposalsTotal >= CPMAX)
+        if (constraintProposalsTotal >= CPMAX) //if number of proposals exceeds CPMAX, exit program
         {
             printf("Exceeded maximum proposals.\n");
             fflush(stdout);
@@ -392,23 +390,77 @@ void metropolisJoint()
         // check if blocking sphere
         if (1)
         {
-            for(iy=0;iy<iSiteTotal;iy++)
+            /*******Initialize variables********/
+            
+            
+            for(iy=0;iy<iSiteTotal;iy++) //for each iSite, determine the center of the ligand sphere
             {
                 iSiteCurrent = iSite[iy];
                 iLigandCenter[iy][0] = r[iSiteCurrent][0] + rLigand*e1[iSiteCurrent][0];
                 iLigandCenter[iy][1] = r[iSiteCurrent][1] + rLigand*e1[iSiteCurrent][1];
                 iLigandCenter[iy][2] = r[iSiteCurrent][2] + rLigand*e1[iSiteCurrent][2];
             
-                stericOcclusion[iy] = 0;
+                stericOcclusion[iy] = 0; //set steric occlusion array to 0 for each iSite
             }
-//            
-//            baseLigandCenter[0] = rBase[0] + rLigand*e1Base[0];
-//            baseLigandCenter[1] = rBase[1] + rLigand*e1Base[1];
-//            baseLigandCenter[2] = rBase[2] + rLigand*e1Base[2];
-//            
-//            stericOcclusionBase = 0;
             
             
+            //initialize ligand center at base
+            baseLigandCenter[0] = rBase[0] + rLigand*e1Base[0];
+            baseLigandCenter[1] = rBase[1] + rLigand*e1Base[1];
+            baseLigandCenter[2] = rBase[2] + rLigand*e1Base[2];
+            
+            //initialize steric occlusion at base to 0
+            stericOcclusionBase = 0;
+            
+            if(MULTIPLE)
+            {
+                //Is it better to write over bLigandCenter or to reinitialize or to create bLigandCenterPropose and copy it over when it passes?
+                //determine center of bound ligand sphere, maintaining orientation as in proposals above
+                for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
+                {
+                    switch (ib % 4) //currently changes orientation of ligand center based on where it is in list of bound sites
+                    {
+                        case 0: //standard orientation - same as used for iSite Pocc calculations
+                            
+                            bSiteCurrent = bSite[ib];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + rLigand*e1[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + rLigand*e1[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + rLigand*e1[bSiteCurrent][2];
+                            break;
+                            
+                        case 1: //180 degrees from standard
+                            
+                            bSiteCurrent = bSite[ib];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - rLigand*e1[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - rLigand*e1[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - rLigand*e1[bSiteCurrent][2];
+                            break;
+                            
+                        case 2: //90 degrees from standard
+                            
+                            bSiteCurrent = bSite[ib];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + rLigand*e2[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + rLigand*e2[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + rLigand*e2[bSiteCurrent][2];
+                            break;
+                            
+                        case 3: //270 from standard
+                            
+                            bSiteCurrent = bSite[ib];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - rLigand*e2[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - rLigand*e2[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - rLigand*e2[bSiteCurrent][2];
+                            break;
+                    }
+                    
+                }
+            }
+            
+            
+            
+            /**********Test Occlusion of iSites*********/
+            
+            //tests occlusion of iSites first
             for(iy=0; iy<iSiteTotal;iy++)
             {
                 for (ib=0;ib<bSiteTotal;ib++)
@@ -456,17 +508,11 @@ void metropolisJoint()
                     }
                 }
                 }
+                
                 if (MULTIPLE && (stericOcclusion[iy]==0)) //if there are multiple ligands and not occluded yet, test other ligands
                 {
                     for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
                     {
-                        bSiteCurrent = bSite[ib];
-
-                        bLigandCenter[ib][0] = r[bSiteCurrent][0] + rLigand*e1[bSiteCurrent][0];
-                        bLigandCenter[ib][1] = r[bSiteCurrent][1] + rLigand*e1[bSiteCurrent][1];
-                        bLigandCenter[ib][2] = r[bSiteCurrent][2] + rLigand*e1[bSiteCurrent][2];
-                        
-                        //would it be better to reinitialize bLigandCenter before writing over it?
                     
                         if ((iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0])+(iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1])+(iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2])<=(2*rLigand)*(2*rLigand))
                         // if potential ligand intersects with bound ligand
@@ -481,8 +527,11 @@ void metropolisJoint()
         
         
 
-            if (!MEMBRANE) //check occlusion at base if there is no membrane
+            /***********Check Occlusion of Base************/
+            if (!MEMBRANE) //only check occlusion if there is no membrane (membrane implies always occluded at base)
             {
+                
+                /*****Initialize******/
                 //initialize ligand center and stericOcclusion
                 baseLigandCenter[0] = rBase[0] + rLigand*e1Base[0];
                 baseLigandCenter[1] = rBase[1] + rLigand*e1Base[1];
@@ -491,6 +540,7 @@ void metropolisJoint()
                 stericOcclusionBase = 0;
 
                 
+                /*****Test Occlusion of Base*****/
                 //check occlusion with joints
                 for(i=0;i<N;i++)
                 {
@@ -509,17 +559,11 @@ void metropolisJoint()
                 //or do we want to test Occlusion of base with ligands? Could do both?
                 if (MULTIPLE && stericOcclusionBase==0)
                 {
-                    //initialize
-                    for (ib=0;ib<bSiteTotal;ib++)
-                    {
-                        bSiteCurrent = bSite[ib];
-                        
-                        bLigandCenter[ib][0] = r[bSiteCurrent][0] + rLigand*e1[bSiteCurrent][0];
-                        bLigandCenter[ib][1] = r[bSiteCurrent][1] + rLigand*e1[bSiteCurrent][1];
-                        bLigandCenter[ib][2] = r[bSiteCurrent][2] + rLigand*e1[bSiteCurrent][2];
-                        
-                        boundToBaseDeliver[ib]=0;
-                    }
+//                    //initialize
+//                    for (ib=0;ib<bSiteTotal;ib++)
+//                    {
+//                        boundToBaseDeliver[ib]=0;
+//                    }
                     
                     
 //                    switch (deliveryMethod)
@@ -530,7 +574,7 @@ void metropolisJoint()
                                 {
                                     if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (2*rLigand)*(2*rLigand))
                                     {
-                                        boundToBaseDeliver[ib]++;
+                                        //boundToBaseDeliver[ib]++;
                                         stericOcclusionBase++;
                                     }
                                 }
@@ -557,7 +601,7 @@ void metropolisJoint()
                 }
                 
             
-            }
+            }//end checking occlusion of base
         
         } //end checking occlusion
 

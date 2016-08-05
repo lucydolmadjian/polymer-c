@@ -133,6 +133,9 @@ void dataRecording()
     // Verbose output: One line is written each iteration.
     if (verboseTF)
     {
+        
+        if ( (nt % 100) == 0) //only output every 100 time steps
+        {
         // output results to file
         fList = fopen(listName, "a");
         fprintf(fList, "%ld %f %f %f %f %f %f %f %f %f %ld",
@@ -163,6 +166,7 @@ void dataRecording()
         fprintf(fList, "\n");
 
         fclose(fList);
+        }
     }
     
     if (nt>NTCHECK)
