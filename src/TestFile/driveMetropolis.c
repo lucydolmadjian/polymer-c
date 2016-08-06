@@ -125,38 +125,38 @@ int main( int argc, char *argv[] )
     if(argv[4]) // Force - Units of kBT/[kuhn length]
         Force = atof(argv[4]);
     printf("This is argument 4: %f\n", Force);
-    
-    if(argv[5]) // Occupied (phosphorylated) iSites
-        strcpy(phosphorylatediSites,argv[5]);
-        printf("This is argument 5: %s\n", phosphorylatediSites);
-    
-    if(argv[6]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
-        StiffenRange = atof(argv[6]);
-    printf("This is argument 6: %f\n", StiffenRange);
+//    
+//    if(argv[5]) // Occupied (phosphorylated) iSites
+//        strcpy(phosphorylatediSites,argv[5]);
+//        printf("This is argument 5: %s\n", phosphorylatediSites);
+//    
+//    if(argv[6]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
+//        StiffenRange = atof(argv[6]);
+//    printf("This is argument 6: %f\n", StiffenRange);
     
     
     // IF verboseTF = 0, one line summarizing the run is written to the file listName.
     // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
     verboseTF = 0;
-    if(argv[7]) // Verbose Output
+    if(argv[5]) // Verbose Output
         verboseTF = atoi(argv[7]);
     printf("This is argument 7: %d\n", verboseTF);
     
-    if(argv[8]) //Test Run - yes=1, no=0
+    if(argv[6]) //Test Run - yes=1, no=0
         testRun = atoi(argv[8]);
     printf("This is argument 8: %d\n", testRun);
+//    
+//    if(argv[9]) // Occupied (phosphorylated) iSites
+//        strcpy(phosphorylatediSitesNoSpace,argv[9]);
+//    printf("This is argument 9: %s\n", phosphorylatediSitesNoSpace);
     
-    if(argv[9]) // Occupied (phosphorylated) iSites
-        strcpy(phosphorylatediSitesNoSpace,argv[9]);
-    printf("This is argument 9: %s\n", phosphorylatediSitesNoSpace);
-    
-    if(argv[10]) //Delivery distance - how close to base it needs to be
-        deliveryDistance = atof(argv[10]);
-    printf("This is argument 10: %f\n", deliveryDistance);
-    
-    if(argv[11]) //Delivery method - 0 = within Base ligand site, 1 = within deliveryDistance
-        deliveryMethod = atoi(argv[11]);
-    printf("This is argument 11: %d\n", deliveryMethod);
+//    if(argv[10]) //Delivery distance - how close to base it needs to be
+//        deliveryDistance = atof(argv[10]);
+//    printf("This is argument 10: %f\n", deliveryDistance);
+//    
+//    if(argv[11]) //Delivery method - 0 = within Base ligand site, 1 = within deliveryDistance
+//        deliveryMethod = atoi(argv[11]);
+//    printf("This is argument 11: %d\n", deliveryMethod);
     
 //    if(argv[12]) //hardcoded vs command line iSites
 //        commandiSites = atoi(argv[12]);

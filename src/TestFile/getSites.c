@@ -54,7 +54,7 @@ void getSites()
             
         case 2: //iSites for testing
             
-            iSiteTotal = 4;
+            iSiteTotal = 5;
             
             for(iy=0;iy<iSiteTotal;iy++)
             {
@@ -62,9 +62,10 @@ void getSites()
             }
             
             iSite[0]=10;
-            iSite[1]=11;
-            iSite[2]=25;
-            iSite[3]=49;
+            iSite[1]=20;
+            iSite[2]=30;
+            iSite[3]=40;
+            iSite[4]=49;
 
             break;
 
@@ -86,7 +87,7 @@ void getSites()
         
         bSiteTotal = 1; //total number of iSites bound
         
-        bSite[0]=25; //specify bSites same way as iSites
+        bSite[0]=30; //specify bSites same way as iSites
 
     }
 
