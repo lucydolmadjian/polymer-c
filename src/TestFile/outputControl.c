@@ -59,17 +59,18 @@ void finalizeSummary()
         fList = fopen(listName, "a");
         
         //set joints to stiff based on which iSites are occupied and the stiffness range
-        if (StiffenRange > -1) //stiffen only if StiffenRange is 0 or greater
+        if (STIFFEN) //stiffen only if StiffenRange is 0 or greater
         {
             fprintf(fList, "%s %s ",phosphorylatediSites,
                     phosphorylatediSitesNoSpace);
         }
         
-        fprintf(fList, "%ld %f %f %ld %f %f %f %e",
+        fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",
 
                 
                 N,           // 1
-                rLigand,     // 4
+                irLigand,     // 4
+                brLigand,
                 Force,       // 5
                 nt,          // 6
                 ksStatistic, // 7
@@ -87,7 +88,7 @@ void finalizeSummary()
                     
         }
         
-        fprintf(fList, " %s %e %e", "Base", POccludeBase, 1-POccludeBase);
+        fprintf(fList, " %d %e %e", -1, POccludeBase, 1-POccludeBase);
         
         for (ib=0;ib<bSiteTotal;ib++)
         {
@@ -133,6 +134,9 @@ void dataRecording()
     // Verbose output: One line is written each iteration.
     if (verboseTF)
     {
+        
+        if ( (nt % 100) == 0) //only output every 100 time steps
+        {
         // output results to file
         fList = fopen(listName, "a");
         fprintf(fList, "%ld %f %f %f %f %f %f %f %f %f %ld",
@@ -163,6 +167,7 @@ void dataRecording()
         fprintf(fList, "\n");
 
         fclose(fList);
+        }
     }
     
     if (nt>NTCHECK)

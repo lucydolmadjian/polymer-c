@@ -5,29 +5,34 @@ NRequested=0            # initialize number of runs submitted
 
 NRODS=50
 
-RATIO=0
+IRATIO=5
+
+BRATIO=0
 
 FORCE=0
 
-STIFFENRANGE=-1 # -1 means don't stiffen
+#STIFFENRANGE=-1 # -1 means don't stiffen
 
-VERBOSE=1
+VERBOSE=0
 
-TESTRUN=3 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
+TESTRUN=2 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
 ITERATIONS=1
 
-DELIVERYDISTANCE=$RATIO
 
-echo "Delivery Distance is: $DELIVERYDISTANCE "
+#########You can ignore these parameters###########
 
-DELIVERYMETHOD=1 # 0 = test if ligand intersects base ligand site, 1 = test if within delivery distance
+#DELIVERYDISTANCE=$IRATIO
 
-#COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites
+#DELIVERYMETHOD=1 # 0 = test if ligand intersects base ligand site, 1 = test if within delivery distance
+
+#COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
 
 #ISITETOTAL=4
 
-#ISITELOCATIONS="10 12 14 19" # string format "iSite iSite iSite....."
+#ISITELOCATIONS="10 12 14 30" # string format "iSite iSite iSite....."
+
+#####################################################
 
 TOTALITERATIONS=1 #for testing
 
@@ -41,7 +46,7 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-for ((RATIO=0;RATIO<15;RATIO++))
+for ((BRATIO=0;BRATIO<=400;BRATIO=$BRATIO+5))
 do
 
 echo "Ratio = $RATIO"
@@ -69,17 +74,19 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
     while (( $NRequested < $1 && $ITERATIONS <= $TOTALITERATIONS ))
         do
 
+###############Ignore these lines - used for Stiffening.  Currently still in input, so need to be read, but otherwise can be ignored.###############
             # read specified line of text file
 
-            STIFFISITES="`awk 'NR==iter' iter=$ITERATIONS PhosphorylatediSites.txt`"
+            #STIFFISITES="`awk 'NR==iter' iter=$ITERATIONS PhosphorylatediSites.txt`"
 
-            STIFFISITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS PhosphorylatediSitesNoSpace.txt`"
+            #STIFFISITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS PhosphorylatediSitesNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+            #echo "Line $ITERATIONS of file is $STIFFISITES"
+################################
 
             # run program with specified parameters
-            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1.$RATIO $NRODS $RATIO $FORCE "$STIFFISITES" $STIFFENRANGE $VERBOSE $TESTRUN "$STIFFISITESNOSPACE" $DELIVERYDISTANCE $DELIVERYMETHOD &
+            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -105,15 +112,15 @@ wait
 echo "Done waiting for processes to finish."
 
 # loop through all files, concatenate them into one file
-# for ((N=1; N<=$NRODSMAX; N++))
-# do
+ for ((BRATIO=0; BRATIO<=400; BRATIO=$BRATIO+5))
+ do
 
 #IT=1
 #
 #for ((IT=1; IT<=$TOTALITERATIONS; IT++))
 #do
 #
-#cat MultipleBinding.$IT >> MultipleBindingTest1.txt
+cat MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 >> MultipleBindingTestReeN50bSiteTotal1irLigand5.bSite49.cat.txt
 #
 #done
-# done
+done
