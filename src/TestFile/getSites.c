@@ -87,7 +87,7 @@ void getSites()
         
         bSiteTotal = 1; //total number of iSites bound
         
-        bSite[0]=30; //specify bSites same way as iSites
+        bSite[0]=49; //specify bSites same way as iSites
 
     }
 

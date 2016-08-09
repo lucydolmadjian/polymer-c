@@ -87,7 +87,7 @@ void finalizeSummary()
                     
         }
         
-        fprintf(fList, " %s %e %e", "Base", POccludeBase, 1-POccludeBase);
+        fprintf(fList, " %d %e %e", -1, POccludeBase, 1-POccludeBase);
         
         for (ib=0;ib<bSiteTotal;ib++)
         {

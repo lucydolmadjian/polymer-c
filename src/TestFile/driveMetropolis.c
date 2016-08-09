@@ -139,11 +139,11 @@ int main( int argc, char *argv[] )
     // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
     verboseTF = 0;
     if(argv[5]) // Verbose Output
-        verboseTF = atoi(argv[7]);
+        verboseTF = atoi(argv[5]);
     printf("This is argument 7: %d\n", verboseTF);
     
     if(argv[6]) //Test Run - yes=1, no=0
-        testRun = atoi(argv[8]);
+        testRun = atoi(argv[6]);
     printf("This is argument 8: %d\n", testRun);
 //    
 //    if(argv[9]) // Occupied (phosphorylated) iSites
