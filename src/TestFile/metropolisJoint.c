@@ -264,33 +264,33 @@ void metropolisJoint()
                             case 0: //standard orientation - same as used for iSite Pocc calculations
                     
                                 bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e1Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e1Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e1Propose[bSiteCurrent][2];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + brLigand*e1Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + brLigand*e1Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + brLigand*e1Propose[bSiteCurrent][2];
                             break;
                             
                             case 1: //180 degrees from standard
                             
                                 bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e1Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e1Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e1Propose[bSiteCurrent][2];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - brLigand*e1Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - brLigand*e1Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - brLigand*e1Propose[bSiteCurrent][2];
                             break;
                             
                             case 2: //90 degrees from standard
                             
                                 bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + rLigand*e2Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + rLigand*e2Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + rLigand*e2Propose[bSiteCurrent][2];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + brLigand*e2Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + brLigand*e2Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + brLigand*e2Propose[bSiteCurrent][2];
                             break;
                             
                             case 3: //270 from standard
                             
                                 bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - rLigand*e2Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - rLigand*e2Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - rLigand*e2Propose[bSiteCurrent][2];
+                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - brLigand*e2Propose[bSiteCurrent][0];
+                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - brLigand*e2Propose[bSiteCurrent][1];
+                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - brLigand*e2Propose[bSiteCurrent][2];
                             break;
                     }
                     
@@ -304,7 +304,7 @@ void metropolisJoint()
                     {
                         if ( ((bLigandCenter[ib][0]-rPropose[i][0])*(bLigandCenter[ib][0]-rPropose[i][0]) +
                             (bLigandCenter[ib][1]-rPropose[i][1])*(bLigandCenter[ib][1]-rPropose[i][1]) +
-                            (bLigandCenter[ib][2]-rPropose[i][2])*(bLigandCenter[ib][2]-rPropose[i][2]) <= rLigand*rLigand )
+                            (bLigandCenter[ib][2]-rPropose[i][2])*(bLigandCenter[ib][2]-rPropose[i][2]) <= brLigand*brLigand )
                             && i != bSite[ib]) //if proposed joint is inside ligand sphere AND joint is not where ligand is attached
                         {
                             constraintSatisfiedTF=0; //constraint not satisfied
@@ -319,7 +319,7 @@ void metropolisJoint()
                         for (ib2=(ib+1);ib2<bSiteTotal;ib2++) //for each next ligand
                         {
                             
-                            if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*rLigand)*(2*rLigand) && bSite[ib]!= bSite[ib2]) //if distance between centers is less than 2*rLigand, then ligands are intersecting, and ligands are not at same joint
+                            if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*brLigand)*(2*brLigand) && bSite[ib]!= bSite[ib2]) //if distance between centers is less than 2*brLigand, then ligands are intersecting, and ligands are not at same joint
                                 
                             {
                                 constraintSatisfiedTF=0; //constraint not satisfied
@@ -396,18 +396,18 @@ void metropolisJoint()
             for(iy=0;iy<iSiteTotal;iy++) //for each iSite, determine the center of the ligand sphere
             {
                 iSiteCurrent = iSite[iy];
-                iLigandCenter[iy][0] = r[iSiteCurrent][0] + rLigand*e1[iSiteCurrent][0];
-                iLigandCenter[iy][1] = r[iSiteCurrent][1] + rLigand*e1[iSiteCurrent][1];
-                iLigandCenter[iy][2] = r[iSiteCurrent][2] + rLigand*e1[iSiteCurrent][2];
+                iLigandCenter[iy][0] = r[iSiteCurrent][0] + irLigand*e1[iSiteCurrent][0];
+                iLigandCenter[iy][1] = r[iSiteCurrent][1] + irLigand*e1[iSiteCurrent][1];
+                iLigandCenter[iy][2] = r[iSiteCurrent][2] + irLigand*e1[iSiteCurrent][2];
             
                 stericOcclusion[iy] = 0; //set steric occlusion array to 0 for each iSite
             }
             
             
             //initialize ligand center at base
-            baseLigandCenter[0] = rBase[0] + rLigand*e1Base[0];
-            baseLigandCenter[1] = rBase[1] + rLigand*e1Base[1];
-            baseLigandCenter[2] = rBase[2] + rLigand*e1Base[2];
+            baseLigandCenter[0] = rBase[0] + irLigand*e1Base[0];
+            baseLigandCenter[1] = rBase[1] + irLigand*e1Base[1];
+            baseLigandCenter[2] = rBase[2] + irLigand*e1Base[2];
             
             //initialize steric occlusion at base to 0
             stericOcclusionBase = 0;
@@ -423,33 +423,33 @@ void metropolisJoint()
                         case 0: //standard orientation - same as used for iSite Pocc calculations
                             
                             bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + rLigand*e1[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + rLigand*e1[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + rLigand*e1[bSiteCurrent][2];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + brLigand*e1[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + brLigand*e1[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + brLigand*e1[bSiteCurrent][2];
                             break;
                             
                         case 1: //180 degrees from standard
                             
                             bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - rLigand*e1[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - rLigand*e1[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - rLigand*e1[bSiteCurrent][2];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - brLigand*e1[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - brLigand*e1[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - brLigand*e1[bSiteCurrent][2];
                             break;
                             
                         case 2: //90 degrees from standard
                             
                             bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + rLigand*e2[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + rLigand*e2[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + rLigand*e2[bSiteCurrent][2];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + brLigand*e2[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + brLigand*e2[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + brLigand*e2[bSiteCurrent][2];
                             break;
                             
                         case 3: //270 from standard
                             
                             bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - rLigand*e2[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - rLigand*e2[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - rLigand*e2[bSiteCurrent][2];
+                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - brLigand*e2[bSiteCurrent][0];
+                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - brLigand*e2[bSiteCurrent][1];
+                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - brLigand*e2[bSiteCurrent][2];
                             break;
                     }
                     
@@ -478,7 +478,7 @@ void metropolisJoint()
                 if (MEMBRANE)
                 {
                     // check if sphere violates membrane
-                    if (iLigandCenter[iy][2]<rLigand)
+                    if (iLigandCenter[iy][2]<irLigand)
                         stericOcclusion[iy]++;
 
                 }
@@ -487,7 +487,7 @@ void metropolisJoint()
                     // check if sphere violates base
                     if ( (iLigandCenter[iy][0])*(iLigandCenter[iy][0]) +
                         (iLigandCenter[iy][1])*(iLigandCenter[iy][1]) +
-                        (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= rLigand*rLigand )
+                        (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= irLigand*irLigand )
                         stericOcclusion[iy]++;
                     
                     //didn't include base - don't want the base to violate the base
@@ -500,7 +500,7 @@ void metropolisJoint()
                 {
                     if ( (iLigandCenter[iy][0]-r[i][0])*(iLigandCenter[iy][0]-r[i][0]) +
                          (iLigandCenter[iy][1]-r[i][1])*(iLigandCenter[iy][1]-r[i][1]) +
-                         (iLigandCenter[iy][2]-r[i][2])*(iLigandCenter[iy][2]-r[i][2]) <= rLigand*rLigand
+                         (iLigandCenter[iy][2]-r[i][2])*(iLigandCenter[iy][2]-r[i][2]) <= irLigand*irLigand
                         && i != iSite[iy])
                     {
                         stericOcclusion[iy]++;
@@ -514,7 +514,7 @@ void metropolisJoint()
                     for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
                     {
                     
-                        if ((iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0])+(iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1])+(iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2])<=(2*rLigand)*(2*rLigand))
+                        if ((iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0])+(iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1])+(iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2])<=(irLigand+brLigand)*(irLigand+brLigand))
                         // if potential ligand intersects with bound ligand
                         
                         {
@@ -533,9 +533,9 @@ void metropolisJoint()
                 
                 /*****Initialize******/
                 //initialize ligand center and stericOcclusion
-                baseLigandCenter[0] = rBase[0] + rLigand*e1Base[0];
-                baseLigandCenter[1] = rBase[1] + rLigand*e1Base[1];
-                baseLigandCenter[2] = rBase[2] + rLigand*e1Base[2];
+                baseLigandCenter[0] = rBase[0] + irLigand*e1Base[0];
+                baseLigandCenter[1] = rBase[1] + irLigand*e1Base[1];
+                baseLigandCenter[2] = rBase[2] + irLigand*e1Base[2];
                 
                 stericOcclusionBase = 0;
 
@@ -546,7 +546,7 @@ void metropolisJoint()
                 {
                     if ( (baseLigandCenter[0]-r[i][0])*(baseLigandCenter[0]-r[i][0]) +
                         (baseLigandCenter[1]-r[i][1])*(baseLigandCenter[1]-r[i][1]) +
-                        (baseLigandCenter[2]-r[i][2])*(baseLigandCenter[2]-r[i][2]) <= rLigand*rLigand)
+                        (baseLigandCenter[2]-r[i][2])*(baseLigandCenter[2]-r[i][2]) <= irLigand*irLigand)
                     {
                         stericOcclusionBase+=N;
                         i=N; // shortcut out of the loop
@@ -572,7 +572,7 @@ void metropolisJoint()
                                 //for each bound iSite, test if bound ligand intersects with base ligand site
                                 for (ib=0; ib<bSiteTotal;ib++)
                                 {
-                                    if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (2*rLigand)*(2*rLigand))
+                                    if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
                                     {
                                         //boundToBaseDeliver[ib]++;
                                         stericOcclusionBase++;
@@ -591,7 +591,7 @@ void metropolisJoint()
 //                                    }
 //                                    
 //                                    //test if bound ligand intersects base site
-//                                    if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (2*rLigand)*(2*rLigand))
+//                                    if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
 //                                    {
 //                                        stericOcclusionBase++;
 //                                    }

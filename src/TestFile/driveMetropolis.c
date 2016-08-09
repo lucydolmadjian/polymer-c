@@ -38,7 +38,7 @@ FILE *iSiteList;
 long N, ntNextStationarityCheck, iBin;
 
 long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
-double c0, c1, rLigand;
+double c0, c1, irLigand, brLigand;
 double ree, rM, rH, ksStatistic;
 long rMCounts[NBINS], rMCountsPrevious[NBINS];
 long iseed;
@@ -118,13 +118,17 @@ int main( int argc, char *argv[] )
         //iSite = floor(N/2);
 		
 	if(argv[3]) // rLigand - RATIO OF ligand radius to kuhn length
-		rLigand = atof(argv[3]);
-    printf("This is argument 3: %f\n", rLigand);
+		irLigand = atof(argv[3]);
+    printf("This is argument 3: %f\n", irLigand);
+    
+    if(argv[4]) // rLigand - RATIO OF ligand radius to kuhn length
+        brLigand = atof(argv[4]);
+    printf("This is argument 4: %f\n", brLigand);
     
     Force = 0;
-    if(argv[4]) // Force - Units of kBT/[kuhn length]
-        Force = atof(argv[4]);
-    printf("This is argument 4: %f\n", Force);
+    if(argv[5]) // Force - Units of kBT/[kuhn length]
+        Force = atof(argv[5]);
+    printf("This is argument 5: %f\n", Force);
 //    
 //    if(argv[5]) // Occupied (phosphorylated) iSites
 //        strcpy(phosphorylatediSites,argv[5]);
@@ -138,13 +142,13 @@ int main( int argc, char *argv[] )
     // IF verboseTF = 0, one line summarizing the run is written to the file listName.
     // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
     verboseTF = 0;
-    if(argv[5]) // Verbose Output
-        verboseTF = atoi(argv[5]);
-    printf("This is argument 7: %d\n", verboseTF);
+    if(argv[6]) // Verbose Output
+        verboseTF = atoi(argv[6]);
+    printf("This is argument 6: %d\n", verboseTF);
     
-    if(argv[6]) //Test Run - yes=1, no=0
-        testRun = atoi(argv[6]);
-    printf("This is argument 8: %d\n", testRun);
+    if(argv[7]) //Test Run - yes=1, no=0
+        testRun = atoi(argv[7]);
+    printf("This is argument 7: %d\n", testRun);
 //    
 //    if(argv[9]) // Occupied (phosphorylated) iSites
 //        strcpy(phosphorylatediSitesNoSpace,argv[9]);

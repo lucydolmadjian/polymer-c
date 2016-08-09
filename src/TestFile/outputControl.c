@@ -65,11 +65,12 @@ void finalizeSummary()
                     phosphorylatediSitesNoSpace);
         }
         
-        fprintf(fList, "%ld %f %f %ld %f %f %f %e",
+        fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",
 
                 
                 N,           // 1
-                rLigand,     // 4
+                irLigand,     // 4
+                brLigand,
                 Force,       // 5
                 nt,          // 6
                 ksStatistic, // 7
