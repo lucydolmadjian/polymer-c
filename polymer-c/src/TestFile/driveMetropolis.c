@@ -1,5 +1,5 @@
 /*** Allard Lab jun.allard@uci.edu                    ***/
-//Commit
+//
 
 #define TWISTER genrand_real3()
 #define NMAX     400
