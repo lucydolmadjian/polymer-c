@@ -85,9 +85,14 @@ void getSites()
     if (MULTIPLE) //if looking at multiple binding (i.e. MULTIPLE set to 1 in driveM)
     {
         
-        bSiteTotal = 1; //total number of iSites bound
+        bSiteTotal = 4; //total number of iSites bound
         
-        bSite[0]=49; //specify bSites same way as iSites
+        bSite[0]=10;
+        bSite[1]=10;
+        bSite[2]=40;
+        bSite[3]=40;
+        
+        //specify bSites same way as iSites
 
     }
 

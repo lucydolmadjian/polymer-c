@@ -69,14 +69,14 @@ void finalizeSummary()
 
                 
                 N,           // 1
-                irLigand,     // 4
-                brLigand,
-                Force,       // 5
-                nt,          // 6
-                ksStatistic, // 7
-                reeBar,      // 8
-                ree2Bar,     // 9
-                rMBar);       //10
+                irLigand,     // 2
+                brLigand,   //3
+                Force,       // 4
+                nt,          // 5
+                ksStatistic, // 6
+                reeBar,      // 7
+                ree2Bar,     // 8
+                rMBar);       //9
         
         for (iy=0;iy<iSiteTotal;iy++)
         {

@@ -46,10 +46,10 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-for ((BRATIO=0;BRATIO<=400;BRATIO=$BRATIO+5))
+for ((BRATIO=0;BRATIO<=14;BRATIO++))
 do
 
-echo "Ratio = $RATIO"
+echo "bRatio = $BRATIO"
 
 ITERATIONS=1
 
@@ -86,7 +86,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 ################################
 
             # run program with specified parameters
-            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN &
+            ./metropolis.out MultipleBindingTestReeN50bSitesTotal4.$BRATIO $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -112,7 +112,7 @@ wait
 echo "Done waiting for processes to finish."
 
 # loop through all files, concatenate them into one file
- for ((BRATIO=0; BRATIO<=400; BRATIO=$BRATIO+5))
+ for ((BRATIO=0; BRATIO<=14; BRATIO++))
  do
 
 #IT=1
@@ -120,7 +120,7 @@ echo "Done waiting for processes to finish."
 #for ((IT=1; IT<=$TOTALITERATIONS; IT++))
 #do
 #
-cat MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 >> MultipleBindingTestReeN50bSiteTotal1irLigand5.bSite49.cat.txt
+cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
 #
 #done
 done
