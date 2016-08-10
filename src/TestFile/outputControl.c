@@ -21,7 +21,7 @@ void initializeSummary()
     for(iy=0;iy<iSiteTotal;iy++)
     {
     POcclude_sum[iy] = 0;
-    //Prvec0_sum[iy]   = 0;
+    Prvec0_sum[iy]   = 0;
     }
     POccludeBase_sum = 0;
 //    for(ib=0; ib<bSiteTotal; ib++)
@@ -42,7 +42,7 @@ void finalizeSummary()
     for(iy=0;iy<iSiteTotal;iy++)
     {
     POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
-    //Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
+    Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
     }
     
     POccludeBase = (double)POccludeBase_sum/(double)(nt-NTCHECK);
@@ -80,11 +80,12 @@ void finalizeSummary()
         
         for (iy=0;iy<iSiteTotal;iy++)
         {
-            fprintf(fList, " %ld %e %e",
+            fprintf(fList, " %ld %e %e %e",
                     
-                iSite[iy],
-                POcclude[iy],
-                1-POcclude[iy]);
+                iSite[iy], //10 + 4*iBind
+                POcclude[iy], //11 + 4*iBind
+                1-POcclude[iy], //12 + 4*iBind
+                Prvec0[iy]); //13 + 4*iBind
                     
         }
         
@@ -179,7 +180,7 @@ void dataRecording()
         for(iy=0;iy<iSiteTotal;iy++)
         {
         POcclude_sum[iy] += (long)(stericOcclusion[iy]>0);
-        //Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
+        Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
         }
         POccludeBase_sum += (long)(stericOcclusionBase>0);
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);

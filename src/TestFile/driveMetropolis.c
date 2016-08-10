@@ -149,7 +149,18 @@ int main( int argc, char *argv[] )
     if(argv[7]) //Test Run - yes=1, no=0
         testRun = atoi(argv[7]);
     printf("This is argument 7: %d\n", testRun);
-//    
+    
+    if(argv[8])
+    {
+    if(atoi(argv[8])!=-1) //iSite Location from command line
+    {
+        iSite[0]= atoi(argv[8]);
+        iSiteTotal=1;
+        printf("This is argument 8: %ld\n", iSite[0]);
+        testRun=3;
+    }
+    }
+//
 //    if(argv[9]) // Occupied (phosphorylated) iSites
 //        strcpy(phosphorylatediSitesNoSpace,argv[9]);
 //    printf("This is argument 9: %s\n", phosphorylatediSitesNoSpace);

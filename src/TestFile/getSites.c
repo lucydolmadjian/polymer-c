@@ -68,6 +68,10 @@ void getSites()
             iSite[4]=49;
 
             break;
+            
+        case 3: //do nothing, use command line input
+            
+            break;
 
     }
     

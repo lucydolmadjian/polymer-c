@@ -30,7 +30,7 @@ ITERATIONS=1
 
 #ISITETOTAL=4
 
-#ISITELOCATIONS="10 12 14 30" # string format "iSite iSite iSite....."
+ISITELOCATION=5
 
 #####################################################
 
@@ -86,7 +86,11 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 ################################
 
             # run program with specified parameters
+<<<<<<< HEAD
             ./metropolis.out MultipleBindingTestReeN50bSitesTotal4.$BRATIO $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN &
+=======
+            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION &
+>>>>>>> 2afe308a8fbc76de34d27c442b74780a54c64cc4
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
