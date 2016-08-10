@@ -83,9 +83,9 @@ void finalizeSummary()
             fprintf(fList, " %ld %e %e %e",
                     
                 iSite[iy], //10 + 4*iBind
-                POcclude[iy],
-                1-POcclude[iy],
-                Prvec0[iy]);
+                POcclude[iy], //11 + 4*iBind
+                1-POcclude[iy], //12 + 4*iBind
+                Prvec0[iy]); //13 + 4*iBind
                     
         }
         
