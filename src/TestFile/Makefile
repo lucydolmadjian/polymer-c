@@ -3,4 +3,12 @@ all:
 
 	chmod a+x batchMetropolis.sh
 
-	./batchMetropolis.sh 6 v
+	cp metropolis.out ~/polymer-c/runs/.
+
+run:
+
+	gcc -O3 driveMetropolis.c -o metropolis.out -lm
+
+	chmod a+x batchMetropolis.sh
+
+	./batchMetropolis.sh
