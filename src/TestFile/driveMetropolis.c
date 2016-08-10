@@ -150,9 +150,7 @@ int main( int argc, char *argv[] )
         testRun = atoi(argv[7]);
     printf("This is argument 7: %d\n", testRun);
     
-    if(argv[8]) //iSite
-    
-    if(argv[8]!=-1)
+    if(argv[8]!=-1) //iSite Location from command line
     {
         iSite[0]= atoi(argv[8]);
         iSiteTotal=1;
