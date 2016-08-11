@@ -11,9 +11,9 @@
 #define INF      1e14
 #define DCHIINIT 0.1
 #define KSCRITICAL 0.005
-#define MEMBRANE 0
-#define MULTIPLE 0
-#define STIFFEN  1
+#define MEMBRANE 1
+#define MULTIPLE 1
+#define STIFFEN  0
 #define CPMAX    1e8
 
 #include <math.h>

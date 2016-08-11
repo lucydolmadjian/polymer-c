@@ -16,26 +16,47 @@ void getSites()
    
     switch (testRun) //switch in Batch Script to specify which set of iSites you want to use
     {
+//        case 0:  // iSites initialized for human CD3Zeta-Chain
+//            
+//            iSiteTotal = 7;
+//            
+//            
+//            for (iy=0;iy<iSiteTotal;iy++) //initializes iSite array
+//            {
+//                iSite[iy]=0;
+//            }
+//            
+//            //specify iSite locations by rod number (located at n-1) (i.e. if you have a polymer of N=50, and want an iSite at the 36th rod, input iSite[]=35)
+//            
+//            iSite[0]=42;
+//            iSite[1]=50;
+//            iSite[2]=61;
+//            iSite[3]=89;
+//            iSite[4]=101;
+//            iSite[5]=120;
+//            iSite[6]=131;
+//            break;
+            
         case 0:  // iSites initialized for human CD3Zeta-Chain
-            
-            iSiteTotal = 7;
-            
-            
+
+            iSiteTotal = 6;
+
+
             for (iy=0;iy<iSiteTotal;iy++) //initializes iSite array
             {
                 iSite[iy]=0;
             }
-            
+
             //specify iSite locations by rod number (located at n-1) (i.e. if you have a polymer of N=50, and want an iSite at the 36th rod, input iSite[]=35)
-            
-            iSite[0]=42;
-            iSite[1]=50;
-            iSite[2]=61;
-            iSite[3]=89;
-            iSite[4]=101;
-            iSite[5]=120;
-            iSite[6]=131;
+
+            iSite[0]=50;
+            iSite[1]=61;
+            iSite[2]=89;
+            iSite[3]=101;
+            iSite[4]=120;
+            iSite[5]=131;
             break;
+
             
         case 1: // iSites for formin //for testing - N=10
             
@@ -54,7 +75,7 @@ void getSites()
             
         case 2: //iSites for testing
             
-            iSiteTotal = 2;
+            iSiteTotal = 14;
             
             for(iy=0;iy<iSiteTotal;iy++)
             {
@@ -63,6 +84,18 @@ void getSites()
             
             iSite[0]=0;
             iSite[1]=1;
+            iSite[2]=2;
+            iSite[3]=3;
+            iSite[4]=4;
+            iSite[5]=5;
+            iSite[6]=6;
+            iSite[7]=7;
+            iSite[8]=8;
+            iSite[9]=9;
+            iSite[10]=10;
+            iSite[11]=11;
+            iSite[12]=12;
+            iSite[13]=13;
 
 
             break;

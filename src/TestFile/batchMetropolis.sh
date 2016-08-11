@@ -3,17 +3,17 @@
 
 NRequested=0            # initialize number of runs submitted
 
-NRODS=2
+NRODS=143
 
 IRATIO=1
 
-BRATIO=0
+BRATIO=4
 
 FORCE=0
 
 VERBOSE=1
 
-TESTRUN=2 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
+TESTRUN=0 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
 ITERATIONS=1
 
@@ -90,7 +90,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ~/Documents/polymer-c_runs/metropolis.out MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "1 0" $STIFFENRANGE "10" &
+            ~/Documents/polymer-c_runs/metropolis.out StiffenTestN14ReeDist $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "0 1 0 1 0 1 0 1 0 1 0 1 0 1" $STIFFENRANGE "01010101010101" &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
