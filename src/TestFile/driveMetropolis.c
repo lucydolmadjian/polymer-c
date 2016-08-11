@@ -12,8 +12,8 @@
 #define DCHIINIT 0.1
 #define KSCRITICAL 0.005
 #define MEMBRANE 0
-#define MULTIPLE 1
-#define STIFFEN  0
+#define MULTIPLE 0
+#define STIFFEN  1
 #define CPMAX    1e8
 
 #include <math.h>
@@ -80,7 +80,7 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
-int convergedTF, constraintSatisfiedTF, verboseTF, testRun;
+int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 
 /*******************************************************************************/
 //  INCLUDES
@@ -129,15 +129,6 @@ int main( int argc, char *argv[] )
     if(argv[5]) // Force - Units of kBT/[kuhn length]
         Force = atof(argv[5]);
     printf("This is argument 5: %f\n", Force);
-//    
-//    if(argv[5]) // Occupied (phosphorylated) iSites
-//        strcpy(phosphorylatediSites,argv[5]);
-//        printf("This is argument 5: %s\n", phosphorylatediSites);
-//    
-//    if(argv[6]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
-//        StiffenRange = atof(argv[6]);
-//    printf("This is argument 6: %f\n", StiffenRange);
-    
     
     // IF verboseTF = 0, one line summarizing the run is written to the file listName.
     // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
@@ -160,10 +151,43 @@ int main( int argc, char *argv[] )
         testRun=3;
     }
     }
-//
-//    if(argv[9]) // Occupied (phosphorylated) iSites
-//        strcpy(phosphorylatediSitesNoSpace,argv[9]);
-//    printf("This is argument 9: %s\n", phosphorylatediSitesNoSpace);
+    
+if(argv[9])
+{
+    if(atoi(argv[9])!=-1)
+    {
+        bSite[0]=atoi(argv[9]);
+        bSiteTotal=1;
+        printf("This is argument 9: %ld\n", bSite[0]);
+        bSiteCommand = 1;
+    }
+    else
+    {
+        bSiteCommand = 0;
+    }
+}
+    
+    
+    
+///////////Stiffening Parameters/////////////////
+    
+    if (STIFFEN)
+    {
+    
+    if(argv[10]) // Occupied (phosphorylated) iSites
+        strcpy(phosphorylatediSites,argv[10]);
+        printf("This is argument 10: %s\n", phosphorylatediSites);
+
+    if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
+        StiffenRange = atof(argv[11]);
+    printf("This is argument 11: %f\n", StiffenRange);
+
+    if(argv[12]) // Occupied (phosphorylated) iSites
+        strcpy(phosphorylatediSitesNoSpace,argv[12]);
+    printf("This is argument 12: %s\n", phosphorylatediSitesNoSpace);
+    
+    }
+    
     
 //    if(argv[10]) //Delivery distance - how close to base it needs to be
 //        deliveryDistance = atof(argv[10]);

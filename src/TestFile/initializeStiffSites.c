@@ -48,8 +48,12 @@ void initializeStiffSites()
                 
             case 2:
                 
-                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
+//                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
+//                break;
+
+                sscanf(phosphorylatediSites,"%lf %lf", &phosiSites[0], &phosiSites[1]);
                 break;
+                
         }
         
         

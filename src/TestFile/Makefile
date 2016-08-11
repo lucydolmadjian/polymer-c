@@ -3,10 +3,7 @@ all:
 
 	chmod a+x batchMetropolis.sh
 
-<<<<<<< HEAD
-	./batchMetropolis.sh 7 v
-=======
-	cp metropolis.out ~/polymer-c/runs/.
+	cp metropolis.out ~/Documents/polymer-c_runs/.
 
 run:
 
@@ -14,5 +11,7 @@ run:
 
 	chmod a+x batchMetropolis.sh
 
-	./batchMetropolis.sh
->>>>>>> 2afe308a8fbc76de34d27c442b74780a54c64cc4
+	cp metropolis.out ~/Documents/polymer-c_runs/.
+
+	./batchMetropolis.sh 7 v
+

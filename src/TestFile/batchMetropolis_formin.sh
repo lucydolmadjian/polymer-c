@@ -11,6 +11,8 @@ BRATIO=0
 
 FORCE=0
 
+#STIFFENRANGE=-1 # -1 means don't stiffen
+
 VERBOSE=1
 
 TESTRUN=2 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
@@ -28,12 +30,9 @@ ITERATIONS=1
 
 #ISITETOTAL=4
 
-ISITELOCATION=-1
+ISITELOCATION=0
 
 BSITELOCATION=0
-
-
-STIFFENRANGE=0 # -1 means don't stiffen
 
 #####################################################
 
@@ -49,10 +48,10 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-#for ((BRATIO=0;BRATIO<=14;BRATIO++))
-#do
+for ((BRATIO=0;BRATIO<=14;BRATIO++))
+do
 
-#echo "bRatio = $BRATIO"
+echo "bRatio = $BRATIO"
 
 ITERATIONS=1
 
@@ -85,12 +84,12 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 #            STIFFISITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS PhosphorylatediSitesNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+#            echo "Line $ITERATIONS of file is $STIFFISITES"
 ################################
 
             # run program with specified parameters
 
-            ~/Documents/polymer-c_runs/metropolis.out MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "1 0" $STIFFENRANGE "10" &
+            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -107,24 +106,24 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
     done
             echo "Done calling metropolis."
 done
-#done
+done
 
 
-## wait for all background processes to finish before concatenating files
-#wait
+# wait for all background processes to finish before concatenating files
+wait
+
+echo "Done waiting for processes to finish."
+
+# loop through all files, concatenate them into one file
+ for ((BRATIO=0; BRATIO<=14; BRATIO++))
+ do
+
+#IT=1
 #
-#echo "Done waiting for processes to finish."
-
-## loop through all files, concatenate them into one file
-# for ((BRATIO=0; BRATIO<=14; BRATIO++))
-# do
+#for ((IT=1; IT<=$TOTALITERATIONS; IT++))
+#do
 #
-##IT=1
-##
-##for ((IT=1; IT<=$TOTALITERATIONS; IT++))
-##do
-##
-#cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
-##
-##done
+cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
+#
 #done
+done
