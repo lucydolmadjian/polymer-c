@@ -171,22 +171,22 @@ if(argv[9])
     
 ///////////Stiffening Parameters/////////////////
     
-    if (STIFFEN)
-    {
-    
-    if(argv[10]) // Occupied (phosphorylated) iSites
-        strcpy(phosphorylatediSites,argv[10]);
-        printf("This is argument 10: %s\n", phosphorylatediSites);
-
-    if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
-        StiffenRange = atof(argv[11]);
-    printf("This is argument 11: %f\n", StiffenRange);
-
-    if(argv[12]) // Occupied (phosphorylated) iSites
-        strcpy(phosphorylatediSitesNoSpace,argv[12]);
-    printf("This is argument 12: %s\n", phosphorylatediSitesNoSpace);
-    
-    }
+//    if (STIFFEN)
+//    {
+//    
+//    if(argv[10]) // Occupied (phosphorylated) iSites
+//        strcpy(phosphorylatediSites,argv[10]);
+//        printf("This is argument 10: %s\n", phosphorylatediSites);
+//
+//    if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
+//        StiffenRange = atof(argv[11]);
+//    printf("This is argument 11: %f\n", StiffenRange);
+//
+//    if(argv[12]) // Occupied (phosphorylated) iSites
+//        strcpy(phosphorylatediSitesNoSpace,argv[12]);
+//    printf("This is argument 12: %s\n", phosphorylatediSitesNoSpace);
+//    
+//    }
     
     
 //    if(argv[10]) //Delivery distance - how close to base it needs to be
