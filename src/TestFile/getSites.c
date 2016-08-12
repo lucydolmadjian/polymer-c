@@ -131,7 +131,40 @@ void getSites()
                 bSite[3]=40;
                 break;
                 
-            case 1:
+            case 1: //bSites for multiple binding of ZAP-70 to CD3 Zeta mouse
+                
+                for (iy=0; iy<iSiteTotal; iy++)
+                {
+                    iSiteOccupied[iy]=0;
+                }
+                
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf", &iSiteOccupied[0],&iSiteOccupied[1],&iSiteOccupied[2],&iSiteOccupied[3], &iSiteOccupied[4],&iSiteOccupied[5]);
+                
+                bSiteCounter=0;
+                for (iy=0;iy<iSiteTotal;iy++)
+                {
+                    if (iSiteOccupied[iy]==1)
+                    {
+                        bSite[bSiteCounter]=iSite[iy];
+                        bSiteCounter++;
+                    }
+                }
+                
+                bSiteTotal=bSiteCounter;
+                
+                //for debugging
+                for (ib=0; ib<bSiteTotal; ib++)
+                {
+                    printf("bSite[%ld] is %ld \n", ib, bSite[ib]);
+                    fflush(stdout);
+                }
+                
+                printf("bSiteTotal = %ld \n", bSiteTotal);
+                fflush(stdout);
+                
+                break;
+                
+            case 2:
                 
                 break;
         }

@@ -54,7 +54,10 @@ double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 double StiffenRange,phosiSites[NMAX], Stiff[NMAX];
-char phosphorylatediSites[4*NMAX],phosphorylatediSitesNoSpace[NMAX];
+char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
+
+double iSiteOccupied[NMAX];
+long bSiteCounter;
 
 double bLigandCenter[NMAX][3];
 long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;
@@ -117,29 +120,29 @@ int main( int argc, char *argv[] )
     //if(iSite == -1)
         //iSite = floor(N/2);
 		
-	if(argv[3]) // rLigand - RATIO OF ligand radius to kuhn length
+	if(argv[3]) // irLigand - RATIO OF ligand radius to kuhn length
 		irLigand = atof(argv[3]);
-    printf("This is argument 3: %f\n", irLigand);
+        printf("This is argument 3: %f\n", irLigand);
     
-    if(argv[4]) // rLigand - RATIO OF ligand radius to kuhn length
+    if(argv[4]) // brLigand - RATIO OF ligand radius to kuhn length
         brLigand = atof(argv[4]);
-    printf("This is argument 4: %f\n", brLigand);
+        printf("This is argument 4: %f\n", brLigand);
     
     Force = 0;
     if(argv[5]) // Force - Units of kBT/[kuhn length]
         Force = atof(argv[5]);
-    printf("This is argument 5: %f\n", Force);
+        printf("This is argument 5: %f\n", Force);
     
     // IF verboseTF = 0, one line summarizing the run is written to the file listName.
     // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
     verboseTF = 0;
     if(argv[6]) // Verbose Output
         verboseTF = atoi(argv[6]);
-    printf("This is argument 6: %d\n", verboseTF);
+        printf("This is argument 6: %d\n", verboseTF);
     
     if(argv[7]) //Test Run - yes=1, no=0
         testRun = atoi(argv[7]);
-    printf("This is argument 7: %d\n", testRun);
+        printf("This is argument 7: %d\n", testRun);
     
     if(argv[8])
     {
@@ -152,41 +155,41 @@ int main( int argc, char *argv[] )
     }
     }
     
-if(argv[9])
-{
-    if(atoi(argv[9])!=-1)
+    if(argv[9])
     {
-        bSite[0]=atoi(argv[9]);
-        bSiteTotal=1;
-        printf("This is argument 9: %ld\n", bSite[0]);
-        bSiteCommand = 1;
+        if(atoi(argv[9])!=-1)
+        {
+            bSite[0]=atoi(argv[9]);
+            bSiteTotal=1;
+            printf("This is argument 9: %ld\n", bSite[0]);
+            bSiteCommand = 2;
+        }
+        else
+        {
+            bSiteCommand = 0;
+        }
     }
-    else
-    {
-        bSiteCommand = 0;
-    }
-}
     
     
     
 ///////////Stiffening Parameters/////////////////
     
-    if (STIFFEN)
-    {
     
     if(argv[10]) // Occupied (phosphorylated) iSites
-        strcpy(phosphorylatediSites,argv[10]);
-        printf("This is argument 10: %s\n", phosphorylatediSites);
+        strcpy(occupiedSites,argv[10]);
+        printf("This is argument 10: %s\n", occupiedSites);
 
-    if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
-        StiffenRange = atof(argv[11]);
-    printf("This is argument 11: %f\n", StiffenRange);
+//    if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
+//        StiffenRange = atof(argv[11]);
+//    printf("This is argument 11: %f\n", StiffenRange);
 
-    if(argv[12]) // Occupied (phosphorylated) iSites
-        strcpy(phosphorylatediSitesNoSpace,argv[12]);
-    printf("This is argument 12: %s\n", phosphorylatediSitesNoSpace);
+    if(argv[11]) // Occupied (phosphorylated) iSites
+        strcpy(occupiedSitesNoSpace,argv[11]);
+        printf("This is argument 11: %s \n", occupiedSitesNoSpace);
     
-    }
+    if(argv[12]) //bSiteCommand - switch for how bSites are input
+        bSiteCommand = atoi(argv[12]);
+        printf("This is argument 12: %d \n", bSiteCommand);
     
     
 //    if(argv[10]) //Delivery distance - how close to base it needs to be

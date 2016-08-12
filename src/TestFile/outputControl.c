@@ -61,8 +61,8 @@ void finalizeSummary()
         //set joints to stiff based on which iSites are occupied and the stiffness range
         if (STIFFEN) //stiffen only if StiffenRange is 0 or greater
         {
-            fprintf(fList, "%s %s ",phosphorylatediSites,
-                    phosphorylatediSitesNoSpace);
+            fprintf(fList, "%s %s ",occupiedSites,
+                    occupiedSitesNoSpace);
         }
         
         fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",

@@ -17,6 +17,8 @@ TESTRUN=0 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use t
 
 ITERATIONS=1
 
+BSITECOMMAND=1
+
 
 #########You can ignore these parameters###########
 
@@ -37,9 +39,9 @@ STIFFENRANGE=0 # -1 means don't stiffen
 
 #####################################################
 
-TOTALITERATIONS=1 #for testing
+TOTALITERATIONS=3 #for testing
 
-#TOTALITERATIONS=`wc -l < PhosphorylatediSites.txt`
+#TOTALITERATIONS=`wc -l < OccupiediSitesMouse.txt`
 
 echo "Length of file is $TOTALITERATIONS"
 
@@ -85,12 +87,12 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             OCCUPIEDSITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS OccupiediSitesMouseNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+            echo "Line $ITERATIONS of file is $OCCUPIEDSITESNOSPACE"
 ################################
 
             # run program with specified parameters
 
-            ~/Documents/polymer-c_runs/metropolis.out StiffenTestN14ReeDist $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" &
+            ~/Documents/polymer-c_runs/metropolis.out MultipleTestBoundLigands $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" "$OCCUPIEDSITESNOSPACE" $BSITECOMMAND &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]

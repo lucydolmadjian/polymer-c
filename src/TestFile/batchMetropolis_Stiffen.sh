@@ -85,7 +85,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             OCCUPIEDSITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS OccupiediSitesMouseNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+            echo "Line $ITERATIONS of file is $OCCUPIEDISITES"
 ################################
 
             # run program with specified parameters
