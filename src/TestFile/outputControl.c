@@ -38,7 +38,8 @@ void finalizeSummary()
     // finalize summary statistics
     reeBar = reeBar_sum/(double)(nt-NTCHECK);
     ree2Bar = ree2Bar_sum/(double)(nt-NTCHECK);
-    
+
+	
     for(iy=0;iy<iSiteTotal;iy++)
     {
     POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
@@ -116,9 +117,9 @@ void dataRecording()
     // distance from base to iSite
     for(iy=0;iy<iSiteTotal;iy++)
     {
-        iSiteCurrent = iy;
+        iSiteCurrent = iSite[iy];
         reeiSite[iy] = sqrt(r[iSiteCurrent][0]*r[iSiteCurrent][0] + r[iSiteCurrent][1]*r[iSiteCurrent][1] + r[iSiteCurrent][2]*r[iSiteCurrent][2]);
-    }
+	}
 
     // distance of tip to membrane
 	rM = r[N-1][2];
@@ -179,8 +180,9 @@ void dataRecording()
         
         for(iy=0;iy<iSiteTotal;iy++)
         {
-        POcclude_sum[iy] += (long)(stericOcclusion[iy]>0);
-        Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
+			POcclude_sum[iy] += (long)(stericOcclusion[iy]>0);
+			Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
+			
         }
         POccludeBase_sum += (long)(stericOcclusionBase>0);
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);
