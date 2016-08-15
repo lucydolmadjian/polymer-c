@@ -159,8 +159,8 @@ void getSites()
                     fflush(stdout);
                 }
                 
-                printf("bSiteTotal = %ld \n", bSiteTotal);
-                fflush(stdout);
+//                printf("bSiteTotal = %ld \n", bSiteTotal);
+//                fflush(stdout);
                 
                 break;
                 

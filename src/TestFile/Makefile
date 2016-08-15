@@ -7,11 +7,9 @@ all:
 
 multiple:
 
-	gcc -O3 driveMetropolis.c -o metropolis.out -lm
+	gcc -O3 driveMetropolis.c -o metropolis.x -lm
 
 	chmod a+x batchMetropolis_Multiple.sh
-
-	cp metropolis.out ~/Documents/polymer-c_runs/.
 
 	./batchMetropolis_Multiple.sh 7 v
 
