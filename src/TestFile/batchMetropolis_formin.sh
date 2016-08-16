@@ -3,17 +3,19 @@
 
 NRequested=0            # initialize number of runs submitted
 
-NRODS=143       # N=143 for CD3 in human and mouse
+NRODS=2
 
-IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc) # kinase = 10?
+IRATIO=1
 
-BRATIO=5        # BRATIO = 5-7 for SH2 domain of ZAP-70
+BRATIO=0
 
 FORCE=0
 
-VERBOSE=0
+#STIFFENRANGE=-1 # -1 means don't stiffen
 
-TESTRUN=0 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
+VERBOSE=1
+
+TESTRUN=2 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
 ITERATIONS=1
 
@@ -28,12 +30,9 @@ ITERATIONS=1
 
 #ISITETOTAL=4
 
-ISITELOCATION=-1
+ISITELOCATION=0
 
-BSITELOCATION=-1
-
-
-STIFFENRANGE=0 # -1 means don't stiffen
+BSITELOCATION=0
 
 #####################################################
 
@@ -49,10 +48,10 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-#for ((BRATIO=0;BRATIO<=14;BRATIO++))
-#do
+for ((BRATIO=0;BRATIO<=14;BRATIO++))
+do
 
-#echo "bRatio = $BRATIO"
+echo "bRatio = $BRATIO"
 
 ITERATIONS=1
 
@@ -79,18 +78,18 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
 ###############Ignore these lines - used for Stiffening.  Currently still in input, so need to be read, but otherwise can be ignored.###############
             # read specified line of text file
-
-            OCCUPIEDSITES="`awk 'NR==iter' iter=$ITERATIONS OccupiediSitesMouse.txt`"
-
-            OCCUPIEDSITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS OccupiediSitesMouseNoSpace.txt`"
+#
+#            STIFFISITES="`awk 'NR==iter' iter=$ITERATIONS PhosphorylatediSites.txt`"
+#
+#            STIFFISITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS PhosphorylatediSitesNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+#            echo "Line $ITERATIONS of file is $STIFFISITES"
 ################################
 
             # run program with specified parameters
 
-            ~/Documents/polymer-c_runs/metropolis.out StiffenTestN14ReeDist $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" &
+            ./metropolis.out MultipleBindingTestReeN50bSiteTotal1irLigand5.$BRATIO.bSite49 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -107,24 +106,24 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
     done
             echo "Done calling metropolis."
 done
-#done
+done
 
 
-## wait for all background processes to finish before concatenating files
-#wait
+# wait for all background processes to finish before concatenating files
+wait
+
+echo "Done waiting for processes to finish."
+
+# loop through all files, concatenate them into one file
+ for ((BRATIO=0; BRATIO<=14; BRATIO++))
+ do
+
+#IT=1
 #
-#echo "Done waiting for processes to finish."
-
-## loop through all files, concatenate them into one file
-# for ((BRATIO=0; BRATIO<=14; BRATIO++))
-# do
+#for ((IT=1; IT<=$TOTALITERATIONS; IT++))
+#do
 #
-##IT=1
-##
-##for ((IT=1; IT<=$TOTALITERATIONS; IT++))
-##do
-##
-#cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
-##
-##done
+cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
+#
 #done
+done

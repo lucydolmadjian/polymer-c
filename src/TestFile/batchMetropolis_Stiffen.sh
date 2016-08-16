@@ -5,9 +5,9 @@ NRequested=0            # initialize number of runs submitted
 
 NRODS=143       # N=143 for CD3 in human and mouse
 
-IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc) # kinase = 10?
+IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
 
-BRATIO=5        # BRATIO = 5-7 for SH2 domain of ZAP-70
+BRATIO=0        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
 FORCE=0
 
@@ -37,7 +37,7 @@ STIFFENRANGE=0 # -1 means don't stiffen
 
 #####################################################
 
-TOTALITERATIONS=1 #for testing
+TOTALITERATIONS=3 #for testing
 
 #TOTALITERATIONS=`wc -l < PhosphorylatediSites.txt`
 
@@ -85,12 +85,12 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             OCCUPIEDSITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS OccupiediSitesMouseNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+            echo "Line $ITERATIONS of file is $OCCUPIEDISITES"
 ################################
 
             # run program with specified parameters
 
-            ~/Documents/polymer-c_runs/metropolis.out StiffenTestN14ReeDist $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" &
+            ./metropolis.out StiffenTestN3Stiffen2 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]

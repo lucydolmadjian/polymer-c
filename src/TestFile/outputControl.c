@@ -21,7 +21,7 @@ void initializeSummary()
     for(iy=0;iy<iSiteTotal;iy++)
     {
     POcclude_sum[iy] = 0;
-    //Prvec0_sum[iy]   = 0;
+    Prvec0_sum[iy]   = 0;
     }
     POccludeBase_sum = 0;
 //    for(ib=0; ib<bSiteTotal; ib++)
@@ -42,7 +42,7 @@ void finalizeSummary()
     for(iy=0;iy<iSiteTotal;iy++)
     {
     POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
-    //Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
+    Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
     }
     
     POccludeBase = (double)POccludeBase_sum/(double)(nt-NTCHECK);
@@ -58,36 +58,34 @@ void finalizeSummary()
     {
         fList = fopen(listName, "a");
         
-        //set joints to stiff based on which iSites are occupied and the stiffness range
-        if (StiffenRange > -1) //stiffen only if StiffenRange is 0 or greater
-        {
-            fprintf(fList, "%s %s ",phosphorylatediSites,
-                    phosphorylatediSitesNoSpace);
-        }
+        fprintf(fList, "%s %s ",occupiedSites,
+                    occupiedSitesNoSpace);
         
-        fprintf(fList, "%ld %f %f %ld %f %f %f %e",
+        fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",
 
                 
                 N,           // 1
-                rLigand,     // 4
-                Force,       // 5
-                nt,          // 6
-                ksStatistic, // 7
-                reeBar,      // 8
-                ree2Bar,     // 9
-                rMBar);       //10
+                irLigand,     // 2
+                brLigand,   //3
+                Force,       // 4
+                nt,          // 5
+                ksStatistic, // 6
+                reeBar,      // 7
+                ree2Bar,     // 8
+                rMBar);       //9
         
         for (iy=0;iy<iSiteTotal;iy++)
         {
-            fprintf(fList, " %ld %e %e",
+            fprintf(fList, " %ld %e %e %e",
                     
-                iSite[iy],
-                POcclude[iy],
-                1-POcclude[iy]);
+                iSite[iy], //10 + 4*iBind
+                POcclude[iy], //11 + 4*iBind
+                1-POcclude[iy], //12 + 4*iBind
+                Prvec0[iy]); //13 + 4*iBind
                     
         }
         
-        fprintf(fList, " %s %e %e", "Base", POccludeBase, 1-POccludeBase);
+        fprintf(fList, " %d %e %e", -1, POccludeBase, 1-POccludeBase);
         
         for (ib=0;ib<bSiteTotal;ib++)
         {
@@ -114,7 +112,7 @@ void dataRecording()
     // distance from base to iSite
     for(iy=0;iy<iSiteTotal;iy++)
     {
-        iSiteCurrent = iy;
+        iSiteCurrent = iSite[iy];
         reeiSite[iy] = sqrt(r[iSiteCurrent][0]*r[iSiteCurrent][0] + r[iSiteCurrent][1]*r[iSiteCurrent][1] + r[iSiteCurrent][2]*r[iSiteCurrent][2]);
     }
 
@@ -134,7 +132,11 @@ void dataRecording()
     if (verboseTF)
     {
         
+<<<<<<< HEAD
         if ( (nt % 100) == 0)
+=======
+        if (nt<1001) //only output first thousand time steps
+>>>>>>> StiffenDebug
         {
         // output results to file
         fList = fopen(listName, "a");
@@ -150,6 +152,12 @@ void dataRecording()
                 rate[1],          // 9
                 ksStatistic,     // 10
         constraintProposalsTotal);    //11
+            
+        for (i=0;i<N;i++)
+        {
+            fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
+            fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
+        }
         
         for(iy=0;iy<iSiteTotal;iy++)
         {
@@ -178,7 +186,7 @@ void dataRecording()
         for(iy=0;iy<iSiteTotal;iy++)
         {
         POcclude_sum[iy] += (long)(stericOcclusion[iy]>0);
-        //Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
+        Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
         }
         POccludeBase_sum += (long)(stericOcclusionBase>0);
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);

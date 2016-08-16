@@ -13,36 +13,50 @@ void getSites()
 {
     /********* INITIALIZE ISITES *******************/
     
-    
-//        for (iy=0;iy<iSiteTotal;iy++)
-//        {
-//            iSite[iy]=0;
-//        }
-//    
-//    switch (commandiSites)
-//    {
-//    case 0: //hardcode sites
-//    
-    switch (testRun)
+   
+    switch (testRun) //switch in Batch Script to specify which set of iSites you want to use
     {
+//        case 0:  // iSites initialized for human CD3Zeta-Chain
+//            
+//            iSiteTotal = 7;
+//            
+//            
+//            for (iy=0;iy<iSiteTotal;iy++) //initializes iSite array
+//            {
+//                iSite[iy]=0;
+//            }
+//            
+//            //specify iSite locations by rod number (located at n-1) (i.e. if you have a polymer of N=50, and want an iSite at the 36th rod, input iSite[]=35)
+//            
+//            iSite[0]=42;
+//            iSite[1]=50;
+//            iSite[2]=61;
+//            iSite[3]=89;
+//            iSite[4]=101;
+//            iSite[5]=120;
+//            iSite[6]=131;
+//            break;
+            
         case 0:  // iSites initialized for human CD3Zeta-Chain
-            
-            iSiteTotal = 7;
-            
-            
-            for (iy=0;iy<iSiteTotal;iy++)
+
+            iSiteTotal = 6;
+
+
+            for (iy=0;iy<iSiteTotal;iy++) //initializes iSite array
             {
                 iSite[iy]=0;
             }
-            
-            iSite[0]=42;
-            iSite[1]=50;
-            iSite[2]=61;
-            iSite[3]=89;
-            iSite[4]=101;
-            iSite[5]=120;
-            iSite[6]=131;
+
+            //specify iSite locations by rod number (located at n-1) (i.e. if you have a polymer of N=50, and want an iSite at the 36th rod, input iSite[]=35)
+
+            iSite[0]=50;
+            iSite[1]=61;
+            iSite[2]=89;
+            iSite[3]=101;
+            iSite[4]=120;
+            iSite[5]=131;
             break;
+
             
         case 1: // iSites for formin //for testing - N=10
             
@@ -57,13 +71,13 @@ void getSites()
             iSite[1]=3;
             iSite[2]=7;
             break;
+
             
+        case 2: //iSites for testing
             
-        case 2: //test case 2 - stiffen none, but test all iSites, make Ratio half of Ratio for case 1
+            iSiteTotal = 3;
             
-            iSiteTotal = 7;
-            
-            for (iy=0;iy<iSiteTotal;iy++)
+            for(iy=0;iy<iSiteTotal;iy++)
             {
                 iSite[iy]=0;
             }
@@ -71,136 +85,92 @@ void getSites()
             iSite[0]=0;
             iSite[1]=1;
             iSite[2]=2;
-            iSite[3]=3;
-            iSite[4]=4;
-            iSite[5]=5;
-            iSite[6]=6;
+//            iSite[3]=3;
+//            iSite[4]=4;
+//            iSite[5]=5;
+//            iSite[6]=6;
+//            iSite[7]=7;
+//            iSite[8]=8;
+//            iSite[9]=9;
+//            iSite[10]=10;
+//            iSite[11]=11;
+//            iSite[12]=12;
+//            iSite[13]=13;
+
+
             break;
             
-        case 3:
+        case 3: //do nothing, use command line input
             
-            iSiteTotal = 4;
-            
-            for(iy=0;iy<iSiteTotal;iy++)
-            {
-                iSite[iy]=0;
-            }
-            
-            iSite[0]=10;
-            iSite[1]=11;
-            iSite[2]=25;
-            iSite[3]=40;
-
             break;
 
     }
-//            break;
-    
-//                case 1: //read input from user in batch script
-//    
-//                    for (iy=0;iy<iSiteTotal;iy++)
-//                    {
-//                        iSite[iy]=0;
-//                    }
-//    
-//                printf("Total iSites: %ld", iSiteTotal);
-//    
-//                //for debugging
-//                for(iy=0;iy<iSiteTotal;iy++)
-//            {
-//                printf("iSite[%ld] = %ld", iy, iSite[iy]);
-//            }
-//    
-//                    //char input[] = iSiteLocations;
-//                    printf("I want to split this into tokens: %s", input);
-//                    char* strArray[NMAX];
-//                    char *token = strtok(input, " ");
-//    
-//                    //for(int j = 0; j<NMAX;j++)
-//                    //{
-//                    //    strArray[j] = new char[4];
-//                    //}
-//    
-//                    while(token != NULL)
-//                    {
-//                        strcpy(strArray[st],token);
-//                        printf("This is the next token: %s\n",token); //for debugging
-//                        token = strtok(NULL, " ");
-//                        st++;
-//                    }
-//    
-//                    //for debugging
-//    
-//                    if (iSiteTotal!=st)
-//                    {
-//                        printf("Warning! iSite Total is %ld but Number of iSites in String is %ld ", iSiteTotal, st);
-//                    }
-//    
-//                    //reassign strings as doubles
-//                    for(iy=0;iy<st;iy++)
-//                    {
-//                        iSite[iy]=atof(strArray[iy]);
-//                    }
-//    
-//                    //for debugging
-//                    for(iy=0;iy<iSiteTotal;iy++)
-//                    {
-//                        printf("iSite[%ld] = %ld", iy, iSite[iy]);
-//                    }
-//    
-//                break;
-//
-//        case 2: //read input from file
-//            
-//            iSiteList = fopen("iSiteList.txt", "r");
-//            if (iSiteList==NULL)
-//            {
-//                printf("Error reading file.");
-//            
-//            }
-//            else
-//            {
-//                while (
-//                fscanf( iSiteList, "%ld", )
-//            }
-            
-//        }
     
     
+    //for debugging - prints a list of the iSites
     
-    //for debugging
-    
-    for (iy=0;iy<iSiteTotal;iy++)
-    {
-        printf("iSite: %ld\n", iSite[iy]);
-        fflush(stdout);
-    }
+//    for (iy=0;iy<iSiteTotal;iy++)
+//    {
+//        printf("iSite: %ld\n", iSite[iy]);
+//        fflush(stdout);
+//    }
     
     /********* INITIALIZE BOUND ISITES *******************/
     
-    if (MULTIPLE)
+    if (MULTIPLE) //if looking at multiple binding (i.e. MULTIPLE set to 1 in driveM)
     {
+        switch (bSiteCommand)
+        {
+            case 0:
         
+                bSiteTotal = 4; //total number of iSites bound
+                
+                bSite[0]=10;
+                bSite[1]=10;
+                bSite[2]=40;
+                bSite[3]=40;
+                break;
+                
+            case 1: //bSites for multiple binding of ZAP-70 to CD3 Zeta mouse
+                
+                for (iy=0; iy<iSiteTotal; iy++)
+                {
+                    iSiteOccupied[iy]=0;
+                }
+                
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf", &iSiteOccupied[0],&iSiteOccupied[1],&iSiteOccupied[2],&iSiteOccupied[3], &iSiteOccupied[4],&iSiteOccupied[5]);
+                
+                bSiteCounter=0;
+                for (iy=0;iy<iSiteTotal;iy++)
+                {
+                    if (iSiteOccupied[iy]==1)
+                    {
+                        bSite[bSiteCounter]=iSite[iy];
+                        bSiteCounter++;
+                    }
+                }
+                
+                bSiteTotal=bSiteCounter;
+                
+                //for debugging
+                for (ib=0; ib<bSiteTotal; ib++)
+                {
+                    printf("bSite[%ld] is %ld \n", ib, bSite[ib]);
+                    fflush(stdout);
+                }
+                
+//                printf("bSiteTotal = %ld \n", bSiteTotal);
+//                fflush(stdout);
+                
+                break;
+                
+            case 2:
+                
+                break;
+        }
         
-        //add switch to be able to input 101010 etc to specify which iSites are bound/unbound
-        
-        //switch () //add more cases later
-        //{
-        //case 0: // arbitrary subset are occupied
-        
-        bSiteTotal = 1; //total number of iSites bound
-        
-        bSite[0]=25;
-  
+        //specify bSites same way as iSites
 
-        
-
-        
-        
-        //currently identifying by location
-        //what is the best way to do this - identify by location or identify by iSite number?
-        //pro for location - can specify locations other than iSites to be bound - but then might want to change name
-        //}
     }
 
 
