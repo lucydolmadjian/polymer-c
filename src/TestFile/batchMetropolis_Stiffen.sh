@@ -13,7 +13,7 @@ FORCE=0
 
 VERBOSE=0
 
-TESTRUN=0 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
+TESTRUN=4 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
 ITERATIONS=1
 
@@ -33,11 +33,17 @@ ISITELOCATION=-1
 BSITELOCATION=-1
 
 
-STIFFENRANGE=0 # -1 means don't stiffen
+STIFFENRANGE=-1 # -1 means don't stiffen
+
+ISITEFILE="iSites.txt"
+
+BSITEFILE="bSites.txt"
+
+BSITECOMMAND=3
 
 #####################################################
 
-TOTALITERATIONS=3 #for testing
+TOTALITERATIONS=1 #for testing
 
 #TOTALITERATIONS=`wc -l < PhosphorylatediSites.txt`
 
@@ -90,7 +96,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out StiffenTestN3Stiffen2 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" &
+            ./metropolis.out StiffenTestN3Stiffen2 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]

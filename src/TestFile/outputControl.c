@@ -131,12 +131,9 @@ void dataRecording()
     // Verbose output: One line is written each iteration.
     if (verboseTF)
     {
-        
-<<<<<<< HEAD
-        if ( (nt % 100) == 0)
-=======
+
         if (nt<1001) //only output first thousand time steps
->>>>>>> StiffenDebug
+
         {
         // output results to file
         fList = fopen(listName, "a");

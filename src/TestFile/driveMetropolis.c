@@ -11,8 +11,8 @@
 #define INF      1e14
 #define DCHIINIT 0.1
 #define KSCRITICAL 0.005
-#define MEMBRANE 1
-#define MULTIPLE 0
+#define MEMBRANE 0
+#define MULTIPLE 1
 #define STIFFEN  1
 #define CPMAX    1e8
 
@@ -32,8 +32,8 @@
 char listName[100];
 FILE *fList;
 //
-//char listName2[100] = "TestOutput";
-FILE *iSiteList;
+char iSiteFilename[100], bSiteFilename[100];
+FILE *iSiteList, *bSiteList;
 
 long N, ntNextStationarityCheck, iBin;
 
@@ -186,10 +186,19 @@ int main( int argc, char *argv[] )
     if(argv[12]) // Occupied (phosphorylated) iSites
         strcpy(occupiedSitesNoSpace,argv[12]);
         printf("This is argument 12: %s \n", occupiedSitesNoSpace);
-//    
-//    if(argv[13]) //bSiteCommand - switch for how bSites are input
-//        bSiteCommand = atoi(argv[13]);
-//        printf("This is argument 12: %d \n", bSiteCommand);
+    
+    if(argv[13]) //iSite file
+        strcpy(iSiteFilename, argv[13]);
+        printf("This is argument 13: %s \n", iSiteFilename);
+    
+    if(argv[14]) //iSite file
+        strcpy(bSiteFilename, argv[14]);
+    printf("This is argument 14: %s \n", bSiteFilename);
+    
+    
+    if(argv[15]) //bSiteCommand - switch for how bSites are input
+        bSiteCommand = atoi(argv[15]);
+        printf("This is argument 15: %d \n", bSiteCommand);
     
     
 //    if(argv[10]) //Delivery distance - how close to base it needs to be
@@ -199,24 +208,23 @@ int main( int argc, char *argv[] )
 //    if(argv[11]) //Delivery method - 0 = within Base ligand site, 1 = within deliveryDistance
 //        deliveryMethod = atoi(argv[11]);
 //    printf("This is argument 11: %d\n", deliveryMethod);
-    
-<<<<<<< HEAD
-    if(argv[12]) //hardcoded vs command line iSites
-        commandiSites = atoi(argv[12]);
-    printf("This is argument 12: %ld/n", commandiSites);
+//
+//    if(argv[12]) //hardcoded vs command line iSites
+//        commandiSites = atoi(argv[12]);
+//    printf("This is argument 12: %ld/n", commandiSites);
 
-    if (commandiSites==1)
-    {
-        if(argv[13])
-            iSiteTotal=atoi(argv[13]);
-        printf("This is argument 13: %ld/n", iSiteTotal);
-        
-        if(argv[14])
-            strcpy(input,argv[14]);
-            strcpy(iSiteLocations,argv[14]);
-            printf("This is argument 14: %s and %s", iSiteLocations, input);
-    }
-=======
+//    if (commandiSites==1)
+//    {
+//        if(argv[13])
+//            iSiteTotal=atoi(argv[13]);
+//        printf("This is argument 13: %ld/n", iSiteTotal);
+//        
+//        if(argv[14])
+//            strcpy(input,argv[14]);
+//            strcpy(iSiteLocations,argv[14]);
+//            printf("This is argument 14: %s and %s", iSiteLocations, input);
+//    }
+
 //    if(argv[12]) //hardcoded vs command line iSites
 //        commandiSites = atoi(argv[12]);
 //    printf("This is argument 12: %ld/n", commandiSites);
@@ -232,7 +240,7 @@ int main( int argc, char *argv[] )
 //            strcpy(iSiteLocations,argv[14]);
 //            printf("This is argument 14: %s and %s", iSiteLocations, input);
 //    }
->>>>>>> StiffenDebug
+
     
     
 	iseed = RanInitReturnIseed(0);

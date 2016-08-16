@@ -103,17 +103,38 @@ void getSites()
         case 3: //do nothing, use command line input
             
             break;
+            
+        case 4: //input iSites from file
+            
+            iSiteList = fopen(iSiteFilename, "r");
+            char line[200];
+            iy=0;
+            
+            while (fgets(line, sizeof(line), iSiteList))
+            {
+                iSite[iy]=atoi(line);
+                iy++;
+            }
+            
+            fclose(iSiteList);
+            
+            iSiteTotal=iy;
+
+            break;
 
     }
     
     
     //for debugging - prints a list of the iSites
     
-//    for (iy=0;iy<iSiteTotal;iy++)
-//    {
-//        printf("iSite: %ld\n", iSite[iy]);
-//        fflush(stdout);
-//    }
+    for (iy=0;iy<iSiteTotal;iy++)
+    {
+        printf("iSite: %ld\n", iSite[iy]);
+        fflush(stdout);
+    }
+    
+    printf("iSiteTotal: %ld\n", iSiteTotal);
+    fflush(stdout);
     
     /********* INITIALIZE BOUND ISITES *******************/
     
@@ -166,12 +187,48 @@ void getSites()
                 
             case 2:
                 
+
+                
                 break;
+                
+            case 3:
+                
+                bSiteList = fopen(bSiteFilename, "r");
+                char line[200];
+                iy=0;
+                
+                while (fgets(line, sizeof(line), bSiteList))
+                {
+                    bSite[iy]=atoi(line);
+                    iy++;
+                }
+                
+                fclose(bSiteList);
+                
+                bSiteTotal=iy;
+                
+                break;
+                
         }
         
         //specify bSites same way as iSites
+        
+        
+        //for debugging - prints a list of the iSites
+        
+        for (iy=0;iy<bSiteTotal;iy++)
+        {
+            printf("bSite: %ld\n", bSite[iy]);
+            fflush(stdout);
+        }
+        
+        printf("bSiteTotal: %ld\n", bSiteTotal);
+        fflush(stdout);
 
     }
+    
+    
+    
 
 
 }
