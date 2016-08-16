@@ -75,7 +75,7 @@ void getSites()
             
         case 2: //iSites for testing
             
-            iSiteTotal = 14;
+            iSiteTotal = 3;
             
             for(iy=0;iy<iSiteTotal;iy++)
             {
@@ -85,17 +85,17 @@ void getSites()
             iSite[0]=0;
             iSite[1]=1;
             iSite[2]=2;
-            iSite[3]=3;
-            iSite[4]=4;
-            iSite[5]=5;
-            iSite[6]=6;
-            iSite[7]=7;
-            iSite[8]=8;
-            iSite[9]=9;
-            iSite[10]=10;
-            iSite[11]=11;
-            iSite[12]=12;
-            iSite[13]=13;
+//            iSite[3]=3;
+//            iSite[4]=4;
+//            iSite[5]=5;
+//            iSite[6]=6;
+//            iSite[7]=7;
+//            iSite[8]=8;
+//            iSite[9]=9;
+//            iSite[10]=10;
+//            iSite[11]=11;
+//            iSite[12]=12;
+//            iSite[13]=13;
 
 
             break;

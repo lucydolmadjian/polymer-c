@@ -19,7 +19,5 @@ stiffen:
 
 	chmod a+x batchMetropolis_Stiffen.sh
 
-	cp metropolis.out ~/Documents/polymer-c_runs/.
-
 	./batchMetropolis_Stiffen.sh 7 v
 

@@ -12,8 +12,8 @@
 #define DCHIINIT 0.1
 #define KSCRITICAL 0.005
 #define MEMBRANE 1
-#define MULTIPLE 1
-#define STIFFEN  0
+#define MULTIPLE 0
+#define STIFFEN  1
 #define CPMAX    1e8
 
 #include <math.h>
@@ -179,17 +179,17 @@ int main( int argc, char *argv[] )
         strcpy(occupiedSites,argv[10]);
         printf("This is argument 10: %s\n", occupiedSites);
 
-//    if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
-//        StiffenRange = atof(argv[11]);
-//    printf("This is argument 11: %f\n", StiffenRange);
+    if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
+        StiffenRange = atof(argv[11]);
+    printf("This is argument 11: %f\n", StiffenRange);
 
-    if(argv[11]) // Occupied (phosphorylated) iSites
-        strcpy(occupiedSitesNoSpace,argv[11]);
-        printf("This is argument 11: %s \n", occupiedSitesNoSpace);
-    
-    if(argv[12]) //bSiteCommand - switch for how bSites are input
-        bSiteCommand = atoi(argv[12]);
-        printf("This is argument 12: %d \n", bSiteCommand);
+    if(argv[12]) // Occupied (phosphorylated) iSites
+        strcpy(occupiedSitesNoSpace,argv[12]);
+        printf("This is argument 12: %s \n", occupiedSitesNoSpace);
+//    
+//    if(argv[13]) //bSiteCommand - switch for how bSites are input
+//        bSiteCommand = atoi(argv[13]);
+//        printf("This is argument 12: %d \n", bSiteCommand);
     
     
 //    if(argv[10]) //Delivery distance - how close to base it needs to be

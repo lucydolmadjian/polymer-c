@@ -112,7 +112,7 @@ void dataRecording()
     // distance from base to iSite
     for(iy=0;iy<iSiteTotal;iy++)
     {
-        iSiteCurrent = iy;
+        iSiteCurrent = iSite[iy];
         reeiSite[iy] = sqrt(r[iSiteCurrent][0]*r[iSiteCurrent][0] + r[iSiteCurrent][1]*r[iSiteCurrent][1] + r[iSiteCurrent][2]*r[iSiteCurrent][2]);
     }
 
@@ -132,7 +132,7 @@ void dataRecording()
     if (verboseTF)
     {
         
-        if ( 1) //only output first thousand time steps
+        if (nt<1001) //only output first thousand time steps
         {
         // output results to file
         fList = fopen(listName, "a");

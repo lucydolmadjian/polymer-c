@@ -79,8 +79,11 @@ void initializeStiffSites()
     
         for (i=0;i<N;i++)
         {
-            printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
-            fflush(stdout);
+            if (Stiff[i]==1)
+            {
+                printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
+                fflush(stdout);
+            }
         }
     
 
