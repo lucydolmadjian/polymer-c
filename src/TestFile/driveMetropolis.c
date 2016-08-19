@@ -144,32 +144,30 @@ int main( int argc, char *argv[] )
     
     if(argv[8])
     {
-    if(atoi(argv[8])!=-1) //iSite Location from command line
+        if(atoi(argv[8])!=-1) //iSite Location from command line
+        {
+            iSite[0]= atoi(argv[8]);
+            iSiteTotal=1;
+            if (TALKATIVE) printf("This is argument 8: %ld\n", iSite[0]);
+            testRun=3;
+        }
+    }
+    
+    if(argv[9])
     {
-        iSite[0]= atoi(argv[8]);
-        iSiteTotal=1;
-        if (TALKATIVE) printf("This is argument 8: %ld\n", iSite[0]);
-        testRun=3;
+        if(atoi(argv[9])!=-1)
+        {
+            bSite[0]=atoi(argv[9]);
+            bSiteTotal=1;
+            if (TALKATIVE) printf("This is argument 9: %ld\n", bSite[0]);
+            bSiteCommand = 1;
+        }
+        else
+        {
+            bSiteCommand = 0;
+        }
     }
-    }
-    
-if(argv[9])
-{
-    if(atoi(argv[9])!=-1)
-    {
-        bSite[0]=atoi(argv[9]);
-        bSiteTotal=1;
-        if (TALKATIVE) printf("This is argument 9: %ld\n", bSite[0]);
-        bSiteCommand = 1;
-    }
-    else
-    {
-        bSiteCommand = 0;
-    }
-}
-    
-    
-    
+        
 ///////////Stiffening Parameters/////////////////
     
 //    if (STIFFEN)

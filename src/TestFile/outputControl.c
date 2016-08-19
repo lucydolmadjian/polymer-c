@@ -20,8 +20,8 @@ void initializeSummary()
     ree2Bar_sum  = 0;
     for(iy=0;iy<iSiteTotal;iy++)
     {
-    POcclude_sum[iy] = 0;
-    Prvec0_sum[iy]   = 0;
+        POcclude_sum[iy] = 0;
+        Prvec0_sum[iy]   = 0;
     }
     POccludeBase_sum = 0;
 //    for(ib=0; ib<bSiteTotal; ib++)
@@ -42,8 +42,8 @@ void finalizeSummary()
 	
     for(iy=0;iy<iSiteTotal;iy++)
     {
-    POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
-    Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
+        POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
+        Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
     }
     
     POccludeBase = (double)POccludeBase_sum/(double)(nt-NTCHECK);
@@ -67,27 +67,24 @@ void finalizeSummary()
         }
         
         fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",
-
-                
                 N,           // 1
-                irLigand,     // 2
-                brLigand,   //3
+                irLigand,    // 2
+                brLigand,    //3
                 Force,       // 4
                 nt,          // 5
                 ksStatistic, // 6
                 reeBar,      // 7
                 ree2Bar,     // 8
-                rMBar);       //9
+                rMBar);      // 9
         
         for (iy=0;iy<iSiteTotal;iy++)
         {
             fprintf(fList, " %ld %e %e %e",
-                    
                 iSite[iy], //10 + 4*iBind
                 POcclude[iy], //11 + 4*iBind
                 1-POcclude[iy], //12 + 4*iBind
                 Prvec0[iy]); //13 + 4*iBind
-                    
+        
         }
         
         fprintf(fList, " %d %e %e", -1, POccludeBase, 1-POccludeBase);
@@ -95,11 +92,9 @@ void finalizeSummary()
         for (ib=0;ib<bSiteTotal;ib++)
         {
             fprintf(fList, " %ld",
-                    
-                    bSite[ib]);
+                bSite[ib]);
                     //PDeliver[ib]);
-                    
-                    }
+        }
         
         fprintf(fList, "\n");
         fclose(fList);
@@ -139,38 +134,38 @@ void dataRecording()
         
         if ( (nt % 100) == 0) //only output every 100 time steps
         {
-        // output results to file
-        fList = fopen(listName, "a");
-        fprintf(fList, "%ld %f %f %f %f %f %f %f %f %f %ld",
-                nt,               // 1
-                ree,              // 2
-                rM,               // 3
-                rH,               // 4
-                E,                // 5
-                dChi[0],          // 6
-                dChi[1],          // 7
-                rate[0],          // 8
-                rate[1],          // 9
-                ksStatistic,     // 10
-        constraintProposalsTotal);    //11
+            // output results to file
+            fList = fopen(listName, "a");
+            fprintf(fList, "%ld %f %f %f %f %f %f %f %f %f %ld",
+                    nt,               // 1
+                    ree,              // 2
+                    rM,               // 3
+                    rH,               // 4
+                    E,                // 5
+                    dChi[0],          // 6
+                    dChi[1],          // 7
+                    rate[0],          // 8
+                    rate[1],          // 9
+                    ksStatistic,      // 10
+                    constraintProposalsTotal);// 11
         
-        for(iy=0;iy<iSiteTotal;iy++)
-        {
-            fprintf(fList, " %ld",stericOcclusion[iy]);
-        }
+            for(iy=0;iy<iSiteTotal;iy++)
+            {
+                fprintf(fList, " %ld",stericOcclusion[iy]);
+            }
         
-        fprintf(fList, " %ld", stericOcclusionBase);
+            fprintf(fList, " %ld", stericOcclusionBase);
         
 //        for(ib=0;ib<bSiteTotal;ib++)
 //        {
 //            fprintf(fList, " %ld", boundToBaseDeliver[ib]);
 //        }
         
-        fprintf(fList, "\n");
+            fprintf(fList, "\n");
 
-        fclose(fList);
+            fclose(fList);
         }
-    }
+    } // finished verbose output
     
     if (nt>NTCHECK)
     {
