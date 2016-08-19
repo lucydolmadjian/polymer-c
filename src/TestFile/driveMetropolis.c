@@ -1,20 +1,21 @@
 /*** Allard Lab jun.allard@uci.edu                    ***/
 
 #define TWISTER genrand_real3()
-#define NMAX     400
-#define NTMAX    1e9
-#define NTADAPT  20000
-#define NTCHECK  200000
-#define DCHIMIN  1e-4
-#define NBINS    100
-#define PI       3.14159265359
-#define INF      1e14
-#define DCHIINIT 0.1
+#define NMAX       400
+#define NTMAX      1e9
+#define NTADAPT    20000
+#define NTCHECK    200000
+#define DCHIMIN    1e-4
+#define NBINS      100
+#define PI         3.14159265359
+#define INF        1e14
+#define DCHIINIT   0.1
 #define KSCRITICAL 0.005
-#define MEMBRANE 0
-#define MULTIPLE 0
-#define STIFFEN  1
-#define CPMAX    1e8
+#define MEMBRANE   0
+#define MULTIPLE   0
+#define STIFFEN    1
+#define CPMAX      1e8
+#define TALKATIVE  1
 
 #include <math.h>
 #include <stdlib.h>
@@ -104,11 +105,11 @@ int main( int argc, char *argv[] )
     
 	if(argv[1]) // listName
 		strcpy(listName, argv[1]);
-        printf("This is argument 1: %s\n", listName);
+    if (TALKATIVE) printf("This is argument 1: %s\n", listName);
 
 	if(argv[2]) // N - should be 143 for this code - human CD3 iSites specified
 		N = atoi(argv[2]);
-    printf("This is argument 2: %ld\n", N);
+    if (TALKATIVE) printf("This is argument 2: %ld\n", N);
 	
     //- binding site. iSite=0 is the first joint away from the origin. iSite=N-1 is the furthest joint
 	//if(argv[3]) // iSite
@@ -119,27 +120,27 @@ int main( int argc, char *argv[] )
 		
 	if(argv[3]) // rLigand - RATIO OF ligand radius to kuhn length
 		irLigand = atof(argv[3]);
-    printf("This is argument 3: %f\n", irLigand);
+    if (TALKATIVE) printf("This is argument 3: %f\n", irLigand);
     
     if(argv[4]) // rLigand - RATIO OF ligand radius to kuhn length
         brLigand = atof(argv[4]);
-    printf("This is argument 4: %f\n", brLigand);
+    if (TALKATIVE) printf("This is argument 4: %f\n", brLigand);
     
     Force = 0;
     if(argv[5]) // Force - Units of kBT/[kuhn length]
         Force = atof(argv[5]);
-    printf("This is argument 5: %f\n", Force);
+    if (TALKATIVE) printf("This is argument 5: %f\n", Force);
     
     // IF verboseTF = 0, one line summarizing the run is written to the file listName.
     // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
     verboseTF = 0;
     if(argv[6]) // Verbose Output
         verboseTF = atoi(argv[6]);
-    printf("This is argument 6: %d\n", verboseTF);
+    if (TALKATIVE) printf("This is argument 6: %d\n", verboseTF);
     
     if(argv[7]) //Test Run - yes=1, no=0
         testRun = atoi(argv[7]);
-    printf("This is argument 7: %d\n", testRun);
+    if (TALKATIVE) printf("This is argument 7: %d\n", testRun);
     
     if(argv[8])
     {
@@ -147,7 +148,7 @@ int main( int argc, char *argv[] )
     {
         iSite[0]= atoi(argv[8]);
         iSiteTotal=1;
-        printf("This is argument 8: %ld\n", iSite[0]);
+        if (TALKATIVE) printf("This is argument 8: %ld\n", iSite[0]);
         testRun=3;
     }
     }
@@ -158,7 +159,7 @@ if(argv[9])
     {
         bSite[0]=atoi(argv[9]);
         bSiteTotal=1;
-        printf("This is argument 9: %ld\n", bSite[0]);
+        if (TALKATIVE) printf("This is argument 9: %ld\n", bSite[0]);
         bSiteCommand = 1;
     }
     else
