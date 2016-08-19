@@ -15,7 +15,7 @@
 #define MULTIPLE   0
 #define STIFFEN    1
 #define CPMAX      1e8
-#define TALKATIVE  1
+#define TALKATIVE  0
 
 #include <math.h>
 #include <stdlib.h>
