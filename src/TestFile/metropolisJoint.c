@@ -503,18 +503,21 @@ void metropolisJoint()
                     {
                         // check if sphere violates base
                         if ( (iLigandCenter[iy][0])*(iLigandCenter[iy][0]) +
-                            (iLigandCenter[iy][1])*(iLigandCenter[iy][1]) +
-                            (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= irLigand*irLigand )
+                             (iLigandCenter[iy][1])*(iLigandCenter[iy][1]) +
+                             (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= irLigand*irLigand )
                             stericOcclusion[iy]++;
                     
                         //didn't include base - don't want the base to violate the base
                     } // finished membrane tests
-
+                }
+                
+                if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
+                {
                     for(i=0;i<N;i++) // loop through joints
                     {
                         if ( (iLigandCenter[iy][0]-r[i][0])*(iLigandCenter[iy][0]-r[i][0]) +
-                            (iLigandCenter[iy][1]-r[i][1])*(iLigandCenter[iy][1]-r[i][1]) +
-                            (iLigandCenter[iy][2]-r[i][2])*(iLigandCenter[iy][2]-r[i][2]) <= irLigand*irLigand
+                             (iLigandCenter[iy][1]-r[i][1])*(iLigandCenter[iy][1]-r[i][1]) +
+                             (iLigandCenter[iy][2]-r[i][2])*(iLigandCenter[iy][2]-r[i][2]) <= irLigand*irLigand
                             && i != iSite[iy])
                         {
                             stericOcclusion[iy]++;
@@ -522,13 +525,18 @@ void metropolisJoint()
                         }
                     } // finished loop through joints
 
+                } 
                 
+                if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
+                {
                     if (MULTIPLE) //if there are multiple ligands and not occluded yet, test other ligands
                     {
                         for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
                         {
                             
-                            if ((iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0])+(iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1])+(iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2])<=(irLigand+brLigand)*(irLigand+brLigand))
+                            if ( (iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0]) +
+                                 (iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1]) +
+                                 (iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
                                 // if potential ligand intersects with bound ligand
                             {
                                 stericOcclusion[iy]++;
@@ -536,7 +544,7 @@ void metropolisJoint()
                             }
                         }
                     } // finished multiple ligand tests
-                } // finished all tests for this iSite
+                }
             } // finished loop through iSites
         
         
