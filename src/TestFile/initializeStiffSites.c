@@ -28,7 +28,7 @@ void initializeStiffSites()
         }
         
         
-        printf("This is a string: %s\n", phosphorylatediSites);
+        if (TALKATIVE) printf("This is a string: %s\n", phosphorylatediSites);
         
         //read string and assign to double vector
         
@@ -57,10 +57,11 @@ void initializeStiffSites()
         }
         
         
-        for (iy=0;iy<iSiteTotal;iy++)
-        {
-            printf("phosiSites[ %ld ] =  %f\n",iy, phosiSites[iy]);
-        }
+        if (TALKATIVE)
+            for (iy=0;iy<iSiteTotal;iy++)
+            {
+                printf("phosiSites[ %ld ] =  %f\n",iy, phosiSites[iy]);
+            }
         
         //initializes stiffened rods to 0 (none stiff)
         for(i=0;i<N;i++)
