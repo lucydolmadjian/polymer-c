@@ -38,13 +38,13 @@ void initializeStiffSites()
                 sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
                 break;
                 
-            case 2:
+            case 4:
                 
                 sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
                 break;
 
 //                sscanf(occupiedSites,"%lf %lf", &phosiSites[0], &phosiSites[1]);
-                break;
+                //break;
                 
         }
         

@@ -132,7 +132,7 @@ void dataRecording()
     if (verboseTF)
     {
 
-        if (nt<1001) //only output first thousand time steps
+        if (nt%20 == 0) //only output first thousand time steps
 
         {
         // output results to file
@@ -149,12 +149,12 @@ void dataRecording()
                 rate[1],          // 9
                 ksStatistic,     // 10
         constraintProposalsTotal);    //11
-            
-        for (i=0;i<N;i++)
-        {
-            fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
-            fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
-        }
+//            
+//        for (i=0;i<N;i++)
+//        {
+//            fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
+//            fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
+//        }
         
         for(iy=0;iy<iSiteTotal;iy++)
         {

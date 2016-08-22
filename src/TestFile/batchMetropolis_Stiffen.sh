@@ -3,15 +3,15 @@
 
 NRequested=0            # initialize number of runs submitted
 
-NRODS=143       # N=143 for CD3 in human and mouse
+NRODS=7       # N=143 for CD3 in human and mouse
 
-IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
+IRATIO=3        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
 
 BRATIO=0        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
 FORCE=0
 
-VERBOSE=0
+VERBOSE=1
 
 TESTRUN=4 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
@@ -96,7 +96,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out StiffenTestN3Stiffen2 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
+            ./metropolis.out StiffenTestN7ks003 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "0 0 0 0 0 0 0" $STIFFENRANGE "0000000" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
