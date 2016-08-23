@@ -320,6 +320,7 @@ void metropolisJoint()
                         {
                             
                             if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*brLigand)*(2*brLigand) && bSite[ib]!= bSite[ib2]) //if distance between centers is less than 2*brLigand, then ligands are intersecting, and ligands are not at same joint
+
                                 
                             {
                                 constraintSatisfiedTF=0; //constraint not satisfied
@@ -780,7 +781,7 @@ void rotate(double *tIn, double *e1In, double *e2In, double *tOut, double *e1Out
     *(e2Out+1) = *(e2Out+1)/norm;
     *(e2Out+2) = *(e2Out+2)/norm;
    
-    if (0) // print stuff out for debugging
+    if (nt%1000 == 0) // print stuff out for debugging
     {
         // PRINT RGlobal
         printf("At nt=%ld, i=%ld\n", nt, i);

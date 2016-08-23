@@ -59,17 +59,13 @@ void finalizeSummary()
     {
         fList = fopen(listName, "a");
         
-        //set joints to stiff based on which iSites are occupied and the stiffness range
-        if (STIFFEN) //stiffen only if StiffenRange is 0 or greater
-        {
-            fprintf(fList, "%s %s ",phosphorylatediSites,
-                    phosphorylatediSitesNoSpace);
-        }
+        fprintf(fList, "%s %s ",occupiedSites,
+                    occupiedSitesNoSpace);
         
         fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",
                 N,           // 1
                 irLigand,    // 2
-                brLigand,    //3
+                brLigand,    // 3
                 Force,       // 4
                 nt,          // 5
                 ksStatistic, // 6
@@ -134,20 +130,26 @@ void dataRecording()
         
         if ( (nt % 100) == 0) //only output every 100 time steps
         {
-            // output results to file
-            fList = fopen(listName, "a");
-            fprintf(fList, "%ld %f %f %f %f %f %f %f %f %f %ld",
-                    nt,               // 1
-                    ree,              // 2
-                    rM,               // 3
-                    rH,               // 4
-                    E,                // 5
-                    dChi[0],          // 6
-                    dChi[1],          // 7
-                    rate[0],          // 8
-                    rate[1],          // 9
-                    ksStatistic,      // 10
-                    constraintProposalsTotal);// 11
+        // output results to file
+        fList = fopen(listName, "a");
+        fprintf(fList, "%ld %f %f %f %f %f %f %f %f %f %ld",
+                nt,               // 1
+                ree,              // 2
+                rM,               // 3
+                rH,               // 4
+                E,                // 5
+                dChi[0],          // 6
+                dChi[1],          // 7
+                rate[0],          // 8
+                rate[1],          // 9
+                ksStatistic,      // 10
+        		constraintProposalsTotal);// 11
+//            
+//        for (i=0;i<N;i++)
+//        {
+//            fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
+//            fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
+//        }
         
             for(iy=0;iy<iSiteTotal;iy++)
             {

@@ -20,14 +20,9 @@ void initializeStiffSites()
         }
         
         
+        printf("This is a string: %s\n", occupiedSites);
         
-        //initializes phosiSites to 0 (none phosphorylated)
-        for(ty=0;ty<iSiteTotal;ty++)
-        {
-            phosiSites[ty]=0;
-        }
-        
-        
+     
         if (TALKATIVE) printf("This is a string: %s\n", phosphorylatediSites);
         
         //read string and assign to double vector
@@ -38,21 +33,21 @@ void initializeStiffSites()
         {
             case 0:
                 
-                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6]);
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6]);
                 break;
                 
             case 1:
                 
-                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
                 break;
                 
             case 2:
                 
-//                sscanf(phosphorylatediSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
-//                break;
-
-                sscanf(phosphorylatediSites,"%lf %lf", &phosiSites[0], &phosiSites[1]);
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
                 break;
+
+//                sscanf(occupiedSites,"%lf %lf", &phosiSites[0], &phosiSites[1]);
+                //break;
                 
         }
         
@@ -61,6 +56,7 @@ void initializeStiffSites()
             for (iy=0;iy<iSiteTotal;iy++)
             {
                 printf("phosiSites[ %ld ] =  %f\n",iy, phosiSites[iy]);
+				fflush(stdout);
             }
         
         //initializes stiffened rods to 0 (none stiff)
@@ -80,6 +76,17 @@ void initializeStiffSites()
                 {
                     Stiff[i]=1; //set that joint to "stiff"
                 }
+            }
+        }
+    
+    
+    
+        for (i=0;i<N;i++)
+        {
+            if (Stiff[i]==1)
+            {
+                printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
+                fflush(stdout);
             }
         }
     
