@@ -100,7 +100,8 @@ int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 // arguments: listName, dimension, nBar, N, dt
 int main( int argc, char *argv[] )
 {
-    
+    if (LEGACY)
+    {
     printf("This program is starting.");
     
 	if(argv[1]) // listName
@@ -211,8 +212,12 @@ int main( int argc, char *argv[] )
 //            strcpy(iSiteLocations,argv[14]);
 //            printf("This is argument 14: %s and %s", iSiteLocations, input);
 //    }
-    
-    
+}
+    else
+    {
+        
+    }
+
 	iseed = RanInitReturnIseed(0);
 	
 	metropolisJoint();
