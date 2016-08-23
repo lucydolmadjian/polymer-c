@@ -127,14 +127,17 @@ void getSites()
     
     //for debugging - prints a list of the iSites
     
-    for (iy=0;iy<iSiteTotal;iy++)
+    if (TALKATIVE)
     {
-        printf("iSite: %ld\n", iSite[iy]);
+        for (iy=0;iy<iSiteTotal;iy++)
+        {
+            printf("iSite: %ld\n", iSite[iy]);
+            fflush(stdout);
+        }
+        
+        printf("iSiteTotal: %ld\n", iSiteTotal);
         fflush(stdout);
     }
-    
-    printf("iSiteTotal: %ld\n", iSiteTotal);
-    fflush(stdout);
     
     /********* INITIALIZE BOUND ISITES *******************/
     
@@ -151,8 +154,15 @@ void getSites()
                 bSite[2]=40;
                 bSite[3]=40;
                 break;
+
                 
-            case 1: //bSites for multiple binding of ZAP-70 to CD3 Zeta mouse
+            case 1: //do nothing, use command line input
+                
+                
+                break;
+                
+                
+            case 2: //bSites for multiple binding of ZAP-70 to CD3 Zeta mouse
                 
                 for (iy=0; iy<iSiteTotal; iy++)
                 {
@@ -174,20 +184,18 @@ void getSites()
                 bSiteTotal=bSiteCounter;
                 
                 //for debugging
-                for (ib=0; ib<bSiteTotal; ib++)
+                if (TALKATIVE)
                 {
-                    printf("bSite[%ld] is %ld \n", ib, bSite[ib]);
+                    for (ib=0; ib<bSiteTotal; ib++)
+                    {
+                        printf("bSite[%ld] is %ld \n", ib, bSite[ib]);
+                        fflush(stdout);
+                    }
+                    
+                    
+                    printf("bSiteTotal = %ld \n", bSiteTotal);
                     fflush(stdout);
                 }
-                
-//                printf("bSiteTotal = %ld \n", bSiteTotal);
-//                fflush(stdout);
-                
-                break;
-                
-            case 2:
-                
-
                 
                 break;
                 
@@ -211,19 +219,19 @@ void getSites()
                 
         }
         
-        //specify bSites same way as iSites
-        
-        
         //for debugging - prints a list of the iSites
         
-        for (iy=0;iy<bSiteTotal;iy++)
+        if (TALKATIVE)
         {
-            printf("bSite: %ld\n", bSite[iy]);
+            for (iy=0;iy<bSiteTotal;iy++)
+            {
+                printf("bSite: %ld\n", bSite[iy]);
+                fflush(stdout);
+            }
+            
+            printf("bSiteTotal: %ld\n", bSiteTotal);
             fflush(stdout);
         }
-        
-        printf("bSiteTotal: %ld\n", bSiteTotal);
-        fflush(stdout);
 
     }
     

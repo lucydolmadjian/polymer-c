@@ -41,6 +41,8 @@ BSITEFILE="bSites.txt"
 
 BSITECOMMAND=3
 
+STIFFCASE=0
+
 #####################################################
 
 TOTALITERATIONS=1 #for testing
@@ -96,7 +98,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out StiffenTestN7ks003 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "0 0 0 0 0 0 0" $STIFFENRANGE "0000000" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
+            ./metropolis.out StiffenTestN7ks003 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "0 0 0 0 0 0 0"  "0000000" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]

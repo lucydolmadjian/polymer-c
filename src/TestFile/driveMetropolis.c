@@ -12,11 +12,13 @@
 #define DCHIINIT   0.1
 #define KSCRITICAL 0.005
 #define MEMBRANE   0
-#define MULTIPLE   0
+#define MULTIPLE   1
 #define STIFFEN    0
 #define CPMAX      1e8
 #define TALKATIVE  0
 #define LEGACY	   1
+#define VISUALIZE  0
+#define CD3ZETA    0
 
 #include <math.h>
 #include <stdlib.h>
@@ -56,6 +58,7 @@ double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 double StiffenRange,phosiSites[NMAX], Stiff[NMAX];
+int stiffCase;
 char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
 
 double iSiteOccupied[NMAX];
@@ -106,74 +109,74 @@ int main( int argc, char *argv[] )
 {
     if (LEGACY)
     {
-    printf("This program is starting.");
-    
-	if(argv[1]) // listName
-		strcpy(listName, argv[1]);
-    if (TALKATIVE) printf("This is argument 1: %s\n", listName);
+        printf("This program is starting.");
+        
+        if(argv[1]) // listName
+            strcpy(listName, argv[1]);
+        if (TALKATIVE) printf("This is argument 1: %s\n", listName);
 
-	if(argv[2]) // N - should be 143 for this code - human CD3 iSites specified
-		N = atoi(argv[2]);
-    if (TALKATIVE) printf("This is argument 2: %ld\n", N);
-	
-    //- binding site. iSite=0 is the first joint away from the origin. iSite=N-1 is the furthest joint
-	//if(argv[3]) // iSite
-		//iSite = atoi(argv[3]);
-    
-    //if(iSite == -1)
-        //iSite = floor(N/2);
-		
-	if(argv[3]) // irLigand - RATIO OF ligand radius to kuhn length
-		irLigand = atof(argv[3]);
-    if (TALKATIVE) printf("This is argument 3: %f\n", irLigand);
-    
-    if(argv[4]) // brLigand - RATIO OF ligand radius to kuhn length
-        brLigand = atof(argv[4]);
-    if (TALKATIVE) printf("This is argument 4: %f\n", brLigand);
-    
-    Force = 0;
-    if(argv[5]) // Force - Units of kBT/[kuhn length]
-        Force = atof(argv[5]);
-    if (TALKATIVE) printf("This is argument 5: %f\n", Force);
-    
-    // IF verboseTF = 0, one line summarizing the run is written to the file listName.
-    // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
-    verboseTF = 0;
-    if(argv[6]) // Verbose Output
-        verboseTF = atoi(argv[6]);
-    if (TALKATIVE) printf("This is argument 6: %d\n", verboseTF);
-    
-    if(argv[7]) //Test Run - yes=1, no=0
-        testRun = atoi(argv[7]);
-    if (TALKATIVE) printf("This is argument 7: %d\n", testRun);
-    
-    if(argv[8])
-    {
-        if(atoi(argv[8])!=-1) //iSite Location from command line
+        if(argv[2]) // N - should be 143 for this code - human CD3 iSites specified
+            N = atoi(argv[2]);
+        if (TALKATIVE) printf("This is argument 2: %ld\n", N);
+        
+        //- binding site. iSite=0 is the first joint away from the origin. iSite=N-1 is the furthest joint
+        //if(argv[3]) // iSite
+            //iSite = atoi(argv[3]);
+        
+        //if(iSite == -1)
+            //iSite = floor(N/2);
+            
+        if(argv[3]) // irLigand - RATIO OF ligand radius to kuhn length
+            irLigand = atof(argv[3]);
+        if (TALKATIVE) printf("This is argument 3: %f\n", irLigand);
+        
+        if(argv[4]) // brLigand - RATIO OF ligand radius to kuhn length
+            brLigand = atof(argv[4]);
+        if (TALKATIVE) printf("This is argument 4: %f\n", brLigand);
+        
+        Force = 0;
+        if(argv[5]) // Force - Units of kBT/[kuhn length]
+            Force = atof(argv[5]);
+        if (TALKATIVE) printf("This is argument 5: %f\n", Force);
+        
+        // IF verboseTF = 0, one line summarizing the run is written to the file listName.
+        // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
+        verboseTF = 0;
+        if(argv[6]) // Verbose Output
+            verboseTF = atoi(argv[6]);
+        if (TALKATIVE) printf("This is argument 6: %d\n", verboseTF);
+        
+        if(argv[7]) //Test Run - yes=1, no=0
+            testRun = atoi(argv[7]);
+        if (TALKATIVE) printf("This is argument 7: %d\n", testRun);
+        
+        if(argv[8])
         {
-            iSite[0]= atoi(argv[8]);
-            iSiteTotal=1;
-            if (TALKATIVE) printf("This is argument 8: %ld\n", iSite[0]);
-            testRun=3;
+            if(atoi(argv[8])!=-1) //iSite Location from command line
+            {
+                iSite[0]= atoi(argv[8]);
+                iSiteTotal=1;
+                if (TALKATIVE) printf("This is argument 8: %ld\n", iSite[0]);
+                testRun=3;
+            }
+        }
+        
+        if(argv[9])
+        {
+            if(atoi(argv[9])!=-1)
+            {
+                bSite[0]=atoi(argv[9]);
+                bSiteTotal=1;
+                if (TALKATIVE) printf("This is argument 9: %ld\n", bSite[0]);
+                bSiteCommand = 1;
+            }
+            else
+            {
+                bSiteCommand = 0;
+            }
         }
     }
-    
-    if(argv[9])
-    {
-        if(atoi(argv[9])!=-1)
-        {
-            bSite[0]=atoi(argv[9]);
-            bSiteTotal=1;
-            if (TALKATIVE) printf("This is argument 9: %ld\n", bSite[0]);
-            bSiteCommand = 1;
-        }
-        else
-        {
-            bSiteCommand = 0;
-        }
-    }
-    }
-    else
+    if (!LEGACY)
     {
         printf("This program is starting.");
         
@@ -242,32 +245,34 @@ int main( int argc, char *argv[] )
             }
         }
         ///////////Stiffening Parameters/////////////////
+        if(argv[10]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
+            StiffenRange = atof(argv[10]);
+        if (TALKATIVE) printf("This is argument 10: %f\n", StiffenRange);
         
+        if(argv[11]) // Stiffness Case - 0 = CD3Zeta Mouse
+            stiffCase = atoi(argv[11]);
+        if (TALKATIVE) printf("This is argument 11: %f\n", stiffCase);
         
-        if(argv[10]) // Occupied (phosphorylated) iSites
-            strcpy(occupiedSites,argv[10]);
-        if (TALKATIVE) printf("This is argument 10: %s\n", occupiedSites);
-
-        if(argv[11]) // Stiffness Range - 0 = stiffen only the iSite, -1 = no stiffening at all
-            StiffenRange = atof(argv[11]);
-        if (TALKATIVE) printf("This is argument 11: %f\n", StiffenRange);
-
         if(argv[12]) // Occupied (phosphorylated) iSites
-            strcpy(occupiedSitesNoSpace,argv[12]);
-        if (TALKATIVE) printf("This is argument 12: %s \n", occupiedSitesNoSpace);
-        
-        if(argv[13]) //iSite file
-            strcpy(iSiteFilename, argv[13]);
-        if (TALKATIVE) printf("This is argument 13: %s \n", iSiteFilename);
+            strcpy(occupiedSites,argv[12]);
+        if (TALKATIVE) printf("This is argument 12: %s\n", occupiedSites);
+
+        if(argv[13]) // Occupied (phosphorylated) iSites
+            strcpy(occupiedSitesNoSpace,argv[13]);
+        if (TALKATIVE) printf("This is argument 13: %s \n", occupiedSitesNoSpace);
         
         if(argv[14]) //iSite file
-            strcpy(bSiteFilename, argv[14]);
-        if (TALKATIVE) printf("This is argument 14: %s \n", bSiteFilename);
+            strcpy(iSiteFilename, argv[14]);
+        if (TALKATIVE) printf("This is argument 14: %s \n", iSiteFilename);
+        
+        if(argv[15]) //iSite file
+            strcpy(bSiteFilename, argv[15]);
+        if (TALKATIVE) printf("This is argument 15: %s \n", bSiteFilename);
         
         
-        if(argv[15]) //bSiteCommand - switch for how bSites are input
-            bSiteCommand = atoi(argv[15]);
-        if (TALKATIVE) printf("This is argument 15: %d \n", bSiteCommand);
+        if(argv[16]) //bSiteCommand - switch for how bSites are input
+            bSiteCommand = atoi(argv[16]);
+        if (TALKATIVE) printf("This is argument 16: %d \n", bSiteCommand);
         
         
     //    if(argv[10]) //Delivery distance - how close to base it needs to be

@@ -29,7 +29,7 @@ void initializeStiffSites()
         
         // 1 is occupied iSite (phosphorylated), 0 is unoccupied
         
-        switch (testRun)
+        switch (stiffCase) //do I want this to be testRun? or another variable?
         {
             case 0:
                 
@@ -80,13 +80,15 @@ void initializeStiffSites()
         }
     
     
-    
-        for (i=0;i<N;i++)
+        if (TALKATIVE)
         {
-            if (Stiff[i]==1)
+            for (i=0;i<N;i++)
             {
-                printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
-                fflush(stdout);
+                if (Stiff[i]==1)
+                {
+                    printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
+                    fflush(stdout);
+                }
             }
         }
     

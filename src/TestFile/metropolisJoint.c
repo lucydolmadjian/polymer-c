@@ -200,7 +200,7 @@ void metropolisJoint()
                 rPropose[0][ix] = rBase[ix] + tPropose[0][ix];
 				
             // for i<iPropose, proposal configuration is the same as current configuration
-            for(i=1;i<iPropose;i++)
+            for(i=1;i<iPropose;i++) //Why start at 1 instead of 0??
             {
                 rPropose[i][0] = r[i][0];
                 rPropose[i][1] = r[i][1];
@@ -384,25 +384,6 @@ void metropolisJoint()
 				accepts[0] ++;
 			else 		
 				accepts[1] ++;
-            
-            //debugging stiffening code
-//            
-//            for(i=0;i<N;i++)
-//            {
-//                if (Stiff[i]==1)
-//                {
-////                    
-////                    printf("Angles are: \n %f \n %f \n %f \n", phi[i],theta[i],psi[i]);
-////                    fflush(stdout);
-//                    
-//                    if (phi[i]!=0 || theta[i]!=0 || psi[i]!=0)
-//                    {
-//                        printf("Stiff angles are not all zero!\n");
-//                        fflush(stdout);
-//                        exit(1);
-//                    }
-//                }
-//            }
 			
 		}
         

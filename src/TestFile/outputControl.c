@@ -59,8 +59,12 @@ void finalizeSummary()
     {
         fList = fopen(listName, "a");
         
-        fprintf(fList, "%s %s ",occupiedSites,
-                    occupiedSitesNoSpace);
+        
+        if (CD3ZETA)
+        {
+            fprintf(fList, "%s %s ",occupiedSites,
+                        occupiedSitesNoSpace);
+        }
         
         fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",
                 N,           // 1
@@ -144,12 +148,15 @@ void dataRecording()
                 rate[1],          // 9
                 ksStatistic,      // 10
         		constraintProposalsTotal);// 11
-//            
-//        for (i=0;i<N;i++)
-//        {
-//            fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
-//            fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
-//        }
+            
+             if (VISUALIZE)
+             {
+                for (i=0;i<N;i++)
+                {
+                    fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
+                    fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
+                }
+             }
         
             for(iy=0;iy<iSiteTotal;iy++)
             {
