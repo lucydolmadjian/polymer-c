@@ -3,15 +3,15 @@
 
 NRequested=0            # initialize number of runs submitted
 
-NRODS=7       # N=143 for CD3 in human and mouse
+NRODS=143       # N=143 for CD3 in human and mouse
 
-IRATIO=3        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
+IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
 
 BRATIO=0        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
 FORCE=0
 
-VERBOSE=1
+VERBOSE=0
 
 TESTRUN=4 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
@@ -33,7 +33,7 @@ ISITELOCATION=-1
 BSITELOCATION=-1
 
 
-STIFFENRANGE=-1 # -1 means don't stiffen
+STIFFENRANGE=0 # -1 means don't stiffen
 
 ISITEFILE="iSites.txt"
 
@@ -41,13 +41,13 @@ BSITEFILE="bSites.txt"
 
 BSITECOMMAND=3
 
-STIFFCASE=0
+STIFFCASE=0 # 0 = not test run - CD3Zeta
 
 #####################################################
 
-TOTALITERATIONS=1 #for testing
+#TOTALITERATIONS=1 #for testing
 
-#TOTALITERATIONS=`wc -l < PhosphorylatediSites.txt`
+TOTALITERATIONS=`wc -l < PhosphorylatediSites.txt`
 
 echo "Length of file is $TOTALITERATIONS"
 
@@ -98,7 +98,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out StiffenTestN7ks003 $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "0 0 0 0 0 0 0"  "0000000" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
+            ./metropolis.out StiffenCD3ZetaStiffenRange0Membrane1.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -129,10 +129,10 @@ done
 #
 ##IT=1
 ##
-##for ((IT=1; IT<=$TOTALITERATIONS; IT++))
-##do
-##
-#cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
-##
-##done
+for ((IT=1; IT<=$TOTALITERATIONS; IT++))
+do
+
+cat StiffenCD3ZetaStiffenRange0Membrane1.$IT >> StiffenCD3ZetaStiffenRange0Membrane1.cat.txt
+
+done
 #done

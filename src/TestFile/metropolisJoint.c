@@ -762,7 +762,7 @@ void rotate(double *tIn, double *e1In, double *e2In, double *tOut, double *e1Out
     *(e2Out+1) = *(e2Out+1)/norm;
     *(e2Out+2) = *(e2Out+2)/norm;
    
-    if (nt%1000 == 0) // print stuff out for debugging
+    if (0) // print stuff out for debugging
     {
         // PRINT RGlobal
         printf("At nt=%ld, i=%ld\n", nt, i);
