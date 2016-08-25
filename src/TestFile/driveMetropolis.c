@@ -251,7 +251,7 @@ int main( int argc, char *argv[] )
         
         if(argv[11]) // Stiffness Case - 0 = CD3Zeta Mouse
             stiffCase = atoi(argv[11]);
-        if (TALKATIVE) printf("This is argument 11: %f\n", stiffCase);
+        if (TALKATIVE) printf("This is argument 11: %d\n", stiffCase);
         
         if(argv[12]) // Occupied (phosphorylated) iSites
             strcpy(occupiedSites,argv[12]);

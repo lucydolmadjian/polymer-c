@@ -23,7 +23,7 @@ void initializeStiffSites()
         printf("This is a string: %s\n", occupiedSites);
         
      
-        if (TALKATIVE) printf("This is a string: %s\n", phosphorylatediSites);
+        if (TALKATIVE) printf("This is a string: %s\n", occupiedSites);
         
         //read string and assign to double vector
         
