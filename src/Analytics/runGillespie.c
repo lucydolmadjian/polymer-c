@@ -4,93 +4,131 @@ void runGillespie();
 
 void runGillespie()
 {
-    char *line = malloc(1000);
-    const char delim[2] = " ";
-    char *token;
     
-    size_t count;
-    
-    //read transitionMatrix from file
-    ratesFile = fopen(matrixName, "r");
-    
-    if (ratesFile == NULL )
-    {
-        printf("Could not open file.");
-        exit(0);
-    }
-    else
-    {
+    /****************************** Create State Matrix from File ***********************/
 
-        while(getline(&line, &count, ratesFile) != -1)
+    sizeOfStateMatrix = (int) pow(2,iSiteTotal);
+    
+    
+    char line[200];
+    i=0;
+    j=0;
+    
+    ratesFile = fopen(matrixName,"r");
+    
+    while (fgets(line, sizeof(line), ratesFile))
+    {
+        stateMatrix[i][j]=atof(line);
+        j++;
+        if ((j%iSiteTotal) == 0)
         {
-            printf("This is the next row: %s\n", line);
-            printf("This is the count: %zu\n",count);
-            printf("This is i: %d\n",i);
-            
-            token = strtok(line,delim);
-            
-            while ( token != NULL )
-            {
-                transitionMatrix[i][j]=atof(token);
-                
-                token = strtok(NULL, delim);
-                printf("%.8f\t",transitionMatrix[i][j]);
-                j++;
-            }
-//            
-//            for (j=0;j<64;j++)
-//            {
-//                sscanf(line,"%lf",&transitionMatrix[i][j]);
-//                printf("%lf\t",transitionMatrix[i][j]);
-//            }
-            printf("\n");
             i++;
+            j=0;
+        }
+            
+    }
+    
+    fclose(ratesFile);
+    
+    //debugging
+    if(0)
+    {
+        for (i=0;i<sizeOfStateMatrix;i++)
+        {
+            for (j=0;j<iSiteTotal;j++)
+            {
+                printf("%lf ", stateMatrix[i][j]);
+            
+            }
+        
+            printf("\n");
+        }
+    }
+
+    
+    /******************************* Gillespie ******************************************/
+    
+    timeSum=0;
+    it=0;
+    
+    while (it < iterations && it < ITMAX)
+    {
+    
+    
+        timeTotal=0;
+        
+        currentState=0;
+        stepCount = 0;
+        path=0;
+        
+        while (currentState < pow(2,iSiteTotal)-1) //while loop vs for loop?
+        {
+            
+            
+            //initialize random time array and time step
+            for (iy=0;iy<iSiteTotal;iy++)
+            {
+                randTime[iy]=0;
+            }
+            
+            timeStep = INF;
+            
+            //Gillespie step
+            
+            for (iy=0;iy<iSiteTotal;iy++)
+            {
+                if (stateMatrix[currentState][iy]!=0)
+                {
+                    randTime[iy] = - log(TWISTER)/stateMatrix[currentState][iy]; //exponentially distributed random variable based on transition rate
+                }
+                else
+                {
+                    randTime[iy] = 0; //use 0 instead of infinity - then just remove these cases later
+                }
+            }
+            
+            //pick smallest of random times
+            for (iy=0;iy<iSiteTotal;iy++)
+            {
+                if (randTime[iy]!= 0)  // 0 time is not an option
+                {
+                    if (randTime[iy]<timeStep)
+                    {
+                        timeStep = randTime[iy];
+                        newState = iy;
+                    }
+                }
+            }
+            
+            // create path number
+            path += (newState+1)*pow(10,(iSiteTotal-stepCount));
+            
+            //debugging
+            printf("This is the path: %d\n", path);
+            
+            //update time and state
+            timeTotal += timeStep;
+            stepCount++;
+            
+            currentState += pow(2,newState);
+            
             
         }
         
-//        //debugging
-//        for (i=0;i<64;i++)
-//        {
-//            for (j=0; j<64;j++)
-//            {
-//                printf("%f\t",transitionMatrix[i][j]);
-//            }
-//            printf("\n");
-//        }
-
+        // record which path is used and how long it took
+        for (i=0;i<2;i++)
+        {
+            pathArray[path][0]++;
+            pathArray[path][1] += timeTotal;
+        }
         
-//        for (i=0;i<64;i++)
-//        {
-//            for (j=0;j<64;j++)
-//            {
-//                if(!fscanf(ratesFile,"%lf", &transitionMatrix[i][j]))
-//                      break;
-//                printf("%lf\n",transitionMatrix[i][j]);
-//            }
-//        }
+        timeSum += timeTotal;
         
+        it++;
+    
     }
     
-    
-    
-//    char line[200];
-//    iy=0;
-//    
-//    while (fgets(line, sizeof(line), ratesFile))
-//    {
-//        iSite[iy]=atoi(line);
-//        iy++;
-//    }
-//    
-//    fclose(iSiteList);
-//    
-//    iSiteTotal=iy;
-    
-  
-
-    
-    
-    
+    outputGillespie();
     
     
 }

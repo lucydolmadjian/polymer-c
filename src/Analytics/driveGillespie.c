@@ -9,6 +9,9 @@
 #define NBINS      100
 #define PI         3.14159265359
 #define INF        1e14
+#define ISITEMAX   9
+#define STATEMAX   10000000000
+#define ITMAX      1e9
 
 #include <math.h>
 #include <stdlib.h>
@@ -27,19 +30,27 @@ char matrixName[1000];
 FILE *ratesFile;
 long iseed;
 
+char outputName[1000];
+FILE *outputFile;
 
-//
 
-double transitionMatrix[64][64];
+double timeTotal,randTime[ISITEMAX],timeStep,timeSum;
+double pathArray[STATEMAX][2];
+int currentState,iy,it,iterations, stepCount,path;
 
+
+double stateMatrix[STATEMAX][ISITEMAX];
 int i,j;
+int iSiteTotal,newState;
 
+int sizeOfStateMatrix;
+int verbose;
 
 /*******************************************************************************/
 //  INCLUDES
 /*******************************************************************************/
 
-//#include "outputGillespie.c"
+#include "outputGillespie.c"
 #include "runGillespie.c"
 
 
@@ -56,6 +67,22 @@ int main( int argc, char *argv[] )
     if(argv[1]) // matrixName
         strcpy(matrixName, argv[1]);
         printf("This is argument 1: %s\n", matrixName);
+    
+    if(argv[2]) //iSiteTotal
+        iSiteTotal = atoi(argv[2]);
+        printf("This is argument 2: %d\n", iSiteTotal);
+    
+    if(argv[3]) //total number of iterations
+        iterations = atoi(argv[3]);
+        printf("This is argument 3: %d\n", iterations);
+    
+    if(argv[4]) //output file name
+        strcpy(outputName, argv[4]);
+        printf("This is argument 4: %s\n", outputName);
+    
+    if(argv[5]) //verbose - 1 is verbose, 0 is not verbose
+        verbose = atoi(argv[5])
+        printf("This is argument 5: %d\n", verbose);
 
     
 	iseed = RanInitReturnIseed(0);
