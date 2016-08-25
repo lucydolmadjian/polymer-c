@@ -10,7 +10,7 @@
 #define PI         3.14159265359
 #define INF        1e14
 #define ISITEMAX   9
-#define STATEMAX   10000000000
+#define STATEMAX   1000000000
 #define ITMAX      1e9
 
 #include <math.h>
@@ -40,7 +40,7 @@ int currentState,iy,it,iterations, stepCount,path;
 
 
 double stateMatrix[STATEMAX][ISITEMAX];
-int i,j;
+int i,j,k;
 int iSiteTotal,newState;
 
 int sizeOfStateMatrix;
@@ -81,7 +81,7 @@ int main( int argc, char *argv[] )
         printf("This is argument 4: %s\n", outputName);
     
     if(argv[5]) //verbose - 1 is verbose, 0 is not verbose
-        verbose = atoi(argv[5])
+        verbose = atoi(argv[5]);
         printf("This is argument 5: %d\n", verbose);
 
     
