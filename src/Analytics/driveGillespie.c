@@ -12,6 +12,7 @@
 #define ISITEMAX   9
 #define STATEMAX   1000000000
 #define ITMAX      1e9
+#define NTOPPATHS  50
 
 #include <math.h>
 #include <stdlib.h>
@@ -32,6 +33,10 @@ long iseed;
 
 char outputName[1000];
 FILE *outputFile;
+
+char summaryOutputName[1000];
+FILE *summaryOutputFile;
+
 
 
 double timeTotal,randTime[ISITEMAX],timeStep,timeSum;
@@ -80,9 +85,10 @@ int main( int argc, char *argv[] )
         strcpy(outputName, argv[4]);
         printf("This is argument 4: %s\n", outputName);
     
-    if(argv[5]) //verbose - 1 is verbose, 0 is not verbose
-        verbose = atoi(argv[5]);
-        printf("This is argument 5: %d\n", verbose);
+    if(argv[5]) //output file name
+        strcpy(summaryOutputName, argv[5]);
+        printf("This is argument 5: %s\n", summaryOutputName);
+
 
     
 	iseed = RanInitReturnIseed(0);

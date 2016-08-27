@@ -6,13 +6,32 @@ void outputGillespie();
 //  GLOBAL VARIABLES for output control
 /*******************************************************************************/
 
-double topPaths[20][5],pathArrayShort[STATEMAX][5];
-int factorial,frequency,topLocation,topPathsLocation[20],topFrequency;
-double MFTP;
+double topPaths[NTOPPATHS][5],pathArrayShort[STATEMAX][5],maxPath[5],leastPath[5];
+int factorial,frequency,topLocation,topPathsLocation[NTOPPATHS],topFrequency, maxFreq, maxLocation,leastLocation;
+double MFTP,leastFreq;
+int pass;
 
 /********************************************************************************************************/
 void outputGillespie()
 {
+    
+    //find factorial
+    factorial=1;
+    for (i=1;i<=iSiteTotal;i++)
+    {
+        factorial *= i;
+    }
+    
+//    printf("This is %d factorial: %d\n", iSiteTotal,factorial);
+//    
+//    for (i=0;i<factorial;i++)
+//    {
+//        for (j=0;j<5;j++)
+//        {
+//            pathArrayShort[i][j]=0;
+//        }
+//    }
+    
     
     /************* MFTP ******************/
     MFTP = timeSum/iterations; //find mean first passage time - avg time it takes to move from 000000 to 111111
@@ -29,7 +48,7 @@ void outputGillespie()
     
     //creates smaller matrix of all paths
     i=0;
-    for (j=0;j<STATEMAX;j++)
+    for (j=0;j<pow(10,iSiteTotal+1);j++)
     {
         if (pathArray[j][0] != 0)
         {
@@ -38,18 +57,49 @@ void outputGillespie()
             pathArrayShort[i][2] = pathArray[j][1]; //sum of all times when path was taken
             pathArrayShort[i][3] = pathArray[j][0]/iterations; //probability of path being taken
             pathArrayShort[i][4] = pathArray[j][1]/pathArray[j][0]; //average time
+            i++;
+        }
+        
+    }
+    
+    
+    //find most frequent path
+    maxFreq = 0;
+    for (j=0;j<factorial;j++)
+    {
+        if (pathArrayShort[j][1] > maxFreq)
+        {
+            maxFreq = pathArrayShort[j][1];
+            maxLocation = j;
         }
     }
     
-    //find factorial
-    for (i=1;i<=iSiteTotal;i++)
+    for (k=0;k<5;k++)
     {
-        factorial *= i;
+        maxPath[k] = pathArrayShort[maxLocation][k];
     }
+    
+    
+    //find least frequent path
+    leastFreq = INF;
+    for (j=0;j<factorial;j++)
+    {
+        if (pathArrayShort[j][1] < leastFreq)
+        {
+            leastFreq = pathArrayShort[j][1];
+            leastLocation = j;
+        }
+    }
+    
+    for (k=0;k<5;k++)
+    {
+        leastPath[k] = pathArrayShort[leastLocation][k];
+    }
+  
     
     //find top twenty most frequent paths
     topFrequency=0;
-    for (k=0;k<20;k++)
+    for (k=0;k<NTOPPATHS;k++)
     {
         frequency=0;
         
@@ -57,19 +107,33 @@ void outputGillespie()
         {
             if (pathArrayShort[i][1]>frequency)
             {
-                if (pathArrayShort[i][1]<topFrequency)
+                j=0;
+                pass = 1;
+                while (j<NTOPPATHS && pass)
+                {
+                    if (i != topPathsLocation[j])
+                    {
+                        j++;
+                    }
+                    else
+                    {
+                        pass = 0;
+                    }
+                }
+                if (pass)
                 {
                     frequency = pathArrayShort[i][1];
                     topPathsLocation[k] = i;
                 }
             }
         }
-        topLocation = topPathsLocation[k];
-        topFrequency = pathArrayShort[topLocation][1];
+        //topLocation = topPathsLocation[k];
+        //topFrequency = pathArrayShort[topLocation][1];
     }
+
     
     //create list of top twenty paths with path, frequency, total time, probability, average time
-    for (k=0;k<20;k++)
+    for (k=0;k<NTOPPATHS;k++)
     {
         topLocation = topPathsLocation[k];
         for (i=0;i<5;i++)
@@ -80,51 +144,63 @@ void outputGillespie()
     
     /***************** OUTPUT ********************/
     
-    //print top twenty data
-    if (!verbose)
-    {
-        outputFile = fopen(outputName, "a");
-        
-        
-        fprintf(outputFile, "%f\n", MFTP);
+    //print summary data
 
-        
-        for (i=0;i<20;i++)
-        {
-            for (j=0;j<5;j++)
-            {
-                fprintf(outputFile, "%f ", topPaths[i][j]);
-            }
-            
-            fprintf(outputFile, "\n");
-        }
-        
-        fclose(outputFile);
+    summaryOutputFile = fopen(summaryOutputName, "a");
+    
+    
+    fprintf(summaryOutputFile, "%f\n", MFTP);
+    
+    for (i=0;i<5;i++)
+    {
+        fprintf(summaryOutputFile, "%f ", maxPath[i]);
     }
     
-    //print all data
-    if (verbose)
+    fprintf(summaryOutputFile, "\n");
+    
+    for (i=0;i<5;i++)
     {
-        outputFile = fopen(outputName, "a");
-        
-        
-        fprintf(outputFile, "%f\n", MFTP);
-        
-        //print all 720 path data
-        for (i=0;i<factorial;i++)
+        fprintf(summaryOutputFile, "%f ", leastPath[i]);
+    }
+
+    fprintf(summaryOutputFile, "\n");
+    
+    for (i=0;i<NTOPPATHS;i++)
+    {
+        for (j=0;j<5;j++)
         {
-            for (j=0;j<5;j++)
-            {
-                fprintf(outputFile, "%f ", pathArrayShort[i][j]);
-            }
-            
-            fprintf(outputFile, "\n");
+            fprintf(summaryOutputFile, "%f ", topPaths[i][j]);
         }
         
-        fclose(outputFile);
-        
-        
+        fprintf(summaryOutputFile, "\n");
     }
+    
+    fclose(summaryOutputFile);
+
+    
+    //print all data
+
+
+    outputFile = fopen(outputName, "a");
+    
+    
+    fprintf(outputFile, "%f\n", MFTP);
+    
+    //print all 720 path data
+    for (i=0;i<factorial;i++)
+    {
+        for (j=0;j<5;j++)
+        {
+            fprintf(outputFile, "%f ", pathArrayShort[i][j]);
+        }
+        
+        fprintf(outputFile, "\n");
+    }
+    
+    fclose(outputFile);
+        
+        
+
     
 }
 

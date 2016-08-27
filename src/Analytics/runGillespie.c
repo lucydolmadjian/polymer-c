@@ -48,6 +48,7 @@ void runGillespie()
     
     /******************************* Gillespie ******************************************/
     
+    
     timeSum=0;
     it=0;
     
@@ -101,10 +102,10 @@ void runGillespie()
             }
             
             // create path number
-            path += (newState+1)*pow(10,(iSiteTotal-stepCount));
+            path += (newState+1)*pow(10,(iSiteTotal-stepCount-1));
             
             //debugging
-            printf("This is the path: %d\n", path);
+            //printf("This is the path: %d\n", path);
             
             //update time and state
             timeTotal += timeStep;
@@ -116,11 +117,12 @@ void runGillespie()
         }
         
         // record which path is used and how long it took
-        for (i=0;i<2;i++)
-        {
             pathArray[path][0]++;
             pathArray[path][1] += timeTotal;
-        }
+                    
+        
+        
+
         
         timeSum += timeTotal;
         
