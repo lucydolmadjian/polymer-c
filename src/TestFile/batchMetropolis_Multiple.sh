@@ -5,7 +5,7 @@ NRequested=0            # initialize number of runs submitted
 
 NRODS=143       # N=143 for CD3 in human and mouse
 
-IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc) # kinase = 10?
+IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc) #kinase=10?
 
 BRATIO=5        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
@@ -13,9 +13,11 @@ FORCE=0
 
 VERBOSE=0
 
-TESTRUN0 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
+TESTRUN=0 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
 ITERATIONS=1
+
+BSITECOMMAND=1
 
 
 #########You can ignore these parameters###########
@@ -32,14 +34,14 @@ ISITELOCATION=-1
 
 BSITELOCATION=-1
 
-#
-#STIFFENRANGE=0 # -1 means don't stiffen
+
+STIFFENRANGE=0 # -1 means don't stiffen
 
 #####################################################
 
-TOTALITERATIONS=1 #for testing
+#TOTALITERATIONS=3 #for testing
 
-#TOTALITERATIONS=`wc -l < PhosphorylatediSites.txt`
+TOTALITERATIONS=`wc -l < OccupiediSitesMouse.txt`
 
 echo "Length of file is $TOTALITERATIONS"
 
@@ -54,7 +56,6 @@ NRequested=`ps | grep -c metropolis`
 
 #echo "bRatio = $BRATIO"
 
-ITERATIONS=1
 
 while (( $ITERATIONS <= $TOTALITERATIONS ))
     do
@@ -85,12 +86,12 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             OCCUPIEDSITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS OccupiediSitesMouseNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+            echo "Line $ITERATIONS of file is $OCCUPIEDSITESNOSPACE"
 ################################
 
             # run program with specified parameters
 
-            ~/Documents/polymer-c_runs/metropolis.out StiffenTestN14ReeDist $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" &
+            ./metropolis.x MultipleTestBoundLigands.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" "$OCCUPIEDSITESNOSPACE" $BSITECOMMAND &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -110,21 +111,24 @@ done
 #done
 
 
-# wait for all background processes to finish before concatenating files
+## wait for all background processes to finish before concatenating files
 wait
 
 echo "Done waiting for processes to finish."
 
 # loop through all files, concatenate them into one file
- for ((BRATIO=0; BRATIO<=14; BRATIO++))
- do
+# for ((BRATIO=0; BRATIO<=14; BRATIO++))
+# do
 
-#IT=1
+
+IT=1
 #
-#for ((IT=1; IT<=$TOTALITERATIONS; IT++))
-#do
+for ((IT=1; IT<=$TOTALITERATIONS; IT++))
+do
 #
-cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
+
+
+cat MultipleTestBoundLigands.$IT >> MultipleTestBoundLigands.cat.txt
 #
 #done
 done
