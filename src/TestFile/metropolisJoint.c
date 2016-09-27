@@ -64,6 +64,11 @@ void metropolisJoint()
 	}
     
 	
+    for (i=0; i<N; i++)
+    {
+        Eelectro[i] = INF;
+    }
+    
 	convergedTF=0;
 	nt=0;
     E = INF;
@@ -349,43 +354,107 @@ void metropolisJoint()
         // We now have a propsoal configuration that passes the constraints.
         // Step 3 is to see if it passes our acceptance test (Metropolis test).
         
-        // Compute energy
-        ENew = -rPropose[N-1][2]*Force; // Energy in units of kBT. Force in units of kBT/Kuhn
-		
-        if (  TWISTER < exp(E-ENew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
-		{
-            E = ENew;
+        if (!ELECTRO)
+        {
+            // Compute energy
+            ENew = -rPropose[N-1][2]*Force; // Energy in units of kBT. Force in units of kBT/Kuhn
             
-            // Make configuration into the proposal configuration
-            for(i=iPropose;i<N;i++)
-			{
-				phi[i]   = phiPropose[i];
-				theta[i] = thetaPropose[i];
-				psi[i]   = psiPropose[i];
-				
-				r[i][0] = rPropose[i][0];
-				r[i][1] = rPropose[i][1];
-				r[i][2] = rPropose[i][2];
+            if (  TWISTER < exp(E-ENew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
+            {
+                E = ENew;
                 
-                t[i][0] = tPropose[i][0];
-                t[i][1] = tPropose[i][1];
-                t[i][2] = tPropose[i][2];
+                // Make configuration into the proposal configuration
+                for(i=iPropose;i<N;i++)
+                {
+                    phi[i]   = phiPropose[i];
+                    theta[i] = thetaPropose[i];
+                    psi[i]   = psiPropose[i];
+                    
+                    r[i][0] = rPropose[i][0];
+                    r[i][1] = rPropose[i][1];
+                    r[i][2] = rPropose[i][2];
+                    
+                    t[i][0] = tPropose[i][0];
+                    t[i][1] = tPropose[i][1];
+                    t[i][2] = tPropose[i][2];
+                    
+                    e1[i][0] = e1Propose[i][0];
+                    e1[i][1] = e1Propose[i][1];
+                    e1[i][2] = e1Propose[i][2];
+                    
+                    e2[i][0] = e2Propose[i][0];
+                    e2[i][1] = e2Propose[i][1];
+                    e2[i][2] = e2Propose[i][2];
+                 
+                }
+                if(iPropose==0)
+                    accepts[0] ++;
+                else 		
+                    accepts[1] ++;
                 
-                e1[i][0] = e1Propose[i][0];
-                e1[i][1] = e1Propose[i][1];
-                e1[i][2] = e1Propose[i][2];
+            }
+        }
+        else
+        {
+            // test energy for each joint, accept or reject, if reject, find whole new configuration?  Or just for the joint that failed??
+            
+            // what happens if some pass and some don't?  Do you keep the ones that passed?  Presumably not?  Presumably just rearrange whole thing later?
+            
+            energyBarrier = 0;
+            
+            for (i=0; i<N; i++)
+            {
                 
-                e2[i][0] = e2Propose[i][0];
-                e2[i][1] = e2Propose[i][1];
-                e2[i][2] = e2Propose[i][2];
-             
-			}
-			if(iPropose==0)
-				accepts[0] ++;
-			else 		
-				accepts[1] ++;
-			
-		}
+                // Compute energy
+                EelectroNew[i] = 4*wellDepth*(pow(debye/r[i][2],12)-pow(debye/r[i][2],6)); // Energy in units of kBT. Force in units of kBT/Kuhn
+                
+                if (  TWISTER >= exp(Eelectro[i]-EelectroNew[i]) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
+                {
+                    energyBarrier = 1;
+                    
+                }
+                
+            }
+            
+
+            if (!energyBarrier)
+            {
+                
+                for (i=0; i<N; i++)
+                {
+                    Eelectro[i] = EelectroNew[i];
+                }
+                // Make configuration into the proposal configuration
+                for(i=iPropose;i<N;i++)
+                {
+                    phi[i]   = phiPropose[i];
+                    theta[i] = thetaPropose[i];
+                    psi[i]   = psiPropose[i];
+                    
+                    r[i][0] = rPropose[i][0];
+                    r[i][1] = rPropose[i][1];
+                    r[i][2] = rPropose[i][2];
+                    
+                    t[i][0] = tPropose[i][0];
+                    t[i][1] = tPropose[i][1];
+                    t[i][2] = tPropose[i][2];
+                    
+                    e1[i][0] = e1Propose[i][0];
+                    e1[i][1] = e1Propose[i][1];
+                    e1[i][2] = e1Propose[i][2];
+                    
+                    e2[i][0] = e2Propose[i][0];
+                    e2[i][1] = e2Propose[i][1];
+                    e2[i][2] = e2Propose[i][2];
+                    
+                }
+                if(iPropose==0)
+                accepts[0] ++;
+                else
+                accepts[1] ++;
+            }
+
+        }
         
         /********* 4. Data collection and output to file *******************/
         // check if blocking sphere

@@ -13,7 +13,8 @@
 #define KSCRITICAL 0.005
 #define MEMBRANE   1
 #define MULTIPLE   0
-#define STIFFEN    1
+#define STIFFEN    0
+#define ELECTRO    0
 #define CPMAX      1e8
 #define TALKATIVE  1
 #define LEGACY	   0
@@ -87,6 +88,9 @@ long st;
 long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationarityCheck,i2, iStart;
 
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
+
+double wellDepth,debye, Eelectro[NMAX], EelectroNew[NMAX];
+int energyBarrier;
 
 int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 
@@ -273,6 +277,14 @@ int main( int argc, char *argv[] )
         if(argv[16]) //bSiteCommand - switch for how bSites are input
             bSiteCommand = atoi(argv[16]);
         if (TALKATIVE) printf("This is argument 16: %d \n", bSiteCommand);
+        
+        if(argv[17]) // potential well depth
+            wellDepth = atof(argv[17]);
+        if (TALKATIVE) printf("This is argument 17: %ld \n", wellDepth);
+        
+        if(argv[18]) // potential well depth
+            debye = atof(argv[18]);
+        if (TALKATIVE) printf("This is argument 18: %ld \n", debye);
         
         
     //    if(argv[10]) //Delivery distance - how close to base it needs to be
