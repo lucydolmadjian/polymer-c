@@ -22,21 +22,9 @@ void outputGillespie()
         factorial *= i;
     }
     
-//    printf("This is %d factorial: %d\n", iSiteTotal,factorial);
-//    
-//    for (i=0;i<factorial;i++)
-//    {
-//        for (j=0;j<5;j++)
-//        {
-//            pathArrayShort[i][j]=0;
-//        }
-//    }
-    
     
     /************* MFTP ******************/
     MFTP = timeSum/iterations; //find mean first passage time - avg time it takes to move from 000000 to 111111
-    
-    
     
     /******************** PATHS ************************/
     
@@ -60,6 +48,11 @@ void outputGillespie()
             i++;
         }
         
+    }
+    
+    if (TALKATIVE)
+    {
+        printf("This is how many paths it thinks it took: %d\n", i);
     }
     
     
@@ -127,8 +120,6 @@ void outputGillespie()
                 }
             }
         }
-        //topLocation = topPathsLocation[k];
-        //topFrequency = pathArrayShort[topLocation][1];
     }
 
     
@@ -144,45 +135,48 @@ void outputGillespie()
     
     /***************** OUTPUT ********************/
     
-    //print summary data
+    /*********************** Print Summary Data ***********************/
+    if (summaryOn)
+    {
 
-    summaryOutputFile = fopen(summaryOutputName, "a");
-    
-    
-    fprintf(summaryOutputFile, "%f\n", MFTP);
-    
-    for (i=0;i<5;i++)
-    {
-        fprintf(summaryOutputFile, "%f ", maxPath[i]);
-    }
-    
-    fprintf(summaryOutputFile, "\n");
-    
-    for (i=0;i<5;i++)
-    {
-        fprintf(summaryOutputFile, "%f ", leastPath[i]);
-    }
-
-    fprintf(summaryOutputFile, "\n");
-    
-    for (i=0;i<NTOPPATHS;i++)
-    {
-        for (j=0;j<5;j++)
+        summaryOutputFile = fopen(summaryOutputName, "a");
+        
+        //print MFPT
+        fprintf(summaryOutputFile, "%f\n", MFTP);
+        
+        //print max path
+        for (i=0;i<5;i++)
         {
-            fprintf(summaryOutputFile, "%f ", topPaths[i][j]);
+            fprintf(summaryOutputFile, "%f ", maxPath[i]);
         }
         
         fprintf(summaryOutputFile, "\n");
+        
+        //print least path
+        for (i=0;i<5;i++)
+        {
+            fprintf(summaryOutputFile, "%f ", leastPath[i]);
+        }
+        
+        fprintf(summaryOutputFile, "\n");
+        
+        //print top paths
+        for (i=0;i<NTOPPATHS;i++)
+        {
+            for (j=0;j<5;j++)
+            {
+                fprintf(summaryOutputFile, "%f ", topPaths[i][j]);
+            }
+            
+            fprintf(summaryOutputFile, "\n");
+        }
+        
+        fclose(summaryOutputFile);
+
     }
-    
-    fclose(summaryOutputFile);
-
-    
-    //print all data
-
+    /*********************** Print All Data ***********************/
 
     outputFile = fopen(outputName, "a");
-    
     
     fprintf(outputFile, "%f\n", MFTP);
     
@@ -198,6 +192,18 @@ void outputGillespie()
     }
     
     fclose(outputFile);
+    
+    /*********************** Print Time Data ***********************/
+    
+    if (TIME)
+    {
+        timeOutputFile = fopen(timeOutputName, "a");
+        
+        for (i=0;i<iterations;i++)
+        {
+            fprintf(timeOutputFile, "%f\n", timeArray[i]);
+        }
+    }
         
         
 

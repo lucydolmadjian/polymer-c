@@ -101,30 +101,46 @@ void runGillespie()
                 }
             }
             
-            // create path number
-            path += (newState+1)*pow(10,(iSiteTotal-stepCount-1));
+            if (0)
+            printf("This is the path chosen: %d\n", newState);
             
-            //debugging
-            //printf("This is the path: %d\n", path);
+            // create path number
+            //use this update for "forwards" transitionMatrix (i.e. forwards binary, backwards phosphorylation)
+            path += (iSiteTotal-newState)*pow(10,(iSiteTotal-stepCount-1));
+
+            
+            // use this update for "backwards" transitionMatrix (i.e. backwards binary)
+            //path += (newState+1)*pow(10,(iSiteTotal-stepCount-1));
+
             
             //update time and state
             timeTotal += timeStep;
             stepCount++;
             
+            // use this update for "forwards" transitionMatrix (i.e. forwards binary, backwards phosphorylation)
             currentState += pow(2,newState);
+            
+            // use this update for "backwards" transitionMatrix
+            //currentState += pow(2,iSiteTotal-newState-1);
+            
+            if (0)
+            printf("Current State is: %d \n", currentState);
             
             
         }
         
         // record which path is used and how long it took
-            pathArray[path][0]++;
-            pathArray[path][1] += timeTotal;
-                    
+        pathArray[path][0]++;
+        pathArray[path][1] += timeTotal;
         
-        
-
-        
+        //for MFPT
         timeSum += timeTotal;
+        
+        
+        if (TIME)
+        {
+            timeArray[it] = timeTotal;
+        }
         
         it++;
     
