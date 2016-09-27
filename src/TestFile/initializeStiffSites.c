@@ -79,18 +79,31 @@ void initializeStiffSites()
             }
         }
     
-    
         if (TALKATIVE)
         {
+            totalStiff = 0;
             for (i=0;i<N;i++)
             {
                 if (Stiff[i]==1)
                 {
-                    printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
-                    fflush(stdout);
+                    //printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
+                    //fflush(stdout);
+                    totalStiff++;
                 }
             }
+            printf("Total Stiff: %d\n", totalStiff);
+            fflush(stdout);
+            
+            if (totalStiff >= N)
+            {
+                printf("Error! Completely stiff!\n");
+                fflush(stdout);
+                
+                exit(0);
+                
+            }
         }
+    
     
 
 }
