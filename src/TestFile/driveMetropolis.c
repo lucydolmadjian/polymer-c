@@ -59,7 +59,7 @@ double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 double StiffenRange,phosiSites[NMAX], Stiff[NMAX];
-int stiffCase;
+int stiffCase, totalStiff;
 char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
 
 double iSiteOccupied[NMAX];
@@ -280,11 +280,11 @@ int main( int argc, char *argv[] )
         
         if(argv[17]) // potential well depth
             wellDepth = atof(argv[17]);
-        if (TALKATIVE) printf("This is argument 17: %ld \n", wellDepth);
+        if (TALKATIVE) printf("This is argument 17: %f \n", wellDepth);
         
         if(argv[18]) // potential well depth
             debye = atof(argv[18]);
-        if (TALKATIVE) printf("This is argument 18: %ld \n", debye);
+        if (TALKATIVE) printf("This is argument 18: %f \n", debye);
         
         
     //    if(argv[10]) //Delivery distance - how close to base it needs to be
