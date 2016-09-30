@@ -89,8 +89,7 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
-double wellDepth,debye, Eelectro[NMAX], EelectroNew[NMAX];
-int energyBarrier;
+double wellDepth,debye, Eelectro, EelectroNew;
 
 int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 

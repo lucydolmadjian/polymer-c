@@ -64,14 +64,14 @@ void metropolisJoint()
 	}
     
 	
-    for (i=0; i<N; i++)
-    {
-        Eelectro[i] = INF;
-    }
+
+    
+    
     
 	convergedTF=0;
 	nt=0;
     E = INF;
+    Eelectro = INF;
 
     // stuff needed for automatic perturbation size adaptation
 	for(iParam=0;iParam<2;iParam++)
@@ -396,34 +396,22 @@ void metropolisJoint()
         }
         else
         {
-            // test energy for each joint, accept or reject, if reject, find whole new configuration?  Or just for the joint that failed??
-            
-            // what happens if some pass and some don't?  Do you keep the ones that passed?  Presumably not?  Presumably just rearrange whole thing later?
-            
-            energyBarrier = 0;
+ 
+            EelectroNew = 0;
             
             for (i=0; i<N; i++)
             {
                 
                 // Compute energy
-                EelectroNew[i] = 4*wellDepth*(pow(debye/r[i][2],12)-pow(debye/r[i][2],6)); // Energy in units of kBT. Force in units of kBT/Kuhn
-                
-                if (  TWISTER >= exp(Eelectro[i]-EelectroNew[i]) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
-                {
-                    energyBarrier = 1;
-                    
-                }
+                EelectroNew += 4*wellDepth*(pow(debye/r[i][2],12)-pow(debye/r[i][2],6));
                 
             }
             
-
-            if (!energyBarrier)
+            if (  TWISTER < exp(E-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
             {
-                
-                for (i=0; i<N; i++)
-                {
-                    Eelectro[i] = EelectroNew[i];
-                }
+
+                Eelectro = EelectroNew;
+
                 // Make configuration into the proposal configuration
                 for(i=iPropose;i<N;i++)
                 {
