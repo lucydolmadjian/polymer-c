@@ -93,7 +93,7 @@ void metropolisJoint()
     // stuff needed for automatic stationarity (convergence) check
 	ntNextStationarityCheck = 3*NTCHECK;
 	for(iBin=0;iBin<NBINS;iBin++)
-		rMCounts[iBin] = 0;
+		convergenceVariableCounts[iBin] = 0;
 	
     // summary variables
     initializeSummary();
@@ -719,12 +719,12 @@ void stationarity()
 	for(iBin=0;iBin<NBINS;iBin++)
 	{
 		
-		cdf1 += (double)rMCountsPrevious[iBin]/(((double)nt-(double)NTCHECK)/2.0);
-		cdf2 += (double)rMCounts[iBin]/(((double)nt-(double)NTCHECK)/2.0);
+		cdf1 += (double)convergenceVariableCountsPrevious[iBin]/(((double)nt-(double)NTCHECK)/2.0);
+		cdf2 += (double)convergenceVariableCounts[iBin]/(((double)nt-(double)NTCHECK)/2.0);
 		
 		if (fabs(cdf1-cdf2)>ksStatistic)
 			ksStatistic = fabs(cdf1-cdf2);
-		//printf("rMCounts[%d]: %d, %d \t\t\t cdf: %f, %f\n", iBin, rMCountsPrevious[iBin],rMCounts[iBin], cdf1, cdf2);
+		//printf("convergenceVariableCounts[%d]: %d, %d \t\t\t cdf: %f, %f\n", iBin, convergenceVariableCountsPrevious[iBin],convergenceVariableCounts[iBin], cdf1, cdf2);
 		
 	}
 	
@@ -744,8 +744,8 @@ void appendBins()
 {
     for(iBin=0;iBin<NBINS;iBin++)
     {
-        rMCountsPrevious[iBin] += rMCounts[iBin];
-        rMCounts[iBin] = 0;
+        convergenceVariableCountsPrevious[iBin] += convergenceVariableCounts[iBin];
+        convergenceVariableCounts[iBin] = 0;
     }
 }
 

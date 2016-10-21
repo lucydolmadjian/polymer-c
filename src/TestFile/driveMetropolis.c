@@ -45,7 +45,7 @@ long N, ntNextStationarityCheck, iBin;
 long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
 double c0, c1, irLigand, brLigand;
 double ree, rM, rH, ksStatistic;
-long rMCounts[NBINS], rMCountsPrevious[NBINS];
+long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
 long iseed;
 
 double phi[NMAX], theta[NMAX], psi[NMAX];

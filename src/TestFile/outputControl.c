@@ -176,6 +176,7 @@ void dataRecording()
         }
     } // finished verbose output
     
+    // Note:  eliminates initial transient
     if (nt>NTCHECK)
     {
         // Summary statistics (these will be written at the end of the run)
@@ -192,8 +193,8 @@ void dataRecording()
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);
         rMBar_sum    += rM;
 
-        // update bins for KS test
-		rMCounts[(long)floor(NBINS*fabs(rM)/N)]++;
+        // update bins for KS test (fabs(rM)+ree will never be larger than 2N, so use 2N to normalize)
+		convergenceVariableCounts[(long)floor(NBINS*(fabs(rM)+ree)/(2*N))]++;
     }
 	return;
 	
