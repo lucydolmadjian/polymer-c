@@ -15,8 +15,38 @@ VERBOSE=0
 
 TESTRUN=4 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
-ITERATIONS=1
+ISITELOCATION=-1
 
+BSITELOCATION=-1
+
+STIFFENRANGE=0 # -1 means don't stiffen
+
+STIFFCASE=0 # 0 = not test run - CD3Zeta
+
+
+
+
+
+
+
+ISITEFILE="iSites.txt"
+
+BSITEFILE="bSites.txt"
+
+BSITECOMMAND=2
+
+WELLDEPTH=1 #literally no idea what this parameter should be - is it even positive?
+
+DEBYE=0.3 #arbitrary number between 0 and 0.5 nm? so between 0 and 0.6 kuhn lengths?
+
+RWALL=-10 #arbitrary number greater than -15nm (size of bilayer) or -50 kuhn lengths? should RWALL be measured in kuhn lengths?
+
+
+
+
+
+
+ITERATIONS=1
 
 #########You can ignore these parameters###########
 
@@ -27,22 +57,6 @@ ITERATIONS=1
 #COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
 
 #ISITETOTAL=4
-
-ISITELOCATION=-1
-
-BSITELOCATION=-1
-
-
-#STIFFENRANGE=0 # -1 means don't stiffen
-
-ISITEFILE="iSites.txt"
-
-BSITEFILE="bSites.txt"
-
-BSITECOMMAND=2
-
-STIFFCASE=0 # 0 = not test run - CD3Zeta
-
 #####################################################
 
 #TOTALITERATIONS=1 #for testing
@@ -58,13 +72,13 @@ NRequested=`ps | grep -c metropolis`
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
 
-mkdir CD3ZetaStiffenRangeSweepMembraneOffCatFiles
+mkdir CD3ZetaWellDepthSweepMembraneOnCatFiles
 
 
-for ((STIFFENRANGE=15;STIFFENRANGE<=50;STIFFENRANGE=($STIFFENRANGE+5)))
+for ((WELLDEPTH=0;WELLDEPTH<=50;WELLDEPTH=($WELLDEPTH+5)))
 do
 
-echo "StiffenRange = $STIFFENRANGE"
+echo "WellDepth = $WELLDEPTH"
 
 ITERATIONS=1
 
@@ -102,7 +116,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
+            ./metropolis.out CD3ZetaMembrane1WellDepth.$WELLDEPTH.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND $WELLDEPTH $DEBYE $RWALL &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -119,32 +133,25 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
     done
             echo "Done calling metropolis."
 done
-#done
-
 
 # wait for all background processes to finish before concatenating files
 wait
 
 echo "Done waiting for processes to finish."
 
-## loop through all files, concatenate them into one file
-# for ((BRATIO=0; BRATIO<=14; BRATIO++))
-# do
-#
-##IT=1
-##
+# loop through all files, concatenate them into one file
 for ((IT=1; IT<=$TOTALITERATIONS; IT++))
 do
 
-cat CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.$IT >> CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.cat.txt
+cat CD3ZetaMembrane1WellDepth.$WELLDEPTH.$IT >> CD3ZetaMembrane1WellDepth.$WELLDEPTH.cat.txt
 
 done
 
-cp CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.cat.txt ~/Documents/polymer-c_runs/Sept222016StiffenRangeSweepMembraneOff/CD3ZetaStiffenRangeSweepMembraneOffCatFiles
+cp CD3ZetaMembrane1WellDepth.$WELLDEPTH.cat.txt ~/Documents/polymer-c_runs/Oct142016WellDepthSweepMembraneOn/CD3ZetaWellDepthSweepMembraneOnCatFiles
 
-mkdir CD3ZetaMembrane0StiffenRange.$STIFFENRANGE
+mkdir CD3ZetaMembrane1WellDepth.$WELLDEPTH
 
-mv CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.* ~/Documents/polymer-c_runs/Sept222016StiffenRangeSweepMembraneOff/CD3ZetaMembrane0StiffenRange.$STIFFENRANGE/
+mv CD3ZetaMembrane1WellDepth.$WELLDEPTH.* ~/Documents/polymer-c_runs/Oct142016WellDepthSweepMembraneOn/CD3ZetaMembrane1WellDepth.$WELLDEPTH/
 
 done
 

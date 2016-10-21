@@ -22,6 +22,15 @@ void metropolisJoint()
         initializeStiffSites();
     }
     
+    
+    /************* ELECTRO SEGMENTS *******************/
+    
+    //Ignore for Formin
+    if (ELECTRO) //phosphorylate sites only if ELECTRO is 1 in driveM
+    {
+        initializePhosphorylatedSites();
+    }
+    
     /********* INITIALIZE CONFIGURATION *******************/
 
     //initalize base
@@ -148,7 +157,7 @@ void metropolisJoint()
         //Ignore for formin
         if (STIFFEN)
         {
-            while(Stiff[iPropose]==1) //Test if proposed joint is stiff.
+            while(StiffSites[iPropose]==1) //Test if proposed joint is stiff.
             {
                 iPropose = floor(N*TWISTER); //If stiff, propose new joint until propose one not stiff.
             }
@@ -242,7 +251,8 @@ void metropolisJoint()
 				
             /********* 2. Test constraints *******************/
             constraintSatisfiedTF=1;
-            if (MEMBRANE)
+            //use membrane constraint on polymer, but do not use if using electrostatics
+            if (MEMBRANE && !ELECTRO)
             {
                 //printf("Testing Membrane");
                 for(i=0;i<N;i++)
@@ -397,14 +407,18 @@ void metropolisJoint()
         else
         {
  
+            //sum over energies of all joints, except phosphorylated ones
+            
             EelectroNew = 0;
             
             for (i=0; i<N; i++)
             {
-                
-                // Compute energy
-                EelectroNew += 4*wellDepth*(pow(debye/r[i][2],12)-pow(debye/r[i][2],6));
-                
+                //if not phosphorylated, add energy
+                if (PhosphorylatedSites[i]!=1)
+                {
+                    // Compute energy
+                    EelectroNew += 4*wellDepth*(pow(debye/(r[i][2]-rWall),12)-pow(debye/(r[i][2]-rWall),6));
+                }
             }
             
             if (  TWISTER < exp(E-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
@@ -521,14 +535,18 @@ void metropolisJoint()
             //tests occlusion of iSites first
             for(iy=0; iy<iSiteTotal;iy++)
             {
-                for (ib=0;ib<bSiteTotal;ib++)
+                
+                if (MULTIPLE)
                 {
-                    if(iSite[iy]==bSite[ib]) //test if iSite is bound already
+                    for (ib=0;ib<bSiteTotal;ib++)
                     {
-                        stericOcclusion[iy]++;
-                        ib=bSiteTotal;
-                    }
-                }//didn't include base - assuming can't be bound to base
+                        if(iSite[iy]==bSite[ib]) //test if iSite is bound already
+                        {
+                            stericOcclusion[iy]++;
+                            ib=bSiteTotal;
+                        }
+                    }//didn't include base - assuming can't be bound to base
+                }
                 
                 if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
                 {
