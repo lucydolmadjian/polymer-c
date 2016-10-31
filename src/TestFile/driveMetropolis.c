@@ -290,7 +290,11 @@ int main( int argc, char *argv[] )
         
         if(argv[19]) // rWall
             rWall = atof(argv[19]);
-        if (TALKATIVE) printf("This is argument 18: %f \n", rWall);
+        if (TALKATIVE) printf("This is argument 19: %f \n", rWall);
+        
+        if(argv[20]) //PhosElectroRange
+            PhosElectroRange = atof(argv[20]);
+        if (TALKATIVE) printf("This is argument 20: %d \n", PhosElectroRange);
         
         
     //    if(argv[10]) //Delivery distance - how close to base it needs to be

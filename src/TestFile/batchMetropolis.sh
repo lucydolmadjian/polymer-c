@@ -41,7 +41,7 @@ DEBYE=0.3 #arbitrary number between 0 and 0.5 nm? so between 0 and 0.6 kuhn leng
 
 RWALL=-10 #arbitrary number greater than -15nm (size of bilayer) or -50 kuhn lengths? should RWALL be measured in kuhn lengths?
 
-
+PHOSELECTRORANGE=0
 
 
 
@@ -116,7 +116,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out CD3ZetaMembrane1WellDepth.$WELLDEPTH.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND $WELLDEPTH $DEBYE $RWALL &
+            ./metropolis.out CD3ZetaMembrane1WellDepth.$WELLDEPTH.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND $WELLDEPTH $DEBYE $RWALL $PHOSELECTRORANGE &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
