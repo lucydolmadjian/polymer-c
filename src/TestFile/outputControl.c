@@ -132,7 +132,7 @@ void dataRecording()
     if (verboseTF)
     {
         
-        if ( (nt % 100) == 0) //only output every 100 time steps
+        if ( (nt > NTCHECK) && (nt-NTCHECK <= 4000)) //only output 4000 runs, after initial transient
         {
         // output results to file
         fList = fopen(listName, "a");
@@ -154,7 +154,11 @@ void dataRecording()
                 for (i=0;i<N;i++)
                 {
                     fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
-                    fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
+                }
+                 
+                for (i=0;i<iSiteTotal;i++)
+                {
+                    fprintf(fList, " %f %f %f", iLigandCenter[i][0], iLigandCenter[i][1], iLigandCenter[i][2]);
                 }
              }
         
