@@ -59,9 +59,9 @@ ITERATIONS=1
 #ISITETOTAL=4
 #####################################################
 
-#TOTALITERATIONS=1 #for testing
+TOTALITERATIONS=1 #for testing
 
-TOTALITERATIONS=`wc -l < OccupiediSitesMouse.txt`
+#TOTALITERATIONS=`wc -l < OccupiediSitesMouse.txt`
 
 echo "Length of file is $TOTALITERATIONS"
 
