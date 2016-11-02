@@ -11,7 +11,7 @@ BRATIO=5        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
 FORCE=0
 
-VERBOSE=0
+VERBOSE=1
 
 TESTRUN=4 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
@@ -39,7 +39,7 @@ WELLDEPTH=1 #literally no idea what this parameter should be - is it even positi
 
 DEBYE=0.3 #arbitrary number between 0 and 0.5 nm? so between 0 and 0.6 kuhn lengths?
 
-RWALL=-10 #arbitrary number greater than -15nm (size of bilayer) or -50 kuhn lengths? should RWALL be measured in kuhn lengths?
+RWALL=0 #arbitrary number greater than -15nm (size of bilayer) or -50 kuhn lengths? should RWALL be measured in kuhn lengths?
 
 PHOSELECTRORANGE=0
 
@@ -72,11 +72,11 @@ NRequested=`ps | grep -c metropolis`
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
 
-mkdir CD3ZetaWellDepthSweepMembraneOnCatFiles
+#mkdir CD3ZetaWellDepthSweepMembraneOnCatFiles
 
 
-for ((WELLDEPTH=0;WELLDEPTH<=50;WELLDEPTH=($WELLDEPTH+5)))
-do
+#for ((WELLDEPTH=0;WELLDEPTH<=50;WELLDEPTH=($WELLDEPTH+5)))
+#do
 
 echo "WellDepth = $WELLDEPTH"
 
@@ -140,18 +140,18 @@ wait
 echo "Done waiting for processes to finish."
 
 # loop through all files, concatenate them into one file
-for ((IT=1; IT<=$TOTALITERATIONS; IT++))
-do
+#for ((IT=1; IT<=$TOTALITERATIONS; IT++))
+#do
 
-cat CD3ZetaMembrane1WellDepth.$WELLDEPTH.$IT >> CD3ZetaMembrane1WellDepth.$WELLDEPTH.cat.txt
+#cat CD3ZetaMembrane1WellDepth.$WELLDEPTH.$IT >> CD3ZetaMembrane1WellDepth.$WELLDEPTH.cat.txt
 
-done
+#done
 
-cp CD3ZetaMembrane1WellDepth.$WELLDEPTH.cat.txt ~/Documents/polymer-c_runs/Oct142016WellDepthSweepMembraneOn/CD3ZetaWellDepthSweepMembraneOnCatFiles
+#cp CD3ZetaMembrane1WellDepth.$WELLDEPTH.cat.txt ~/Documents/polymer-c_runs/Oct142016WellDepthSweepMembraneOn/CD3ZetaWellDepthSweepMembraneOnCatFiles
 
-mkdir CD3ZetaMembrane1WellDepth.$WELLDEPTH
+#mkdir CD3ZetaMembrane1WellDepth.$WELLDEPTH
 
-mv CD3ZetaMembrane1WellDepth.$WELLDEPTH.* ~/Documents/polymer-c_runs/Oct142016WellDepthSweepMembraneOn/CD3ZetaMembrane1WellDepth.$WELLDEPTH/
+#mv CD3ZetaMembrane1WellDepth.$WELLDEPTH.* ~/Documents/polymer-c_runs/Oct142016WellDepthSweepMembraneOn/CD3ZetaMembrane1WellDepth.$WELLDEPTH/
 
-done
+#done
 

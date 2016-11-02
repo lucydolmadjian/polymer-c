@@ -18,7 +18,7 @@
 #define CPMAX      1e8
 #define TALKATIVE  1
 #define LEGACY	   0
-#define VISUALIZE  0
+#define VISUALIZE  1
 #define CD3ZETA    1
 
 #include <math.h>

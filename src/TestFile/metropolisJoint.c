@@ -411,14 +411,30 @@ void metropolisJoint()
             
             EelectroNew = 0;
             
+            if (nt > 20000 && nt < 20010)
+            {
+                printf("This is time step %d \n" , nt);
+            }
+            
             for (i=0; i<N; i++)
             {
+
+                
                 //if not phosphorylated, add energy
                 if (PhosphorylatedSites[i]!=1)
                 {
                     // Compute energy
                     EelectroNew += 4*wellDepth*(pow(debye/(r[i][2]-rWall),12)-pow(debye/(r[i][2]-rWall),6));
-                }
+                    
+                    //debugging
+                    if (nt > 20000 && nt < 20010)
+                    {
+                        
+                        printf("This is energy %d : %f \n", i, 4*wellDepth*(pow(debye/(r[i][2]-rWall),12)-pow(debye/(r[i][2]-rWall),6)));
+                        printf("This is EelectroNew: %f \n", EelectroNew);
+                        fflush(stdout);
+                    }
+                } 
             }
             
             if (  TWISTER < exp(E-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E

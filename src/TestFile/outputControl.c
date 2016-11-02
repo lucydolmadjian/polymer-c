@@ -168,6 +168,10 @@ void dataRecording()
             }
         
             fprintf(fList, " %ld", stericOcclusionBase);
+            
+            fprintf(fList, " %f %f", EelectroNew, exp(E-EelectroNew));
+            
+        
         
 //        for(ib=0;ib<bSiteTotal;ib++)
 //        {
