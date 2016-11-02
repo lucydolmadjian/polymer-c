@@ -251,13 +251,18 @@ void metropolisJoint()
 				
             /********* 2. Test constraints *******************/
             constraintSatisfiedTF=1;
-            //use membrane constraint on polymer, but do not use if using electrostatics
-            if (MEMBRANE && !ELECTRO)
+            //use membrane constraint on polymer
+            if (MEMBRANE)
             {
+                if (ELECTRO) //if using electrostatics, impose membrane-like constraint on rWall to prevent double potential curve interference
+                    membraneLocation = rWall;
+                else
+                    membraneLocation = 0;
+                
                 //printf("Testing Membrane");
                 for(i=0;i<N;i++)
                 {
-                    if (rPropose[i][2] < 0)
+                    if (rPropose[i][2] < membraneLocation)
                     {
                         constraintSatisfiedTF=0;
                         i=N+1; // shortcut out of the loop

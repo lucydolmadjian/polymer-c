@@ -116,7 +116,7 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out CD3ZetaMembrane1WellDepth.$WELLDEPTH.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND $WELLDEPTH $DEBYE $RWALL $PHOSELECTRORANGE &
+            ./metropolis.out ElectrostaticsMembraneWallTest $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND $WELLDEPTH $DEBYE $RWALL $PHOSELECTRORANGE &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]

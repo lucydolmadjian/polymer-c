@@ -58,6 +58,8 @@ double iLigandCenter[NMAX][3];
 double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
+double membraneLocation;
+
 double StiffenRange,stiffiSites[NMAX], StiffSites[NMAX];
 int stiffCase, totalStiff;
 char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
