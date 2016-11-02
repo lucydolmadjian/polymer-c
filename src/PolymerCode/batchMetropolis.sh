@@ -11,7 +11,7 @@ BRATIO=5        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
 FORCE=0
 
-VERBOSE=1
+VERBOSE=0
 
 TESTRUN=4 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 

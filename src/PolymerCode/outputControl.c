@@ -132,7 +132,7 @@ void dataRecording()
     if (verboseTF)
     {
         
-        if ( (nt > NTCHECK) && (nt-NTCHECK <= 4000)) //only output 4000 runs, after initial transient
+        if ( (nt > NTCHECK && nt <= NTCHECK+4000) ) //only output 4000 runs, after initial transient
         {
         // output results to file
         fList = fopen(listName, "a");
@@ -169,7 +169,7 @@ void dataRecording()
         
             fprintf(fList, " %ld", stericOcclusionBase);
             
-            fprintf(fList, " %f %f", EelectroNew, exp(Eelectro-EelectroNew));
+            fprintf(fList, " %f %f %f", Eelectro, EelectroNew, exp(Eelectro-EelectroNew));
             
         
         
