@@ -5,7 +5,7 @@ NRequested=0            # initialize number of runs submitted
 
 NRODS=143       # N=143 for CD3 in human and mouse
 
-IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc) # kinase = 10?
+IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
 
 BRATIO=5        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
@@ -13,7 +13,7 @@ FORCE=0
 
 VERBOSE=0
 
-TESTRUN0 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
+TESTRUN=4 # 0 = not test run, use first set of hardcoded iSites, 1 and 2 - use test run iSites
 
 ITERATIONS=1
 
@@ -32,14 +32,22 @@ ISITELOCATION=-1
 
 BSITELOCATION=-1
 
-#
+
 #STIFFENRANGE=0 # -1 means don't stiffen
+
+ISITEFILE="iSites.txt"
+
+BSITEFILE="bSites.txt"
+
+BSITECOMMAND=2
+
+STIFFCASE=0 # 0 = not test run - CD3Zeta
 
 #####################################################
 
-TOTALITERATIONS=1 #for testing
+#TOTALITERATIONS=1 #for testing
 
-#TOTALITERATIONS=`wc -l < PhosphorylatediSites.txt`
+TOTALITERATIONS=`wc -l < OccupiediSitesMouse.txt`
 
 echo "Length of file is $TOTALITERATIONS"
 
@@ -49,10 +57,14 @@ NRequested=`ps | grep -c metropolis`
 
 # while number of iterations ran is less than or equal to total number of iterations desired, loop through runs
 
-#for ((BRATIO=0;BRATIO<=14;BRATIO++))
-#do
 
-#echo "bRatio = $BRATIO"
+mkdir CD3ZetaStiffenRangeSweepMembraneOffCatFiles
+
+
+for ((STIFFENRANGE=15;STIFFENRANGE<=50;STIFFENRANGE=($STIFFENRANGE+5)))
+do
+
+echo "StiffenRange = $STIFFENRANGE"
 
 ITERATIONS=1
 
@@ -85,12 +97,12 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
             OCCUPIEDSITESNOSPACE="`awk 'NR==iter' iter=$ITERATIONS OccupiediSitesMouseNoSpace.txt`"
 
             # print to screen the line read
-            echo "Line $ITERATIONS of file is $STIFFISITES"
+            echo "Line $ITERATIONS of file is $OCCUPIEDISITES"
 ################################
 
             # run program with specified parameters
 
-            ~/Documents/polymer-c_runs/metropolis.out StiffenTestN14ReeDist $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION "$OCCUPIEDSITES" $STIFFENRANGE "$OCCUPIEDSITESNOSPACE" &
+            ./metropolis.out CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.$ITERATIONS $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]
@@ -115,16 +127,24 @@ wait
 
 echo "Done waiting for processes to finish."
 
-# loop through all files, concatenate them into one file
- for ((BRATIO=0; BRATIO<=14; BRATIO++))
- do
+## loop through all files, concatenate them into one file
+# for ((BRATIO=0; BRATIO<=14; BRATIO++))
+# do
+#
+##IT=1
+##
+for ((IT=1; IT<=$TOTALITERATIONS; IT++))
+do
 
-#IT=1
-#
-#for ((IT=1; IT<=$TOTALITERATIONS; IT++))
-#do
-#
-cat MultipleBindingTestReeN50bSitesTotal4.$BRATIO >> MultipleBindingTestReeN50bSitesTotal4.cat.txt
-#
-#done
+cat CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.$IT >> CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.cat.txt
+
 done
+
+cp CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.cat.txt ~/Documents/polymer-c_runs/Sept222016StiffenRangeSweepMembraneOff/CD3ZetaStiffenRangeSweepMembraneOffCatFiles
+
+mkdir CD3ZetaMembrane0StiffenRange.$STIFFENRANGE
+
+mv CD3ZetaMembrane0StiffenRange.$STIFFENRANGE.* ~/Documents/polymer-c_runs/Sept222016StiffenRangeSweepMembraneOff/CD3ZetaMembrane0StiffenRange.$STIFFENRANGE/
+
+done
+

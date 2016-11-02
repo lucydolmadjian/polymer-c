@@ -13,6 +13,8 @@
 #define STATEMAX   1000000000
 #define ITMAX      1e9
 #define NTOPPATHS  50
+#define TIME       0
+#define TALKATIVE  1
 
 #include <math.h>
 #include <stdlib.h>
@@ -37,10 +39,13 @@ FILE *outputFile;
 char summaryOutputName[1000];
 FILE *summaryOutputFile;
 
+char timeOutputName[1000];
+FILE *timeOutputFile;
+
 
 
 double timeTotal,randTime[ISITEMAX],timeStep,timeSum;
-double pathArray[STATEMAX][2];
+double pathArray[STATEMAX][2],timeArray[STATEMAX];
 int currentState,iy,it,iterations, stepCount,path;
 
 
@@ -49,7 +54,7 @@ int i,j,k;
 int iSiteTotal,newState;
 
 int sizeOfStateMatrix;
-int verbose;
+int verbose, summaryOn;
 
 /*******************************************************************************/
 //  INCLUDES
@@ -71,23 +76,31 @@ int main( int argc, char *argv[] )
     
     if(argv[1]) // matrixName
         strcpy(matrixName, argv[1]);
-        printf("This is argument 1: %s\n", matrixName);
+    if (TALKATIVE) printf("This is argument 1: %s\n", matrixName);
     
     if(argv[2]) //iSiteTotal
         iSiteTotal = atoi(argv[2]);
-        printf("This is argument 2: %d\n", iSiteTotal);
+    if (TALKATIVE) printf("This is argument 2: %d\n", iSiteTotal);
     
     if(argv[3]) //total number of iterations
         iterations = atoi(argv[3]);
-        printf("This is argument 3: %d\n", iterations);
+    if (TALKATIVE) printf("This is argument 3: %d\n", iterations);
     
     if(argv[4]) //output file name
         strcpy(outputName, argv[4]);
-        printf("This is argument 4: %s\n", outputName);
+    if (TALKATIVE) printf("This is argument 4: %s\n", outputName);
     
     if(argv[5]) //output file name
+    {
         strcpy(summaryOutputName, argv[5]);
-        printf("This is argument 5: %s\n", summaryOutputName);
+    if (TALKATIVE) printf("This is argument 5: %s\n", summaryOutputName);
+        summaryOn = 1;
+    }
+    else
+    {
+        summaryOn = 0;
+    if (TALKATIVE) printf("No summary file will be created.\n");
+    }
 
 
     

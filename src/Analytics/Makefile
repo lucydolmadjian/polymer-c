@@ -1,10 +1,14 @@
 all:
 	gcc -O3 driveGillespie.c -o gillespie.out -lm
 
+	chmod a+x batchGillespie.sh
+
 run:
 	gcc -O3 driveGillespie.c -o gillespie.out -lm
 
-	./gillespie.out transitionMatrixMultipleTestBoundLigands.cat.txt 6 20000000 GillespieMultipleTestBoundLigandsAllData.txt GillespieMultipleTestBoundLigandsTop50.txt
+	chmod a+x batchGillespie_Control.sh
+
+	./batchGillespie_Control.sh 7 v
 
 
 
