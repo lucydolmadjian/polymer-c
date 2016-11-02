@@ -169,7 +169,7 @@ void dataRecording()
         
             fprintf(fList, " %ld", stericOcclusionBase);
             
-            fprintf(fList, " %f %f", EelectroNew, exp(E-EelectroNew));
+            fprintf(fList, " %f %f", EelectroNew, exp(Eelectro-EelectroNew));
             
         
         

@@ -442,7 +442,7 @@ void metropolisJoint()
                 } 
             }
             
-            if (  TWISTER < exp(E-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
+            if (  TWISTER < exp(Eelectro-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
             {
 
                 Eelectro = EelectroNew;
