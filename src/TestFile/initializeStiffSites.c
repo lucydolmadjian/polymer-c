@@ -7,16 +7,16 @@ void initializeStiffSites();
 //  GLOBAL VARIABLES for output control
 /*******************************************************************************/
 
-
+//
 /********************************************************************************************************/
 void initializeStiffSites()
 {
-
         
-        //initializes phosiSites to 0 (none phosphorylated)
+        
+        //initializes stiffiSites to 0 (none phosphorylated)
         for(ty=0;ty<iSiteTotal;ty++)
         {
-            phosiSites[ty]=0;
+            stiffiSites[ty]=0;
         }
         
         
@@ -33,20 +33,20 @@ void initializeStiffSites()
         {
             case 0:
                 
-                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6]);
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5]);
                 break;
                 
             case 1:
                 
-                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
                 break;
                 
             case 2:
                 
-                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5],&phosiSites[6],&phosiSites[7],&phosiSites[8],&phosiSites[9],&phosiSites[10],&phosiSites[11],&phosiSites[12],&phosiSites[13]);
+                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
                 break;
 
-//                sscanf(occupiedSites,"%lf %lf", &phosiSites[0], &phosiSites[1]);
+//                sscanf(occupiedSites,"%lf %lf", &stiffiSites[0], &stiffiSites[1]);
                 //break;
                 
         }
@@ -55,14 +55,14 @@ void initializeStiffSites()
         if (TALKATIVE)
             for (iy=0;iy<iSiteTotal;iy++)
             {
-                printf("phosiSites[ %ld ] =  %f\n",iy, phosiSites[iy]);
+                printf("stiffiSites[ %ld ] =  %f\n",iy, stiffiSites[iy]);
 				fflush(stdout);
             }
         
         //initializes stiffened rods to 0 (none stiff)
         for(i=0;i<N;i++)
         {
-            Stiff[i] =0;
+            StiffSites[i] =0;
         }
         
         
@@ -70,11 +70,11 @@ void initializeStiffSites()
         //Stiffen segments
         for(ty=0;ty<iSiteTotal;ty++)
         {
-            if(phosiSites[ty]==1) //might want to check the truth value on this - equals for double?
+            if(stiffiSites[ty]==1) //might want to check the truth value on this - equals for double?
             {
                 for(i=(iSite[ty]-StiffenRange);i<(iSite[ty]+StiffenRange+1);i++) //can I even put this stuff in a for loop?
                 {
-                    Stiff[i]=1; //set that joint to "stiff"
+                    StiffSites[i]=1; //set that joint to "stiff"
                 }
             }
         }
@@ -84,9 +84,9 @@ void initializeStiffSites()
             totalStiff = 0;
             for (i=0;i<N;i++)
             {
-                if (Stiff[i]==1)
+                if (StiffSites[i]==1)
                 {
-                    //printf("Stiffen[ %ld ] =  %f\n",i, Stiff[i]);
+                    //printf("Stiffen[ %ld ] =  %f\n",i, StiffSites[i]);
                     //fflush(stdout);
                     totalStiff++;
                 }

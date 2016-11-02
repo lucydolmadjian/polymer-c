@@ -14,11 +14,11 @@
 #define MEMBRANE   1
 #define MULTIPLE   0
 #define STIFFEN    0
-#define ELECTRO    0
+#define ELECTRO    1
 #define CPMAX      1e8
 #define TALKATIVE  1
 #define LEGACY	   0
-#define VISUALIZE  0
+#define VISUALIZE  1
 #define CD3ZETA    1
 
 #include <math.h>
@@ -45,7 +45,7 @@ long N, ntNextStationarityCheck, iBin;
 long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
 double c0, c1, irLigand, brLigand;
 double ree, rM, rH, ksStatistic;
-long rMCounts[NBINS], rMCountsPrevious[NBINS];
+long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
 long iseed;
 
 double phi[NMAX], theta[NMAX], psi[NMAX];
@@ -58,7 +58,7 @@ double iLigandCenter[NMAX][3];
 double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
-double StiffenRange,phosiSites[NMAX], Stiff[NMAX];
+double StiffenRange,stiffiSites[NMAX], StiffSites[NMAX];
 int stiffCase, totalStiff;
 char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
 
@@ -89,7 +89,9 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
-double wellDepth,debye, Eelectro, EelectroNew;
+double wellDepth,debye, rWall, Eelectro, EelectroNew;
+double PhosphorylatedSites[NMAX];
+int PhosElectroRange;
 
 int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 
@@ -100,6 +102,7 @@ int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 #include "outputControl.c"
 #include "getSites.c"
 #include "initializeStiffSites.c"
+#include "initializePhosphorylatedSites.c"
 #include "metropolisJoint.c"
 
 
@@ -268,7 +271,7 @@ int main( int argc, char *argv[] )
             strcpy(iSiteFilename, argv[14]);
         if (TALKATIVE) printf("This is argument 14: %s \n", iSiteFilename);
         
-        if(argv[15]) //iSite file
+        if(argv[15]) //bSite file
             strcpy(bSiteFilename, argv[15]);
         if (TALKATIVE) printf("This is argument 15: %s \n", bSiteFilename);
         
@@ -281,9 +284,17 @@ int main( int argc, char *argv[] )
             wellDepth = atof(argv[17]);
         if (TALKATIVE) printf("This is argument 17: %f \n", wellDepth);
         
-        if(argv[18]) // potential well depth
+        if(argv[18]) // debye length
             debye = atof(argv[18]);
         if (TALKATIVE) printf("This is argument 18: %f \n", debye);
+        
+        if(argv[19]) // rWall
+            rWall = atof(argv[19]);
+        if (TALKATIVE) printf("This is argument 19: %f \n", rWall);
+        
+        if(argv[20]) //PhosElectroRange
+            PhosElectroRange = atof(argv[20]);
+        if (TALKATIVE) printf("This is argument 20: %d \n", PhosElectroRange);
         
         
     //    if(argv[10]) //Delivery distance - how close to base it needs to be

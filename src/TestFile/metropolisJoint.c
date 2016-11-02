@@ -22,6 +22,15 @@ void metropolisJoint()
         initializeStiffSites();
     }
     
+    
+    /************* ELECTRO SEGMENTS *******************/
+    
+    //Ignore for Formin
+    if (ELECTRO) //phosphorylate sites only if ELECTRO is 1 in driveM
+    {
+        initializePhosphorylatedSites();
+    }
+    
     /********* INITIALIZE CONFIGURATION *******************/
 
     //initalize base
@@ -84,7 +93,7 @@ void metropolisJoint()
     // stuff needed for automatic stationarity (convergence) check
 	ntNextStationarityCheck = 3*NTCHECK;
 	for(iBin=0;iBin<NBINS;iBin++)
-		rMCounts[iBin] = 0;
+		convergenceVariableCounts[iBin] = 0;
 	
     // summary variables
     initializeSummary();
@@ -148,7 +157,7 @@ void metropolisJoint()
         //Ignore for formin
         if (STIFFEN)
         {
-            while(Stiff[iPropose]==1) //Test if proposed joint is stiff.
+            while(StiffSites[iPropose]==1) //Test if proposed joint is stiff.
             {
                 iPropose = floor(N*TWISTER); //If stiff, propose new joint until propose one not stiff.
             }
@@ -242,7 +251,8 @@ void metropolisJoint()
 				
             /********* 2. Test constraints *******************/
             constraintSatisfiedTF=1;
-            if (MEMBRANE)
+            //use membrane constraint on polymer, but do not use if using electrostatics
+            if (MEMBRANE && !ELECTRO)
             {
                 //printf("Testing Membrane");
                 for(i=0;i<N;i++)
@@ -397,14 +407,34 @@ void metropolisJoint()
         else
         {
  
+            //sum over energies of all joints, except phosphorylated ones
+            
             EelectroNew = 0;
+            
+            if (nt > 20000 && nt < 20010)
+            {
+                printf("This is time step %d \n" , nt);
+            }
             
             for (i=0; i<N; i++)
             {
+
                 
-                // Compute energy
-                EelectroNew += 4*wellDepth*(pow(debye/r[i][2],12)-pow(debye/r[i][2],6));
-                
+                //if not phosphorylated, add energy
+                if (PhosphorylatedSites[i]!=1)
+                {
+                    // Compute energy
+                    EelectroNew += 4*wellDepth*(pow(debye/(r[i][2]-rWall),12)-pow(debye/(r[i][2]-rWall),6));
+                    
+                    //debugging
+                    if (nt > 20000 && nt < 20010)
+                    {
+                        
+                        printf("This is energy %d : %f \n", i, 4*wellDepth*(pow(debye/(r[i][2]-rWall),12)-pow(debye/(r[i][2]-rWall),6)));
+                        printf("This is EelectroNew: %f \n", EelectroNew);
+                        fflush(stdout);
+                    }
+                } 
             }
             
             if (  TWISTER < exp(E-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
@@ -521,14 +551,18 @@ void metropolisJoint()
             //tests occlusion of iSites first
             for(iy=0; iy<iSiteTotal;iy++)
             {
-                for (ib=0;ib<bSiteTotal;ib++)
+                
+                if (MULTIPLE)
                 {
-                    if(iSite[iy]==bSite[ib]) //test if iSite is bound already
+                    for (ib=0;ib<bSiteTotal;ib++)
                     {
-                        stericOcclusion[iy]++;
-                        ib=bSiteTotal;
-                    }
-                }//didn't include base - assuming can't be bound to base
+                        if(iSite[iy]==bSite[ib]) //test if iSite is bound already
+                        {
+                            stericOcclusion[iy]++;
+                            ib=bSiteTotal;
+                        }
+                    }//didn't include base - assuming can't be bound to base
+                }
                 
                 if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
                 {
@@ -701,12 +735,12 @@ void stationarity()
 	for(iBin=0;iBin<NBINS;iBin++)
 	{
 		
-		cdf1 += (double)rMCountsPrevious[iBin]/(((double)nt-(double)NTCHECK)/2.0);
-		cdf2 += (double)rMCounts[iBin]/(((double)nt-(double)NTCHECK)/2.0);
+		cdf1 += (double)convergenceVariableCountsPrevious[iBin]/(((double)nt-(double)NTCHECK)/2.0);
+		cdf2 += (double)convergenceVariableCounts[iBin]/(((double)nt-(double)NTCHECK)/2.0);
 		
 		if (fabs(cdf1-cdf2)>ksStatistic)
 			ksStatistic = fabs(cdf1-cdf2);
-		//printf("rMCounts[%d]: %d, %d \t\t\t cdf: %f, %f\n", iBin, rMCountsPrevious[iBin],rMCounts[iBin], cdf1, cdf2);
+		//printf("convergenceVariableCounts[%d]: %d, %d \t\t\t cdf: %f, %f\n", iBin, convergenceVariableCountsPrevious[iBin],convergenceVariableCounts[iBin], cdf1, cdf2);
 		
 	}
 	
@@ -726,8 +760,8 @@ void appendBins()
 {
     for(iBin=0;iBin<NBINS;iBin++)
     {
-        rMCountsPrevious[iBin] += rMCounts[iBin];
-        rMCounts[iBin] = 0;
+        convergenceVariableCountsPrevious[iBin] += convergenceVariableCounts[iBin];
+        convergenceVariableCounts[iBin] = 0;
     }
 }
 

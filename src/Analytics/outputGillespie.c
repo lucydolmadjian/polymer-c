@@ -9,7 +9,7 @@ void outputGillespie();
 double topPaths[NTOPPATHS][5],pathArrayShort[STATEMAX][5],maxPath[5],leastPath[5];
 int factorial,frequency,topLocation,topPathsLocation[NTOPPATHS],topFrequency, maxFreq, maxLocation,leastLocation;
 double MFTP,leastFreq;
-int pass;
+int pass, pathTotal;
 
 /********************************************************************************************************/
 void outputGillespie()
@@ -35,30 +35,35 @@ void outputGillespie()
     //this seems like a bad method
     
     //creates smaller matrix of all paths
-    i=0;
+    
+    pathTotal=0;
     for (j=0;j<pow(10,iSiteTotal+1);j++)
     {
         if (pathArray[j][0] != 0)
         {
-            pathArrayShort[i][0] = j; //path sequence
-            pathArrayShort[i][1] = pathArray[j][0]; //total times path was taken
-            pathArrayShort[i][2] = pathArray[j][1]; //sum of all times when path was taken
-            pathArrayShort[i][3] = pathArray[j][0]/iterations; //probability of path being taken
-            pathArrayShort[i][4] = pathArray[j][1]/pathArray[j][0]; //average time
-            i++;
+            pathArrayShort[pathTotal][0] = j; //path sequence
+            pathArrayShort[pathTotal][1] = pathArray[j][0]; //total times path was taken
+            pathArrayShort[pathTotal][2] = pathArray[j][1]; //sum of all times when path was taken
+            pathArrayShort[pathTotal][3] = pathArray[j][0]/iterations; //probability of path being taken
+            pathArrayShort[pathTotal][4] = pathArray[j][1]/pathArray[j][0]; //average time
+            pathTotal++;
         }
         
     }
     
     if (TALKATIVE)
     {
-        printf("This is how many paths it thinks it took: %d\n", i);
+        printf("This is how many paths it thinks it took: %d\n", pathTotal);
+        if (pathTotal > factorial)
+        {
+            printf("Too many paths calculated!");
+        }
     }
     
     
     //find most frequent path
     maxFreq = 0;
-    for (j=0;j<factorial;j++)
+    for (j=0;j<pathTotal;j++)
     {
         if (pathArrayShort[j][1] > maxFreq)
         {
@@ -75,7 +80,7 @@ void outputGillespie()
     
     //find least frequent path
     leastFreq = INF;
-    for (j=0;j<factorial;j++)
+    for (j=0;j<pathTotal;j++)
     {
         if (pathArrayShort[j][1] < leastFreq)
         {
@@ -96,7 +101,7 @@ void outputGillespie()
     {
         frequency=0;
         
-        for (i=0;i<factorial;i++)
+        for (i=0;i<pathTotal;i++)
         {
             if (pathArrayShort[i][1]>frequency)
             {
@@ -180,8 +185,8 @@ void outputGillespie()
     
     fprintf(outputFile, "%f\n", MFTP);
     
-    //print all 720 path data
-    for (i=0;i<factorial;i++)
+    //print all path data
+    for (i=0;i<pathTotal;i++)
     {
         for (j=0;j<5;j++)
         {

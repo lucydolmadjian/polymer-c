@@ -132,7 +132,7 @@ void dataRecording()
     if (verboseTF)
     {
         
-        if ( (nt % 100) == 0) //only output every 100 time steps
+        if ( (nt > NTCHECK) && (nt-NTCHECK <= 4000)) //only output 4000 runs, after initial transient
         {
         // output results to file
         fList = fopen(listName, "a");
@@ -154,7 +154,11 @@ void dataRecording()
                 for (i=0;i<N;i++)
                 {
                     fprintf(fList, " %f %f %f", r[i][0],r[i][1],r[i][2]);
-                    fprintf(fList, " %f %f %f", phi[i],theta[i],psi[i]);
+                }
+                 
+                for (i=0;i<iSiteTotal;i++)
+                {
+                    fprintf(fList, " %f %f %f", iLigandCenter[i][0], iLigandCenter[i][1], iLigandCenter[i][2]);
                 }
              }
         
@@ -164,6 +168,10 @@ void dataRecording()
             }
         
             fprintf(fList, " %ld", stericOcclusionBase);
+            
+            fprintf(fList, " %f %f", EelectroNew, exp(E-EelectroNew));
+            
+        
         
 //        for(ib=0;ib<bSiteTotal;ib++)
 //        {
@@ -176,6 +184,7 @@ void dataRecording()
         }
     } // finished verbose output
     
+    // Note:  eliminates initial transient
     if (nt>NTCHECK)
     {
         // Summary statistics (these will be written at the end of the run)
@@ -192,8 +201,8 @@ void dataRecording()
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);
         rMBar_sum    += rM;
 
-        // update bins for KS test
-		rMCounts[(long)floor(NBINS*fabs(rM)/N)]++;
+        // update bins for KS test (fabs(rM)+ree will never be larger than 2N, so use 2N to normalize)
+		convergenceVariableCounts[(long)floor(NBINS*(fabs(rM)+ree)/(2*N))]++;
     }
 	return;
 	

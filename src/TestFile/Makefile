@@ -1,23 +1,17 @@
 all:
 	gcc -O3 driveMetropolis.c -o metropolis.out -lm
 
-	chmod a+x batchMetropolis_Multiple.sh
+	chmod a+x batchMetropolis.sh
 
 	cp metropolis.out ~/Documents/polymer-c_runs/.
 
-multiple:
-
-	gcc -O3 driveMetropolis.c -o metropolis.x -lm
-
-	chmod a+x batchMetropolis_Multiple.sh
-
-	./batchMetropolis_Multiple.sh 7 v
-
-stiffen:
+run:
 
 	gcc -O3 driveMetropolis.c -o metropolis.out -lm
 
-	chmod a+x batchMetropolis_Stiffen.sh
+	chmod a+x batchMetropolis.sh
 
-	./batchMetropolis_Stiffen.sh 7 v
+	./batchMetropolis.sh 7 v
+
+
 
