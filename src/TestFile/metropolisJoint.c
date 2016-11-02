@@ -432,7 +432,7 @@ void metropolisJoint()
                     EelectroNew += 4*wellDepth*(pow(debye/(r[i][2]-rWall),12)-pow(debye/(r[i][2]-rWall),6));
                     
                     //debugging
-                    if (nt > 20000 && nt < 20010)
+                    if (nt<10 || (nt > 20000 && nt < 20010))
                     {
                         
                         printf("This is energy %d : %f \n", i, 4*wellDepth*(pow(debye/(r[i][2]-rWall),12)-pow(debye/(r[i][2]-rWall),6)));
