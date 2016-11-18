@@ -14,4 +14,3 @@ run:
 	./batchMetropolis.sh 7 v
 
 
-

@@ -11,6 +11,7 @@ void dataRecording();
 double reeBar_sum, ree2Bar_sum, rMBar_sum;
 long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX];
 double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX], reeiSite[NMAX], rMBar;
+double occupied[NMAX];
 
 /********************************************************************************************************/
 void initializeSummary()
@@ -62,7 +63,14 @@ void finalizeSummary()
         
         if (CD3ZETA)
         {
-            fprintf(fList, "%s %s ",occupiedSites,
+            sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &occupied[0],&occupied[1],&occupied[2],&occupied[3], &occupied[4],&occupied[5]);
+            
+            for (iy=0; iy<iSiteTotal;iy++)
+            {
+                fprintf(fList, "%lf ", occupied[iy]);
+            }
+            
+            fprintf(fList, "%s ",occupiedSites,
                         occupiedSitesNoSpace);
         }
         

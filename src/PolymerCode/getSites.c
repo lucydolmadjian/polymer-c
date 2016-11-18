@@ -169,7 +169,7 @@ void getSites()
                     iSiteOccupied[iy]=0;
                 }
                 
-                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf", &iSiteOccupied[0],&iSiteOccupied[1],&iSiteOccupied[2],&iSiteOccupied[3], &iSiteOccupied[4],&iSiteOccupied[5]);
+                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &iSiteOccupied[0],&iSiteOccupied[1],&iSiteOccupied[2],&iSiteOccupied[3], &iSiteOccupied[4],&iSiteOccupied[5]);
                 
                 bSiteCounter=0;
                 for (iy=0;iy<iSiteTotal;iy++)
