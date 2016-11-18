@@ -3,9 +3,9 @@
 
 NRequested=0            # initialize number of runs submitted
 
-NRODS=143       # N=143 for CD3 in human and mouse
+NRODS=113       # N=143 for CD3 in human and mouse
 
-IRATIO=10        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
+IRATIO=7        # Vary for different ligands (kinase, phosphotase, ZAP-70 etc)
 
 BRATIO=5        # BRATIO = 5-7 for SH2 domain of ZAP-70
 
