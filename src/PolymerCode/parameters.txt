@@ -7,7 +7,7 @@ verboseTF		0
 testRun			4
 StiffenRange		0
 stiffCase		0
-occupiedSites		“0 0 0 0 0 0”
+occupiedSites		0_0_0_0_0_0
 occupiedSitesNoSpace 	000000
 iSiteFilename		iSites.txt
 bSiteFilename		bSites.txt

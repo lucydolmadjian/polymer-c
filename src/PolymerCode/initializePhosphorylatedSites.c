@@ -32,7 +32,7 @@ void initializePhosphorylatedSites()
 
         //read string or read and interpret which of CD3Zeta Mouse tyrosines are phosphorylated
     
-        sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5]);
+        sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &phosiSites[0],&phosiSites[1],&phosiSites[2],&phosiSites[3], &phosiSites[4],&phosiSites[5]);
 
 
         //print which of the iSites are phosphorylated

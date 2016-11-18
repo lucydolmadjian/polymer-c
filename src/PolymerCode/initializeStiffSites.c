@@ -33,20 +33,20 @@ void initializeStiffSites()
         {
             case 0:
                 
-                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5]);
+                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5]);
                 break;
                 
             case 1:
                 
-                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
+                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
                 break;
                 
             case 2:
                 
-                sscanf(occupiedSites,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
+                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
                 break;
 
-//                sscanf(occupiedSites,"%lf %lf", &stiffiSites[0], &stiffiSites[1]);
+//                sscanf(occupiedSites,"%lf_%lf", &stiffiSites[0], &stiffiSites[1]);
                 //break;
                 
         }

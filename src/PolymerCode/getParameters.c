@@ -42,7 +42,7 @@ void getParameters()
     fscanf(paramsFile,"%s %d", tmpString, &stiffCase);
     if (TALKATIVE) printf("This is stiffness case: %d\n", stiffCase);
     
-    fscanf(paramsFile,"%s %*s", tmpString, occupiedSites);
+    fscanf(paramsFile,"%s %s", tmpString, occupiedSites);
     if (TALKATIVE) printf("This is occupied Sites: %s\n", occupiedSites);
     
     fscanf(paramsFile,"%s %s", tmpString, occupiedSitesNoSpace);
