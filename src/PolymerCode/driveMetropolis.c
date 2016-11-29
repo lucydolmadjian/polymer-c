@@ -13,8 +13,8 @@
 #define KSCRITICAL 0.005
 #define MEMBRANE   1
 #define MULTIPLE   0
-#define STIFFEN    1
-#define ELECTRO    0
+#define STIFFEN    0
+#define ELECTRO    1
 #define CPMAX      1e8
 #define TALKATIVE  1
 #define LEGACY	   0

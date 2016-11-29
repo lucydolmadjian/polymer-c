@@ -24,11 +24,6 @@ STIFFENRANGE=0 # -1 means don't stiffen
 STIFFCASE=0 # 0 = not test run - CD3Zeta
 
 
-
-
-
-
-
 ISITEFILE="iSites.txt"
 
 BSITEFILE="bSites.txt"
@@ -43,20 +38,9 @@ RWALL=0 #arbitrary number greater than -15nm (size of bilayer) or -50 kuhn lengt
 
 PHOSELECTRORANGE=0
 
-
-
-
 ITERATIONS=1
 
-#########You can ignore these parameters###########
 
-#DELIVERYDISTANCE=$IRATIO
-
-#DELIVERYMETHOD=1 # 0 = test if ligand intersects base ligand site, 1 = test if within delivery distance
-
-#COMMANDISITES=0 # 0=use hardcoded iSites 1 = use user input iSites 2 = read in from file
-
-#ISITETOTAL=4
 #####################################################
 
 TOTALITERATIONS=1 #for testing
@@ -78,7 +62,7 @@ NRequested=`ps | grep -c metropolis`
 #for ((WELLDEPTH=0;WELLDEPTH<=50;WELLDEPTH=($WELLDEPTH+5)))
 #do
 
-echo "WellDepth = $WELLDEPTH"
+#echo "WellDepth = $WELLDEPTH"
 
 ITERATIONS=1
 
@@ -116,7 +100,9 @@ while (( $ITERATIONS <= $TOTALITERATIONS ))
 
             # run program with specified parameters
 
-            ./metropolis.out ElectrostaticsMembraneWallTest $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND $WELLDEPTH $DEBYE $RWALL $PHOSELECTRORANGE &
+            # ./metropolis.out ElectrostaticsMembraneWallTest $NRODS $IRATIO $BRATIO $FORCE $VERBOSE $TESTRUN $ISITELOCATION $BSITELOCATION $STIFFENRANGE $STIFFCASE "$OCCUPIEDSITES"  "$OCCUPIEDSITESNOSPACE" "$ISITEFILE" "$BSITEFILE" $BSITECOMMAND $WELLDEPTH $DEBYE $RWALL $PHOSELECTRORANGE &
+
+            ./metropolis.out parameters.txt TestParameterInput -1 -1 $WELLDEPTH $DEBYE &
 
             # If user gives V or v as second command line argument, then code will be verbose. Any other input will result in non-verbose.
             if [[ $2 == "V" || $2 == "v" ]]

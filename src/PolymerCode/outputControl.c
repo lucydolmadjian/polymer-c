@@ -70,8 +70,7 @@ void finalizeSummary()
                 fprintf(fList, "%lf ", occupied[iy]);
             }
             
-            fprintf(fList, "%s ",
-                        occupiedSitesNoSpace);
+            fprintf(fList, "%s ", occupiedSitesNoSpace);
         }
         
         fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",

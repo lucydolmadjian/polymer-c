@@ -14,5 +14,5 @@ bSiteFilename		bSites.txt
 bSiteCommand		2
 wellDepth		0
 debye			0
-rWall			-5
+rWall			-6
 PhosElectroRange 	0
