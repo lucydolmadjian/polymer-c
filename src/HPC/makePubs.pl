@@ -33,7 +33,7 @@ echo Time is `date`
 echo Directory is `pwd`
 
 # Run your executable and then stuff
-./metropolis.out parameters.txt $fileName $OCCUPIEDSITES $OCCUPIEDSITESNOSPACE $WELLDEPTH $DEBYE
+./metropolis.out parameters.txt $fileName -1 -1 $WELLDEPTH $DEBYE
 
 echo Finished at `date`
 
