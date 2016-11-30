@@ -124,6 +124,14 @@ void getSites()
 
     }
     
+    for (iy=0; iy<iSiteTotal;iy++)
+    {
+        if (iSite[iy] >= N)
+        {
+            printf("Warning! Site is located past end of polymer!");
+            fflush(stdout);
+        }
+    }
     
     //for debugging - prints a list of the iSites
     
@@ -217,6 +225,15 @@ void getSites()
                 
                 break;
                 
+        }
+        
+        for (iy=0; iy<bSiteTotal;iy++)
+        {
+            if (bSite[iy] >= N)
+            {
+                printf("Warning! Bound site is located past end of polymer!");
+                fflush(stdout);
+            }
         }
         
         //for debugging - prints a list of the iSites
