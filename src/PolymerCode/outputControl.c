@@ -171,7 +171,7 @@ void dataRecording()
                  
                 for (i=0;i<3;i++)
                 {
-                    fprintf(fList," %f", baseCenter[i]));
+                    fprintf(fList," %f", baseCenter[i]);
                 }
              }
         
