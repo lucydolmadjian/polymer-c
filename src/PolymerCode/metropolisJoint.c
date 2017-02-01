@@ -72,10 +72,12 @@ void metropolisJoint()
         
 	}
     
-	
-
-    
-    
+    if (baseBoundYN)
+    {
+        baseCenter[0] = 0;
+        baseCenter[1] = 0;
+        baseCenter[2] = -baserLigand;
+    }
     
 	convergedTF=0;
 	nt=0;
@@ -267,6 +269,21 @@ void metropolisJoint()
                 } // done checking constraint
             } //finished first constraint
             
+            if (baseBoundYN)
+            {
+                for(i=0;i<N;i++)// for each joint
+                {
+                    //test polymer against sphere at base
+                    if ( ((baseCenter[0]-rPropose[i][0])*(baseCenter[0]-rPropose[i][0]) +
+                          (baseCenter[1]-rPropose[i][1])*(baseCenter[1]-rPropose[i][1]) +
+                          (baseCenter[2]-rPropose[i][2])*(baseCenter[2]-rPropose[i][2]) <= baserLigand*baserLigand )) //if proposed joint is inside base ligand sphere
+                    {
+                        constraintSatisfiedTF=0; //constraint not satisfied
+                        i=N; //shortcut out of inner loop
+                    }
+                }
+            }
+
             if (MULTIPLE && constraintSatisfiedTF) //only test if looking at multiple binding and if membrane constraint passed
             {
                 
@@ -330,6 +347,14 @@ void metropolisJoint()
                         }
                     }
                     
+                    if (constraintSatisfiedTF && baseBoundYN) //if constraint is still satisfied, test ligand sphere with base ligand if exists
+                    {
+                        if ((bLigandCenter[ib][0]-baseCenter[0])*(bLigandCenter[ib][0]-baseCenter[0])+(bLigandCenter[ib][1]-baseCenter[1])*(bLigandCenter[ib][1]-baseCenter[1])+(bLigandCenter[ib][2]-baseCenter[2])*(bLigandCenter[ib][2]-baseCenter[2])<= (brLigand+baserLigand)*(brLigand+baserLigand)) //if distance between centers is less than brLigand+baserLigand, then ligands are intersecting
+                        {
+                            constraintSatisfiedTF=0; //constraint not satisfied
+                        }
+                        
+                    }
                     
                     if (constraintSatisfiedTF) //if constraint is still satisfied, test ligand sphere with other ligands
                     {

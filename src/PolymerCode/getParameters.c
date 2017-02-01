@@ -25,6 +25,9 @@ void getParameters()
     fscanf(paramsFile,"%s %lf", tmpString, &brLigand);
     if (TALKATIVE) printf("This is bound ligand radius: %lf\n", brLigand);
     
+    fscanf(paramsFile,"%s %lf", tmpString, &baserLigand);
+    if (TALKATIVE) printf("This is base bound ligand radius: %lf\n", baserLigand);
+    
     fscanf(paramsFile,"%s %lf", tmpString, &Force);
     if (TALKATIVE) printf("This is force: %f\n", Force);
     
@@ -67,7 +70,7 @@ void getParameters()
     if (TALKATIVE) printf("This is rWall: %lf\n", rWall);
     
     fscanf(paramsFile,"%s %d", tmpString, &PhosElectroRange);
-    if (TALKATIVE) printf("This is rWall: %d\n", PhosElectroRange);
+    if (TALKATIVE) printf("This is PhosElectroRange: %d\n", PhosElectroRange);
     
     fclose(paramsFile);
     

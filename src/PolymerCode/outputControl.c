@@ -93,6 +93,7 @@ void finalizeSummary()
                 Prvec0[iy]); //13 + 4*iBind
         
         }
+
         
         fprintf(fList, " %d %e %e", -1, POccludeBase, 1-POccludeBase);
         
@@ -167,6 +168,11 @@ void dataRecording()
                 {
                     fprintf(fList, " %f %f %f", iLigandCenter[i][0], iLigandCenter[i][1], iLigandCenter[i][2]);
                 }
+                 
+                for (i=0;i<3;i++)
+                {
+                    fprintf(fList," %f", baseCenter[i]));
+                }
              }
         
             for(iy=0;iy<iSiteTotal;iy++)
@@ -175,8 +181,7 @@ void dataRecording()
             }
         
             fprintf(fList, " %ld", stericOcclusionBase);
-            
-            fprintf(fList, " %f %f %f", Eelectro, EelectroNew, exp(Eelectro-EelectroNew));
+
             
         
         

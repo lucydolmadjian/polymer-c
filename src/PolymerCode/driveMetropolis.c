@@ -44,7 +44,8 @@ FILE *paramsFile, *iSiteList, *bSiteList;
 long N, ntNextStationarityCheck, iBin;
 
 long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
-double c0, c1, irLigand, brLigand;
+double c0, c1, irLigand, brLigand, baserLigand;
+int baseBoundYN;
 double ree, rM, rH, ksStatistic;
 long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
 long iseed;
@@ -56,6 +57,7 @@ double r[NMAX][3],t[NMAX][3], e1[NMAX][3], e2[NMAX][3],
        rPropose[NMAX][3],tPropose[NMAX][3], e1Propose[NMAX][3], e2Propose[NMAX][3];
 double norm;
 double iLigandCenter[NMAX][3];
+double baseCenter[3];
 double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
