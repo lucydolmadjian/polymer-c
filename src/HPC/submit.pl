@@ -17,7 +17,6 @@ for (my $i0 = 1; $i0 <= $i0Max; $i0++)
 
 			print $i1;
 			$i1++;
-        sleep(3);	# why does it need to sleep before submitting another?  Just for ISEED?
 
 	}	
 }
