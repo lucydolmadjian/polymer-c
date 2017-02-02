@@ -2,14 +2,12 @@ all:
 	gcc -O3 driveMetropolis.c -o metropolis.out -lm
 
 
-batch:
+run:
 	gcc -O3 driveMetropolis.c -o metropolis.out -lm
 
-	chmod a+x batchMetropolis.sh
+	./metropolis.out parameters.txt -1 -1 -1 -1 -1
 
-	cp metropolis.out ~/Documents/polymer-c_runs/.
-
-run:
+batch:
 
 	gcc -O3 driveMetropolis.c -o metropolis.out -lm
 

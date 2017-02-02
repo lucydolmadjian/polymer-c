@@ -168,10 +168,12 @@ void dataRecording()
                 {
                     fprintf(fList, " %f %f %f", iLigandCenter[i][0], iLigandCenter[i][1], iLigandCenter[i][2]);
                 }
-                 
-                for (i=0;i<3;i++)
+                if(baseBoundYN)
                 {
-                    fprintf(fList," %f", baseCenter[i]);
+                    for (i=0;i<3;i++)
+                    {
+                        fprintf(fList," %f", baseCenter[i]);
+                    }
                 }
              }
         
