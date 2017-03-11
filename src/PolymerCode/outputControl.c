@@ -109,7 +109,7 @@ void finalizeSummary()
             iSiteCurrent=iSite[iy];
             for (j=0;j<NBINSPOLYMER;j++)
             {
-                fprintf(fList, " %d", polymerLocationCounts[iSiteCurrent][j]);
+                fprintf(fList, " %ld", polymerLocationCounts[iSiteCurrent][j]);
             }
         }
         
@@ -117,7 +117,7 @@ void finalizeSummary()
         iSiteCurrent=iSite[iy];
         for (j=0;j<NBINSPOLYMER;j++)
         {
-            fprintf(fList, " %d", polymerLocationCounts[N-1][j]);
+            fprintf(fList, " %ld", polymerLocationCounts[N-1][j]);
         }
         
         
