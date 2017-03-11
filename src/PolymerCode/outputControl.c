@@ -12,6 +12,7 @@ double reeBar_sum, ree2Bar_sum, rMBar_sum;
 long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX];
 double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX], reeiSite[NMAX], rMBar;
 double occupied[NMAX];
+double binSize;
 
 /********************************************************************************************************/
 void initializeSummary()
@@ -30,6 +31,8 @@ void initializeSummary()
 //        PDeliver[ib]=0;
 //    }
     rMBar_sum    = 0;
+    
+    binSize = (double)(2*N) / NBINSPOLYMER;
 
 }
 
@@ -237,9 +240,7 @@ void dataRecording()
 		convergenceVariableCounts[(long)floor(NBINS*(fabs(rM)+ree)/(2*N))]++;
         
         // Distributions for polymer location
-        
-        binSize = ((long)(2*N) / (long)NBINSPOLYMER);
-        
+
         for(i=0;i<N;i++)
         {
             polymerLocationCounts[i][(long)floor(((long)r[i][2]+N)/binSize)]++;

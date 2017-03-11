@@ -49,7 +49,7 @@ double c0, c1, irLigand, brLigand, baserLigand;
 int baseBoundYN;
 double ree, rM, rH, ksStatistic;
 long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
-long polymerLocationCounts[NMAX][NBINSPOLYMER],binSize;
+long polymerLocationCounts[NMAX][NBINSPOLYMER];
 long iseed;
 
 double phi[NMAX], theta[NMAX], psi[NMAX];
