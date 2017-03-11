@@ -7,6 +7,7 @@
 #define NTCHECK    200000
 #define DCHIMIN    1e-4
 #define NBINS      100
+#define NBINSPOLYMER 2000
 #define PI         3.14159265359
 #define INF        1e14
 #define DCHIINIT   0.1
@@ -48,6 +49,7 @@ double c0, c1, irLigand, brLigand, baserLigand;
 int baseBoundYN;
 double ree, rM, rH, ksStatistic;
 long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
+long polymerLocationCounts[NMAX][NBINSPOLYMER],binSize;
 long iseed;
 
 double phi[NMAX], theta[NMAX], psi[NMAX];

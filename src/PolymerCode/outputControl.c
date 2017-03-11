@@ -104,6 +104,23 @@ void finalizeSummary()
                     //PDeliver[ib]);
         }
         
+        for (iy=0;iy<iSiteTotal;iy++)
+        {
+            iSiteCurrent=iSite[iy];
+            for (j=0;j<NBINSPOLYMER;j++)
+            {
+                fprintf(fList, " %d", polymerLocationCounts[iSiteCurrent][j]);
+            }
+        }
+        
+
+        iSiteCurrent=iSite[iy];
+        for (j=0;j<NBINSPOLYMER;j++)
+        {
+            fprintf(fList, " %d", polymerLocationCounts[N-1][j]);
+        }
+        
+        
         fprintf(fList, "\n");
         fclose(fList);
     }
@@ -175,6 +192,7 @@ void dataRecording()
                         fprintf(fList," %f", baseCenter[i]);
                     }
                 }
+                 
              }
         
             for(iy=0;iy<iSiteTotal;iy++)
@@ -217,6 +235,16 @@ void dataRecording()
 
         // update bins for KS test (fabs(rM)+ree will never be larger than 2N, so use 2N to normalize)
 		convergenceVariableCounts[(long)floor(NBINS*(fabs(rM)+ree)/(2*N))]++;
+        
+        // Distributions for polymer location
+        
+        binSize = ((long)(2*N) / (long)NBINSPOLYMER);
+        
+        for(i=0;i<N;i++)
+        {
+            polymerLocationCounts[i][(long)floor(((long)r[i][2]+N)/binSize)]++;
+        }
+                                     
     }
 	return;
 	
