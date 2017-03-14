@@ -1,28 +1,30 @@
 /*** Allard Lab jun.allard@uci.edu                    ***/
 
 #define TWISTER genrand_real3()
-#define NMAX       400
-#define NTMAX      2e9
-#define NTADAPT    20000
-#define NTCHECK    200000
-#define DCHIMIN    1e-4
-#define NBINS      100
-#define NBINSPOLYMER 3000
-#define PI         3.14159265359
-#define INF        1e14
-#define DCHIINIT   0.1
-#define KSCRITICAL 0.01
-#define MEMBRANE   1
-#define MULTIPLE   0
-#define STIFFEN    0
-#define ELECTRO    1
-#define BASICONLY  1
-#define CPMAX      1e8
-#define TALKATIVE  1
-#define LEGACY	   0
-#define TXTPARAM   1
-#define VISUALIZE  0
-#define CD3ZETA    1
+#define NMAX            400
+#define NTMAX           2e9
+#define NTADAPT         20000
+#define NTCHECK         200000
+#define DCHIMIN         1e-4
+#define NBINS           100
+#define NBINSPOLYMER    3000
+#define PI              3.14159265359
+#define INF             1e14
+#define DCHIINIT        0.1
+#define KSCRITICAL      0.01
+#define MEMBRANE        1
+#define MULTIPLE        0
+#define STIFFEN         0
+#define ELECTRO         1
+#define LENNARDJONES    0
+#define PIECEWISE       1
+#define BASICONLY       1
+#define CPMAX           1e8
+#define TALKATIVE       1
+#define LEGACY          0
+#define TXTPARAM        1
+#define VISUALIZE       0
+#define CD3ZETA         1
 
 #include <math.h>
 #include <stdlib.h>
@@ -97,6 +99,7 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
 double wellDepth,debye, rWall, Eelectro, EelectroNew;
+double parabolaDepth, parabolaCenter;
 double PhosphorylatedSites[NMAX];
 int PhosElectroRange;
 

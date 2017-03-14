@@ -446,70 +446,112 @@ void metropolisJoint()
             
             if(BASICONLY)
             {
-                
-                for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
+                if(LENNARDJONES)
                 {
-                    basicSiteCurrent = basicSite[iBasic];
-                    //if not phosphorylated, add energy
-                    if (PhosphorylatedSites[basicSiteCurrent]!=1)
+                
+                    for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
                     {
-                        // Compute energy
-                        EelectroNew += 4*wellDepth*(pow(debye/(rPropose[basicSiteCurrent][2]-rWall),12)-pow(debye/(rPropose[basicSiteCurrent][2]-rWall),6));
-                        
+                        basicSiteCurrent = basicSite[iBasic];
+                        //if not phosphorylated, add energy
+                        if (PhosphorylatedSites[basicSiteCurrent]!=1)
+                        {
+                            // Compute energy
+                            EelectroNew += 4*wellDepth*(pow(debye/(rPropose[basicSiteCurrent][2]-rWall),12)-pow(debye/(rPropose[basicSiteCurrent][2]-rWall),6));
+                            
+                        }
+                    }
+                }
+                
+                if(PIECEWISE)
+                {
+                    for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
+                    {
+                        basicSiteCurrent = basicSite[iBasic];
+                        //if not phosphorylated, add energy
+                        if (PhosphorylatedSites[basicSiteCurrent]!=1)
+                        {
+                            if(r[iBasic][2]<(sqrt(parabolaDepth)+parabolaCenter))
+                            {
+                            // Compute energy
+                                EelectroNew += (r[iBasic][2]-parabolaCenter)*(r[iBasic][2]-parabolaCenter)-parabolaDepth;
+                            }
+                            
+                        }
                     }
                 }
             }
             else
             {
-                for (i=0; i<N; i++)
+                if(LENNARDJONES)
                 {
-
-                    //if not phosphorylated, add energy
-                    if (PhosphorylatedSites[i]!=1)
+                    for (i=0; i<N; i++)
                     {
-                        // Compute energy
-                        EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
 
-                    } 
+                        //if not phosphorylated, add energy
+                        if (PhosphorylatedSites[i]!=1)
+                        {
+                            // Compute energy
+                            EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
+
+                        } 
+                    }
                 }
+                
+                if(PIECEWISE)
+                {
+                    for (i=0; i<N; i++)
+                    {
+                        //if not phosphorylated, add energy
+                        if (PhosphorylatedSites[i]!=1)
+                        {
+                            if(r[i][2]<(sqrt(parabolaDepth)+parabolaCenter))
+                            {
+                                // Compute energy
+                                EelectroNew += (r[i][2]-parabolaCenter)*(r[i][2]-parabolaCenter)-parabolaDepth;
+                            }
+                            
+                        }
+                    }
+                }
+                
             }
 
             
-                if (  TWISTER < exp(Eelectro-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
+            if (  TWISTER < exp(Eelectro-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
+            {
+
+                Eelectro = EelectroNew;
+
+                // Make configuration into the proposal configuration
+                for(i=iPropose;i<N;i++)
                 {
-
-                    Eelectro = EelectroNew;
-
-                    // Make configuration into the proposal configuration
-                    for(i=iPropose;i<N;i++)
-                    {
-                        phi[i]   = phiPropose[i];
-                        theta[i] = thetaPropose[i];
-                        psi[i]   = psiPropose[i];
-                        
-                        r[i][0] = rPropose[i][0];
-                        r[i][1] = rPropose[i][1];
-                        r[i][2] = rPropose[i][2];
-                        
-                        t[i][0] = tPropose[i][0];
-                        t[i][1] = tPropose[i][1];
-                        t[i][2] = tPropose[i][2];
-                        
-                        e1[i][0] = e1Propose[i][0];
-                        e1[i][1] = e1Propose[i][1];
-                        e1[i][2] = e1Propose[i][2];
-                        
-                        e2[i][0] = e2Propose[i][0];
-                        e2[i][1] = e2Propose[i][1];
-                        e2[i][2] = e2Propose[i][2];
-                        
-                    }
-                    if(iPropose==0)
-                    accepts[0] ++;
-                    else
-                    accepts[1] ++;
+                    phi[i]   = phiPropose[i];
+                    theta[i] = thetaPropose[i];
+                    psi[i]   = psiPropose[i];
                     
-                 }
+                    r[i][0] = rPropose[i][0];
+                    r[i][1] = rPropose[i][1];
+                    r[i][2] = rPropose[i][2];
+                    
+                    t[i][0] = tPropose[i][0];
+                    t[i][1] = tPropose[i][1];
+                    t[i][2] = tPropose[i][2];
+                    
+                    e1[i][0] = e1Propose[i][0];
+                    e1[i][1] = e1Propose[i][1];
+                    e1[i][2] = e1Propose[i][2];
+                    
+                    e2[i][0] = e2Propose[i][0];
+                    e2[i][1] = e2Propose[i][1];
+                    e2[i][2] = e2Propose[i][2];
+                    
+                }
+                if(iPropose==0)
+                accepts[0] ++;
+                else
+                accepts[1] ++;
+                
+             }
 
             }
         
