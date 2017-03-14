@@ -16,6 +16,7 @@
 #define MULTIPLE   0
 #define STIFFEN    0
 #define ELECTRO    1
+#define BASICONLY  1
 #define CPMAX      1e8
 #define TALKATIVE  1
 #define LEGACY	   0
@@ -101,6 +102,8 @@ int PhosElectroRange;
 
 int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 
+long basicSite[NMAX], basicSiteTotal, basicSiteCurrent, iBasic;
+
 /*******************************************************************************/
 //  INCLUDES
 /*******************************************************************************/
@@ -110,6 +113,7 @@ int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 #include "getSites.c"
 #include "initializeStiffSites.c"
 #include "initializePhosphorylatedSites.c"
+#include "getBasicSites.c"
 #include "metropolisJoint.c"
 
 

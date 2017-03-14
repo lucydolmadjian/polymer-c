@@ -60,6 +60,9 @@ void getParameters()
     fscanf(paramsFile,"%s %s", tmpString, bSiteFilename);
     if (TALKATIVE) printf("This is bSite filename: %s\n", bSiteFilename);
     
+    fscanf(paramsFile,"%s %s", tmpString, basicSiteFilename);
+    if (TALKATIVE) printf("This is basicSite filename: %s\n", basicSiteFilename);
+    
     fscanf(paramsFile,"%s %d", tmpString, &bSiteCommand);
     if (TALKATIVE) printf("This is bSite command: %d\n", bSiteCommand);
     

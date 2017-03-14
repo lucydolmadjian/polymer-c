@@ -438,19 +438,39 @@ void metropolisJoint()
             
             EelectroNew = 0;
             
-            for (i=0; i<N; i++)
+            
+            if(BASICONLY)
             {
-
-                //if not phosphorylated, add energy
-                if (PhosphorylatedSites[i]!=1)
+                getBasicSites();
+                
+                for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
                 {
-                    // Compute energy
-                    EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
+                    basicCurrentSite = basicSite[iBasic];
+                    //if not phosphorylated, add energy
+                    if (PhosphorylatedSites[basicCurrentSite]!=1)
+                    {
+                        // Compute energy
+                        EelectroNew += 4*wellDepth*(pow(debye/(rPropose[basicSiteCurrent][2]-rWall),12)-pow(debye/(rPropose[basicSiteCurrent][2]-rWall),6));
+                        
+                    }
+                }
+            }
+            else
+            {
+                for (i=0; i<N; i++)
+                {
 
-                } 
+                    //if not phosphorylated, add energy
+                    if (PhosphorylatedSites[i]!=1)
+                    {
+                        // Compute energy
+                        EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
+
+                    } 
+                }
             }
 
-                
+            
                 if (  TWISTER < exp(Eelectro-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
                 {
 
