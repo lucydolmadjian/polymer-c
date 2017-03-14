@@ -2,7 +2,7 @@ listName		outputTest
 N			113
 irLigand		7
 brLigand		5
-baseBoundYN		1
+baseBoundYN		0
 baserLigand		4
 Force			0
 verboseTF		0

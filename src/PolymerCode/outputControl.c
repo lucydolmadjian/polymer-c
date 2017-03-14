@@ -243,7 +243,7 @@ void dataRecording()
 
         for(i=0;i<N;i++)
         {
-            polymerLocationCounts[i][(long)floor(((long)r[i][2]+N)/binSize)]++;
+            polymerLocationCounts[i][(long)floor(((double)r[i][2]+N)/binSize)]++;
         }
                                      
     }
