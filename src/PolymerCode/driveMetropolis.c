@@ -40,8 +40,8 @@
 char listName[100];
 FILE *fList;
 //
-char paramsFilename[100], iSiteFilename[100], bSiteFilename[100];
-FILE *paramsFile, *iSiteList, *bSiteList;
+char paramsFilename[100], iSiteFilename[100], bSiteFilename[100], basicSiteFilename[100];
+FILE *paramsFile, *iSiteList, *bSiteList, *basicSiteList;
 
 long N, ntNextStationarityCheck, iBin;
 

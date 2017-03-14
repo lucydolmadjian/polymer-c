@@ -445,9 +445,9 @@ void metropolisJoint()
                 
                 for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
                 {
-                    basicCurrentSite = basicSite[iBasic];
+                    basicSiteCurrent = basicSite[iBasic];
                     //if not phosphorylated, add energy
-                    if (PhosphorylatedSites[basicCurrentSite]!=1)
+                    if (PhosphorylatedSites[basicSiteCurrent]!=1)
                     {
                         // Compute energy
                         EelectroNew += 4*wellDepth*(pow(debye/(rPropose[basicSiteCurrent][2]-rWall),12)-pow(debye/(rPropose[basicSiteCurrent][2]-rWall),6));

@@ -14,7 +14,7 @@ void getBasicSites()
     /********* INITIALIZE BASIC AND TYROSINE SITES *******************/
     
 
-    basicSiteList = fopen(basicSiteList, "r");
+    basicSiteList = fopen(basicSiteFilename, "r");
     char line[200];
     iBasic=0;
     
