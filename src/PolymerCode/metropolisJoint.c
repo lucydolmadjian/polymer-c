@@ -13,6 +13,11 @@ void metropolisJoint()
 
         getSites();
     
+    if(BASICONLY)
+    {
+        getBasicSites();
+    }
+    
     
     /************* STIFFEN SEGMENTS *******************/
     
@@ -441,7 +446,6 @@ void metropolisJoint()
             
             if(BASICONLY)
             {
-                getBasicSites();
                 
                 for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
                 {
