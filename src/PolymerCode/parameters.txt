@@ -19,5 +19,5 @@ wellDepth		0
 debye			0
 rWall			-6
 parabolaDepth		0
-parabolaCenter		0
+parabolaWidth		0
 PhosElectroRange 	0

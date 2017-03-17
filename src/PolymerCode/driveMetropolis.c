@@ -99,7 +99,7 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
 double wellDepth,debye, rWall, Eelectro, EelectroNew;
-double parabolaDepth, parabolaCenter;
+double parabolaDepth, parabolaWidth;
 double PhosphorylatedSites[NMAX];
 int PhosElectroRange;
 
