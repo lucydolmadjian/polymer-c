@@ -470,10 +470,10 @@ void metropolisJoint()
                         //if not phosphorylated, add energy
                         if (PhosphorylatedSites[basicSiteCurrent]!=1)
                         {
-                            if(rPropose[iBasic][2]<(sqrt(parabolaDepth/parabolaWidth)))
+                            if(rPropose[basicSiteCurrent][2]<(sqrt(parabolaDepth/parabolaWidth)))
                             {
                             // Compute energy
-                                EelectroNew += parabolaWidth*(rPropose[iBasic][2])*(rPropose[iBasic][2])-parabolaDepth;
+                                EelectroNew += parabolaWidth*(rPropose[basicSiteCurrent][2])*(rPropose[basicSiteCurrent][2])-parabolaDepth;
                             }
                             
                         }
@@ -507,7 +507,7 @@ void metropolisJoint()
                             if(rPropose[i][2]<(sqrt(parabolaDepth/parabolaWidth)))
                             {
                                 // Compute energy
-                                EelectroNew += parabolaWidth*(rPropose[iBasic][2])*(rPropose[iBasic][2])-parabolaDepth;
+                                EelectroNew += parabolaWidth*(rPropose[i][2])*(rPropose[i][2])-parabolaDepth;
                             }
                             
                         }
