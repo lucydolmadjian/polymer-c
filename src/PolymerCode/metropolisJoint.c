@@ -516,7 +516,7 @@ void metropolisJoint()
                             }
                         }
                     }
-                    }
+
                 }
             }
             else
