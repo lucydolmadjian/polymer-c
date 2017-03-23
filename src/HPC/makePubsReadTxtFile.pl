@@ -3,26 +3,26 @@
 use strict;
 use warnings;
 
-my $seriesName = "CD3ZetaElectrostaticsRwall6"; # command line
-my $occupiedSitesFile = "OccupiediSitesMouse.txt";
-my $occupiedSitesFileNoSpace = "OccupiediSitesMouseNoSpace.txt";
+my $seriesName = "CD3ZetaElectrostaticsPhosphorylation"; # command line
+my $occupiediSitesFile = 'OccupiediSitesMouse.txt';
+my $occupiediSitesFileNoSpace = 'OccupiediSitesMouseNoSpace.txt';
 
-my $i0Max = 13;
-my $i1Max = 13;
+my $i0Max = 3;
+my $i1Max = 3;
 
 for (my $i0 = 1; $i0 <= $i0Max; $i0++)
 {
-	my $WELLDEPTH = 10**(-4+0.5*($i0-1));
+	my $PARABOLADEPTH = 10**(0.5*($i0-1));
 
 	for (my $i1 = 1; $i1 <= $i1Max; $i1++)
 	{
-		my $DEBYE = 10**(-4+0.5*($i1-1));
+		my $PARABOLAWIDTH = 10**(-1+0.5*($i1-1));
         
         
-        open(my $fileToRead, '<:encoding(UTF-8)', $occupiediSitesFile)
+        open(my $fileToRead, '<', $occupiediSitesFile)
             or die "Could not open file '$occupiediSitesFile' $!";
         
-        open(my $fileToReadNoSpace, '<:encoding(UTF-8)', $occupiediSitesFileNoSpace)
+        open(my $fileToReadNoSpace, '<', $occupiediSitesFileNoSpace)
             or die "Could not open file '$occupiediSitesFileNoSpace' $!";
         
         while (my $line = <$fileToRead>)
@@ -33,7 +33,7 @@ for (my $i0 = 1; $i0 <= $i0Max; $i0++)
             chomp $lineNoSpace;
 
 
-            my $fileName = $seriesName . "WellDepth" . "." . $i0 . "Debye" . "." . $i1 . "." . $. ;
+            my $fileName = $seriesName . "ParabolaDepth" . "." . $i0 . "." . "ParabolaWidth" . "." . $i1 . "." . $. ;
             my $runName =  $fileName . ".pub";
 	
             open (FOOD, ">pubs/$runName" );
@@ -45,14 +45,14 @@ for (my $i0 = 1; $i0 <= $i0Max; $i0++)
 #\$ -e logs/$runName.err
 #\$ -o logs/$runName.log
 
-cd /pub/laraclemens/Documents/polymer-c_runs/Dec012016ElectrostaticsRwall6Sweep/$seriesName
+cd /pub/laraclemens/Documents/polymer-c_runs/Mar212017ElectrostaticsPhosphorylation
 
 echo Running on host `hostname`
 echo Time is `date`
 echo Directory is `pwd`
 
 # Run your executable and then stuff
-./metropolis.out parameters.txt $fileName $line $lineNoSpace $WELLDEPTH $DEBYE
+./metropolis.out parameters.txt $fileName $line $lineNoSpace $PARABOLADEPTH $PARABOLAWIDTH
 
 echo Finished at `date`
 
