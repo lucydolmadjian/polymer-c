@@ -81,6 +81,9 @@ void getParameters()
     fscanf(paramsFile,"%s %lf", tmpString, &parabolaWidth);
     if (TALKATIVE) printf("This is parabolaCenter: %lf\n", parabolaWidth);
     
+    fscanf(paramsFile,"%s %lf", tmpString, &wallParabolaK);
+    if (TALKATIVE) printf("This is wall parabola K: %lf\n", wallParabolaK);
+    
     fscanf(paramsFile,"%s %d", tmpString, &PhosElectroRange);
     if (TALKATIVE) printf("This is PhosElectroRange: %d\n", PhosElectroRange);
     

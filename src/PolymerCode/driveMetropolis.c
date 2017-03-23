@@ -19,6 +19,7 @@
 #define LENNARDJONES    0
 #define PIECEWISE       1
 #define BASICONLY       1
+#define HARDWALL        1
 #define CPMAX           1e8
 #define TALKATIVE       1
 #define LEGACY          0
@@ -99,13 +100,13 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
 double wellDepth,debye, rWall, Eelectro, EelectroNew;
-double parabolaDepth, parabolaWidth;
+double parabolaDepth, parabolaWidth, wallParabolaK;
 double PhosphorylatedSites[NMAX];
 int PhosElectroRange;
 
 int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
 
-long basicSite[NMAX], basicSiteTotal, basicSiteCurrent, iBasic;
+long basicSite[NMAX], BasicSitesYN[NMAX], basicSiteTotal, basicSiteCurrent, iBasic;
 
 /*******************************************************************************/
 //  INCLUDES

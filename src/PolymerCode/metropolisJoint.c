@@ -449,34 +449,73 @@ void metropolisJoint()
                 if(LENNARDJONES)
                 {
                 
-                    for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
+                    for (i=0;i<N;i++)
                     {
-                        basicSiteCurrent = basicSite[iBasic];
-                        //if not phosphorylated, add energy
-                        if (PhosphorylatedSites[basicSiteCurrent]!=1)
+                        if((BasicSitesYN[i]==1)&&(PhosphorylatedSites[i]!=1))
                         {
+
                             // Compute energy
-                            EelectroNew += 4*wellDepth*(pow(debye/(rPropose[basicSiteCurrent][2]-rWall),12)-pow(debye/(rPropose[basicSiteCurrent][2]-rWall),6));
+                            EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
                             
+                        }
+                        else
+                        {
+                            
+                            if (HARDWALL)
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += INF;
+                                }
+                                
+                            }
+                            else //soft wall
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
+                                }
+                            }
                         }
                     }
                 }
                 
                 if(PIECEWISE)
                 {
-                    for (iBasic=0; iBasic<basicSiteTotal; iBasic++)
+                    for (i=0;i<N;i++)
                     {
-                        basicSiteCurrent = basicSite[iBasic];
-                        //if not phosphorylated, add energy
-                        if (PhosphorylatedSites[basicSiteCurrent]!=1)
+                        if((BasicSitesYN[i]==1)&&(PhosphorylatedSites[i]!=1))
                         {
-                            if(rPropose[basicSiteCurrent][2]<(sqrt(parabolaDepth/parabolaWidth)))
+                            if(rPropose[i][2]<(sqrt(parabolaDepth/parabolaWidth)))
                             {
                             // Compute energy
-                                EelectroNew += parabolaWidth*(rPropose[basicSiteCurrent][2])*(rPropose[basicSiteCurrent][2])-parabolaDepth;
+                                EelectroNew += parabolaWidth*(rPropose[i][2])*(rPropose[i][2])-parabolaDepth;
                             }
                             
                         }
+                        else
+                        {
+                            if (HARDWALL)
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += INF;
+                                }
+                                
+                            }
+                            else //soft wall
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
+                                }
+                            }
+                        }
+                    }
                     }
                 }
             }
@@ -493,7 +532,27 @@ void metropolisJoint()
                             // Compute energy
                             EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
 
-                        } 
+                        }
+                        else
+                        {
+                            if (HARDWALL)
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += INF;
+                                }
+                                
+                            }
+                            else //soft wall
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
+                                }
+                            }
+                        }
                     }
                 }
                 
@@ -510,6 +569,26 @@ void metropolisJoint()
                                 EelectroNew += parabolaWidth*(rPropose[i][2])*(rPropose[i][2])-parabolaDepth;
                             }
                             
+                        }
+                        else
+                        {
+                            if (HARDWALL)
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += INF;
+                                }
+                                
+                            }
+                            else //soft wall
+                            {
+                                if(rPropose[i][2]<=0)
+                                {
+                                    // Compute energy
+                                    EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
+                                }
+                            }
                         }
                     }
                 }
@@ -553,7 +632,7 @@ void metropolisJoint()
                 
              }
 
-            }
+            } // end configuration loop
         
         /********* 4. Data collection and output to file *******************/
         // check if blocking sphere

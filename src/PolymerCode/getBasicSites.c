@@ -38,6 +38,26 @@ void getBasicSites()
         }
     }
     
+    //initializes basic residues to 0 
+    for(i=0;i<N;i++)
+    {
+        BasicSitesYN[i] =0;
+    }
+    
+    //Full residue list of basic yes or no
+    for (i=0;i<N;i++)
+    {
+        for(iBasic=0;iBasic<basicSiteTotal;iBasic++)
+        {
+            if(i==basicSite[iBasic])
+            {
+
+                BasicSitesYN[i]=1; //set that joint to "basic"
+
+            }
+        }
+    }
+    
     //for debugging - prints a list of the iSites
     
     if (TALKATIVE)

@@ -43,7 +43,7 @@ void initializePhosphorylatedSites()
 				fflush(stdout);
             }
         
-        //initializes stiffened rods to 0 (none stiff)
+        //initializes phosphorylated residues to 0 (none phosphorylated)
         for(i=0;i<N;i++)
         {
             PhosphorylatedSites[i] =0;

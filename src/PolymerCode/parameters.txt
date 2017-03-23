@@ -20,4 +20,5 @@ debye			0
 rWall			-6
 parabolaDepth		0
 parabolaWidth		0
+wallParabolaK		0
 PhosElectroRange 	0
