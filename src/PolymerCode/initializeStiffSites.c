@@ -72,7 +72,25 @@ void initializeStiffSites()
         {
             if(stiffiSites[ty]==1) //might want to check the truth value on this - equals for double?
             {
-                for(i=(iSite[ty]-StiffenRange);i<(iSite[ty]+StiffenRange+1);i++) //can I even put this stuff in a for loop?
+                if(iSite[ty]-StiffenRange >= 0)
+                {
+                    stiffStart=iSite[ty]-StiffenRange;
+                }
+                else
+                {
+                    stiffStart=0;
+                }
+                
+                if(iSite[ty]+StiffenRange+1 >= N)
+                {
+                    stiffEnd=N;
+                }
+                else
+                {
+                    stiffStart=iSite[ty]+StiffenRange+1;
+                }
+
+                for(i=stiffStart;i<stiffEnd;i++)
                 {
                     StiffSites[i]=1; //set that joint to "stiff"
                 }

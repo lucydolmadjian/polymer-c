@@ -37,12 +37,14 @@ void initializePhosphorylatedSites()
 
         //print which of the iSites are phosphorylated
         if (TALKATIVE)
+        {
             for (iy=0;iy<iSiteTotal;iy++)
             {
                 printf("phosiSites[ %ld ] =  %f\n",iy, phosiSites[iy]);
 				fflush(stdout);
             }
-        
+        }
+    
         //initializes phosphorylated residues to 0 (none phosphorylated)
         for(i=0;i<N;i++)
         {

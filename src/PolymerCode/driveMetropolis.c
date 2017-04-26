@@ -69,7 +69,7 @@ double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 
 double StiffenRange,stiffiSites[NMAX], StiffSites[NMAX];
-int stiffCase, totalStiff;
+int stiffCase, totalStiff, stiffEnd, stiffStart;
 char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
 
 double iSiteOccupied[NMAX];
