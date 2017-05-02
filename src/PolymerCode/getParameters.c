@@ -66,15 +66,6 @@ void getParameters()
     fscanf(paramsFile,"%s %d", tmpString, &bSiteCommand);
     if (TALKATIVE) printf("This is bSite command: %d\n", bSiteCommand);
     
-    fscanf(paramsFile,"%s %lf", tmpString, &wellDepth);
-    if (TALKATIVE) printf("This is well depth: %lf\n", wellDepth);
-    
-    fscanf(paramsFile,"%s %lf", tmpString, &debye);
-    if (TALKATIVE) printf("This is debye length: %lf\n", debye);
-    
-    fscanf(paramsFile,"%s %lf", tmpString, &rWall);
-    if (TALKATIVE) printf("This is rWall: %lf\n", rWall);
-    
     fscanf(paramsFile,"%s %lf", tmpString, &parabolaDepth);
     if (TALKATIVE) printf("This is parabolaDepth: %lf\n", parabolaDepth);
     
@@ -83,6 +74,9 @@ void getParameters()
     
     fscanf(paramsFile,"%s %lf", tmpString, &wallParabolaK);
     if (TALKATIVE) printf("This is wall parabola K: %lf\n", wallParabolaK);
+    
+    fscanf(paramsFile,"%s %lf", tmpString, &repulsionFactor);
+    if (TALKATIVE) printf("This is repulsion factor: %lf\n", repulsionFactor);
     
     fscanf(paramsFile,"%s %d", tmpString, &PhosElectroRange);
     if (TALKATIVE) printf("This is PhosElectroRange: %d\n", PhosElectroRange);

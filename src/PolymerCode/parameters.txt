@@ -15,10 +15,8 @@ iSiteFilename		iSites.txt
 bSiteFilename		bSites.txt
 basicSiteFilename	basicSites.txt
 bSiteCommand		2
-wellDepth		0
-debye			0
-rWall			-6
 parabolaDepth		0
 parabolaWidth		0
 wallParabolaK		0
+repulsionFactor		0
 PhosElectroRange 	0

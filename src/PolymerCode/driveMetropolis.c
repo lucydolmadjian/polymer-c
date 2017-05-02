@@ -16,10 +16,7 @@
 #define MULTIPLE        0
 #define STIFFEN         0
 #define ELECTRO         1
-#define LENNARDJONES    0
-#define PIECEWISE       1
-#define BASICONLY       1
-#define HARDWALL        1
+#define HARDWALL        0
 #define CPMAX           1e8
 #define TALKATIVE       1
 #define LEGACY          0
@@ -99,7 +96,8 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
-double wellDepth,debye, rWall, Eelectro, EelectroNew;
+double Eelectro, EelectroNew;
+double repulsionFactor;
 double parabolaDepth, parabolaWidth, wallParabolaK;
 double PhosphorylatedSites[NMAX];
 int PhosElectroRange;
@@ -297,21 +295,33 @@ int main( int argc, char *argv[] )
                 bSiteCommand = atoi(argv[16]);
             if (TALKATIVE) printf("This is argument 16: %d \n", bSiteCommand);
             
-            if(argv[17]) // potential well depth
-                wellDepth = atof(argv[17]);
-            if (TALKATIVE) printf("This is argument 17: %f \n", wellDepth);
+            if(argv[17])
+            {
+                parabolaDepth = atof(argv[17]);
+                if (TALKATIVE) printf("This is the parabola depth: %f\n", parabolaDepth);
+            }
             
-            if(argv[18]) // debye length
-                debye = atof(argv[18]);
-            if (TALKATIVE) printf("This is argument 18: %f \n", debye);
+            if(argv[18])
+            {
+                parabolaWidth = atof(argv[18]);
+                if (TALKATIVE) printf("This is the parabola width: %f\n", parabolaWidth);
+            }
             
-            if(argv[19]) // rWall
-                rWall = atof(argv[19]);
-            if (TALKATIVE) printf("This is argument 19: %f \n", rWall);
+            if(argv[19])
+            {
+                wallParabolaK = atof(argv[19]);
+                if (TALKATIVE) printf("This is the wall parabola K: %f\n", wallParabolaK);
+            }
             
-            if(argv[20]) //PhosElectroRange
-                PhosElectroRange = atof(argv[20]);
-            if (TALKATIVE) printf("This is argument 20: %d \n", PhosElectroRange);
+            if(argv[20])
+            {
+                repulsionFactor = atof(argv[20]);
+                if (TALKATIVE) printf("This is the repulsion factor: %f\n", repulsionFactor);
+            }
+            
+            if(argv[21]) //PhosElectroRange
+                PhosElectroRange = atof(argv[21]);
+            if (TALKATIVE) printf("This is argument 21: %d \n", PhosElectroRange);
             
             
         //    if(argv[10]) //Delivery distance - how close to base it needs to be
@@ -359,16 +369,32 @@ int main( int argc, char *argv[] )
             if(argv[5])
             {
                 if(atof(argv[5])!=-1)
-                    wellDepth = atof(argv[5]);
-                if (TALKATIVE) printf("This is the well depth: %f\n", wellDepth);
+                    parabolaDepth = atof(argv[5]);
+                if (TALKATIVE) printf("This is the parabola depth: %f\n", parabolaDepth);
             }
             
             if(argv[6])
             {
                 if(atof(argv[6])!=-1)
-                    debye = atof(argv[6]);
-                if (TALKATIVE) printf("This is the debye length: %f\n", debye);
+                    parabolaWidth = atof(argv[6]);
+                if (TALKATIVE) printf("This is the parabola width: %f\n", parabolaWidth);
             }
+            
+            if(argv[7])
+            {
+                if(atof(argv[7])!=-1)
+                wallParabolaK = atof(argv[7]);
+                if (TALKATIVE) printf("This is the wall parabola K: %f\n", wallParabolaK);
+            }
+            
+            if(argv[8])
+            {
+                if(atof(argv[8])!=-1)
+                repulsionFactor = atof(argv[8]);
+                if (TALKATIVE) printf("This is the repulsion factor: %f\n", repulsionFactor);
+            }
+            
+            
 
         }
             

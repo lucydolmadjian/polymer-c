@@ -87,7 +87,7 @@ void initializeStiffSites()
                 }
                 else
                 {
-                    stiffStart=iSite[ty]+StiffenRange+1;
+                    stiffEnd=iSite[ty]+StiffenRange+1;
                 }
 
                 for(i=stiffStart;i<stiffEnd;i++)

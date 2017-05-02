@@ -13,7 +13,7 @@ void metropolisJoint()
 
         getSites();
     
-    if(BASICONLY)
+    if(ELECTRO)
     {
         getBasicSites();
     }
@@ -442,26 +442,41 @@ void metropolisJoint()
             //sum over energies of all joints, except phosphorylated ones
             
             EelectroNew = 0;
-            
-            
-            if(BASICONLY)
-            {
-                if(LENNARDJONES)
-                {
-                
-                    for (i=0;i<N;i++)
-                    {
-                        if((BasicSitesYN[i]==1)&&(PhosphorylatedSites[i]!=1))
-                        {
 
-                            // Compute energy
-                            EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
-                            
+                // create electrostatic potential
+                // 1. Basic residues feel parabolic potential
+                // 2. Tyrosines feel same potential as rest of amino acids (hardwall or softwall)
+                // 3. Phosphorylated tyrosines feel negative potential (repulsion from membrane)
+                for (i=0;i<N;i++)
+                {
+                    if((BasicSitesYN[i]==1)&&(PhosphorylatedSites[i]!=1))
+                    {
+                        if(rPropose[i][2]<(sqrt(parabolaDepth/parabolaWidth)))
+                        {
+                        // Compute energy
+                            EelectroNew += parabolaWidth*(rPropose[i][2])*(rPropose[i][2])-parabolaDepth;
+                        }
+                        
+                    }
+                    else
+                    {
+                        
+                        if( PhosphorylatedSites[i]==1 )
+                        {
+                            if (rPropose[i][2]>0)
+                            {
+                                // repulsive force with 1/r^2
+                                EelectroNew += repulsionFactor/(rPropose[i][2]*rPropose[i][2]);
+                            }
+                            else
+                            {
+                                // hardwall at 0 for phosphorylated tyrosines - probably unnecessary
+                                EelectroNew += INF;
+                            }
                         }
                         else
                         {
-                            
-                            if (HARDWALL)
+                            if (HARDWALL) // hard wall
                             {
                                 if(rPropose[i][2]<=0)
                                 {
@@ -478,122 +493,12 @@ void metropolisJoint()
                                     EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
                                 }
                             }
+                          }
                         }
-                    }
-                }
-                
-                if(PIECEWISE)
-                {
-                    for (i=0;i<N;i++)
-                    {
-                        if((BasicSitesYN[i]==1)&&(PhosphorylatedSites[i]!=1))
-                        {
-                            if(rPropose[i][2]<(sqrt(parabolaDepth/parabolaWidth)))
-                            {
-                            // Compute energy
-                                EelectroNew += parabolaWidth*(rPropose[i][2])*(rPropose[i][2])-parabolaDepth;
-                            }
-                            
-                        }
-                        else
-                        {
-                            if (HARDWALL)
-                            {
-                                if(rPropose[i][2]<=0)
-                                {
-                                    // Compute energy
-                                    EelectroNew += INF;
-                                }
-                                
-                            }
-                            else //soft wall
-                            {
-                                if(rPropose[i][2]<=0)
-                                {
-                                    // Compute energy
-                                    EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
-                                }
-                            }
-                        }
-                    }
 
-                }
-            }
-            else
-            {
-                if(LENNARDJONES)
-                {
-                    for (i=0; i<N; i++)
-                    {
 
-                        //if not phosphorylated, add energy
-                        if (PhosphorylatedSites[i]!=1)
-                        {
-                            // Compute energy
-                            EelectroNew += 4*wellDepth*(pow(debye/(rPropose[i][2]-rWall),12)-pow(debye/(rPropose[i][2]-rWall),6));
-
-                        }
-                        else
-                        {
-                            if (HARDWALL)
-                            {
-                                if(rPropose[i][2]<=0)
-                                {
-                                    // Compute energy
-                                    EelectroNew += INF;
-                                }
-                                
-                            }
-                            else //soft wall
-                            {
-                                if(rPropose[i][2]<=0)
-                                {
-                                    // Compute energy
-                                    EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
-                                }
-                            }
-                        }
-                    }
-                }
                 
-                if(PIECEWISE)
-                {
-                    for (i=0; i<N; i++)
-                    {
-                        //if not phosphorylated, add energy
-                        if (PhosphorylatedSites[i]!=1)
-                        {
-                            if(rPropose[i][2]<(sqrt(parabolaDepth/parabolaWidth)))
-                            {
-                                // Compute energy
-                                EelectroNew += parabolaWidth*(rPropose[i][2])*(rPropose[i][2])-parabolaDepth;
-                            }
-                            
-                        }
-                        else
-                        {
-                            if (HARDWALL)
-                            {
-                                if(rPropose[i][2]<=0)
-                                {
-                                    // Compute energy
-                                    EelectroNew += INF;
-                                }
-                                
-                            }
-                            else //soft wall
-                            {
-                                if(rPropose[i][2]<=0)
-                                {
-                                    // Compute energy
-                                    EelectroNew += wallParabolaK*(rPropose[i][2])*(rPropose[i][2]);
-                                }
-                            }
-                        }
                     }
-                }
-                
-            }
 
             
             if (  TWISTER < exp(Eelectro-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
