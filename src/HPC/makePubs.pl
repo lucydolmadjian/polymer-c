@@ -22,7 +22,8 @@ for (my $i0 = 1; $i0 <= $i0Max; $i0++)
 
 #!/bin/bash
 #\$ -N $seriesName
-#\$ -q free40i,free32i,free64
+#\$ -q free*,pub*,abio,bio
+#\$ -ckpt blcr
 #\$ -e logs/$runName.err
 #\$ -o logs/$runName.log
 
