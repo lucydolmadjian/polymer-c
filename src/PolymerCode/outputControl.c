@@ -110,20 +110,26 @@ void finalizeSummary()
                     //PDeliver[ib]);
         }
         
-        for (iy=0;iy<iSiteTotal;iy++)
+        if(0)
+        {
+            for (iy=0;iy<iSiteTotal;iy++)
+            {
+                iSiteCurrent=iSite[iy];
+                for (j=0;j<NBINSPOLYMER;j++)
+                {
+                    fprintf(fList, " %ld", polymerLocationCounts[iSiteCurrent][j]);
+                }
+            }
+        }
+        
+        
+        if(0)
         {
             iSiteCurrent=iSite[iy];
             for (j=0;j<NBINSPOLYMER;j++)
             {
-                fprintf(fList, " %ld", polymerLocationCounts[iSiteCurrent][j]);
+                fprintf(fList, " %ld", polymerLocationCounts[N-1][j]);
             }
-        }
-        
-
-        iSiteCurrent=iSite[iy];
-        for (j=0;j<NBINSPOLYMER;j++)
-        {
-            fprintf(fList, " %ld", polymerLocationCounts[N-1][j]);
         }
         
         
