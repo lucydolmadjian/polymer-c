@@ -9,8 +9,8 @@ void dataRecording();
 /*******************************************************************************/
 
 double reeBar_sum, ree2Bar_sum, rMBar_sum;
-long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX];
-double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX], reeiSite[NMAX], rMBar;
+long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX], PMembraneOcclude_sum[NMAX];
+double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX], reeiSite[NMAX], rMBar;
 double occupied[NMAX];
 double binSize;
 
@@ -22,8 +22,9 @@ void initializeSummary()
     ree2Bar_sum  = 0;
     for(iy=0;iy<iSiteTotal;iy++)
     {
-        POcclude_sum[iy] = 0;
-        Prvec0_sum[iy]   = 0;
+        POcclude_sum[iy]          = 0;
+        Prvec0_sum[iy]            = 0;
+        PMembraneOcclude_sum[iy]  = 0;
     }
     POccludeBase_sum = 0;
 //    for(ib=0; ib<bSiteTotal; ib++)
@@ -48,6 +49,7 @@ void finalizeSummary()
     {
         POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
         Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
+        PMembraneOcclude[iy] = (double)PMembraneOcclude_sum[iy]/(double)(nt-NTCHECK);
     }
     
     POccludeBase = (double)POccludeBase_sum/(double)(nt-NTCHECK);
@@ -89,11 +91,12 @@ void finalizeSummary()
         
         for (iy=0;iy<iSiteTotal;iy++)
         {
-            fprintf(fList, " %ld %e %e %e",
+            fprintf(fList, " %ld %e %e %e %e",
                 iSite[iy], //10 + 4*iBind
                 POcclude[iy], //11 + 4*iBind
                 1-POcclude[iy], //12 + 4*iBind
-                Prvec0[iy]); //13 + 4*iBind
+                PMembraneOcclude[iy], //13 +4*iBind
+                Prvec0[iy]); //14 + 4*iBind
         
         }
 
@@ -202,6 +205,11 @@ void dataRecording()
             {
                 fprintf(fList, " %ld",stericOcclusion[iy]);
             }
+            
+            for(iy=0;iy<iSiteTotal;iy++)
+            {
+                fprintf(fList, " %ld",membraneOcclusion[iy]);
+            }
         
             fprintf(fList, " %ld", stericOcclusionBase);
 
@@ -230,6 +238,7 @@ void dataRecording()
         {
 			POcclude_sum[iy] += (long)(stericOcclusion[iy]>0);
 			Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
+            PMembraneOcclude_sum[iy] += (long)(membraneOcclusion[iy]>0);
 			
         }
         POccludeBase_sum += (long)(stericOcclusionBase>0);

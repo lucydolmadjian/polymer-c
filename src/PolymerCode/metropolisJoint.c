@@ -554,6 +554,7 @@ void metropolisJoint()
                 iLigandCenter[iy][2] = r[iSiteCurrent][2] + irLigand*e1[iSiteCurrent][2];
             
                 stericOcclusion[iy] = 0; //set steric occlusion array to 0 for each iSite
+                membraneOcclusion[iy]=0; //set membrane occlusion array to 0 for each iSite
             }
             
             
@@ -617,6 +618,7 @@ void metropolisJoint()
             for(iy=0; iy<iSiteTotal;iy++)
             {
                 
+                // test if iSite is already bound
                 if (MULTIPLE)
                 {
                     for (ib=0;ib<bSiteTotal;ib++)
@@ -629,13 +631,17 @@ void metropolisJoint()
                     }//didn't include base - assuming can't be bound to base
                 }
                 
+                //test if iSite occluded by membrane
                 if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
                 {
                     if (MEMBRANE)
                     {
                         // check if sphere violates membrane
                         if (iLigandCenter[iy][2]<irLigand)
-                            stericOcclusion[iy]++;
+                        {
+                            stericOcclusion[iy]++; //sterically occluded
+                            membraneOcclusion[iy]++; //specifically occluded by the membrane
+                        }
                     }
                     else
                     {
