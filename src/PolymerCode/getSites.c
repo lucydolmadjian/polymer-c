@@ -121,6 +121,18 @@ void getSites()
             iSiteTotal=iy;
 
             break;
+        
+        case 5: // use last site as only iSite
+        
+            iSiteTotal = 1;
+            for(iy=0;iy<iSiteTotal;iy++)
+            {
+                iSite[iy]=0;
+            }
+            iSite[0] = N-1;
+        
+        
+            break;
 
     }
     
