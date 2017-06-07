@@ -339,16 +339,28 @@ void metropolisJoint()
                 for (ib=0;ib<bSiteTotal;ib++) //for each bound ligand
                 {
                     
-                    for(i=0;i<N;i++)// for each joint
+                    if (MEMBRANE)
                     {
-                        if ( ((bLigandCenter[ib][0]-rPropose[i][0])*(bLigandCenter[ib][0]-rPropose[i][0]) +
-                            (bLigandCenter[ib][1]-rPropose[i][1])*(bLigandCenter[ib][1]-rPropose[i][1]) +
-                            (bLigandCenter[ib][2]-rPropose[i][2])*(bLigandCenter[ib][2]-rPropose[i][2]) <= brLigand*brLigand )
-                            && i != bSite[ib]) //if proposed joint is inside ligand sphere AND joint is not where ligand is attached
+                        if(bLigandCenter[ib][2]<brLigand) // if any bound ligands intersect with membrane
                         {
-                            constraintSatisfiedTF=0; //constraint not satisfied
-                            i=N; //shortcut out of inner loop
-                            ib=bSiteTotal;// shortcut out of outer loop
+                            constraintSatisfiedTF = 0; //constraint not satisfied
+                            ib = bSiteTotal; //shortcut out of outer loop
+                        }
+                    }
+                    
+                    if(constraintSatisfiedTF) //if passed membrane constraint, test joints
+                    {
+                        for(i=0;i<N;i++)// for each joint
+                        {
+                            if ( ((bLigandCenter[ib][0]-rPropose[i][0])*(bLigandCenter[ib][0]-rPropose[i][0]) +
+                                (bLigandCenter[ib][1]-rPropose[i][1])*(bLigandCenter[ib][1]-rPropose[i][1]) +
+                                (bLigandCenter[ib][2]-rPropose[i][2])*(bLigandCenter[ib][2]-rPropose[i][2]) <= brLigand*brLigand )
+                                && i != bSite[ib]) //if proposed joint is inside ligand sphere AND joint is not where ligand is attached
+                            {
+                                constraintSatisfiedTF=0; //constraint not satisfied
+                                i=N; //shortcut out of inner loop
+                                ib=bSiteTotal;// shortcut out of outer loop
+                            }
                         }
                     }
                     
