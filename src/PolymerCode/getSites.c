@@ -237,6 +237,18 @@ void getSites()
                 
                 break;
                 
+            case 4: // use last site as only bSite
+                
+                bSiteTotal = 1;
+                for(ib=0;ib<bSiteTotal;ib++)
+                {
+                    bSite[ib]=0;
+                }
+                bSite[0] = N-1;
+                
+                
+                break;
+                
         }
         
         for (iy=0; iy<bSiteTotal;iy++)
