@@ -664,8 +664,10 @@ void metropolisJoint()
                         if ( (iLigandCenter[iy][0])*(iLigandCenter[iy][0]) +
                              (iLigandCenter[iy][1])*(iLigandCenter[iy][1]) +
                              (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= irLigand*irLigand )
+                        {
                             stericOcclusion[iy]++;
                             membraneAndSegmentOcclusion[iy]++;
+                        }
                     
                         //didn't include base - don't want the base to violate the base
                     } // finished membrane tests

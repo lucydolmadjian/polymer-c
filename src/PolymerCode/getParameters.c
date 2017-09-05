@@ -81,6 +81,9 @@ void getParameters()
     fscanf(paramsFile,"%s %d", tmpString, &PhosElectroRange);
     if (TALKATIVE) printf("This is PhosElectroRange: %d\n", PhosElectroRange);
     
+    fscanf(paramsFile,"%s %lf", tmpString, &localConcCutoff);
+    if (TALKATIVE) printf("This is localConcCutoff: %lf\n", localConcCutoff);
+    
     fclose(paramsFile);
     
 }
