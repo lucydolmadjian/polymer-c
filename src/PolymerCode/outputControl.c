@@ -35,6 +35,19 @@ void initializeSummary()
     rMBar_sum    = 0;
     
     binSize = (double)(2*N) / NBINSPOLYMER;
+    
+    if(MULTIPLE)
+    {
+        for(iy=0; iy<iSiteTotal; iy++)
+        {
+            for(ib=0; ib<bSiteTotal; ib++)
+            {
+                distiSiteToLigand[iy][ib]  = 0;
+                selfBind[iy][ib]           = 0;
+                localConcentration[iy][ib] = 0;
+            }
+        }
+    }
 
 }
 
@@ -62,6 +75,18 @@ void finalizeSummary()
 //    }
     
     rMBar = rMBar_sum/(double)(nt-NTCHECK);
+    
+    if(MULTIPLE)
+    {
+        // determine local concentration
+        for(iy=0;iy<iSiteTotal;iy++)
+        {
+            for(ib=0;ib<bSiteTotal;ib++)
+            {
+                localConcentration[iy][ib] = ((double)selfBind[iy][ib]/(double)(nt-NTCHECK)) / ((double) 4/3*pow(localConcCutoff,3)*PI);
+            }
+        }
+    }
     
     if (!verboseTF)
     {
@@ -110,6 +135,14 @@ void finalizeSummary()
             fprintf(fList, " %ld",
                 bSite[ib]);
                     //PDeliver[ib]);
+        }
+        
+        for (iy=0; iy<iSiteTotal; iy++)
+        {
+            for (ib=0; ib<bSiteTotal; ib++)
+            {
+                fprintf(fList, " %f", localConcentration[iy][ib]);
+            }
         }
         
         if(0)
@@ -171,51 +204,45 @@ void dataRecording()
     /* LOCAL CONCENTRATION */
     
     // initialize local concentration arrays
-    for(iy=0; iy<iSiteTotal;iy++)
-    {
-        for(ib=0;ib<bSiteTotal;ib++)
-        {
-            distiSiteToLigand[iy][ib]  = 0;
-            selfBind[iy][ib]           = 0;
-            localConcentration[iy][ib] = 0;
-        }
-    }
-    // calculate distance between each ligand and iSite center
-    for(iy=0;iy<iSiteTotal;iy++)
-    {
-        for(ib=0;ib<bSiteTotal;ib++)
-        {
-            distiSiteToLigand[iy][ib] = sqrt((iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0])+
-                                             (iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1])+
-                                             (iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2]));
-        }
-    }
     
-    // determine if distance is less than given cutoff AND iSite is not occluded
-    for(iy=0;iy<iSiteTotal;iy++)
+    if (MULTIPLE)
     {
-        // if iSite is not occluded
-        if(membraneAndSegmentOcclusion[iy] == 0)
+        for(iy=0; iy<iSiteTotal;iy++)
         {
-            // test how far away each ligand is
             for(ib=0;ib<bSiteTotal;ib++)
             {
-                if(distiSiteToLigand[iy][ib] < localConcCutoff)
+                distiSiteToLigand[iy][ib]  = 0;
+            }
+        }
+        // calculate distance between each ligand and iSite center
+        for(iy=0;iy<iSiteTotal;iy++)
+        {
+            for(ib=0;ib<bSiteTotal;ib++)
+            {
+                distiSiteToLigand[iy][ib] = sqrt((iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0])+
+                                                 (iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1])+
+                                                 (iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2]));
+            }
+        }
+        
+        // determine if distance is less than given cutoff AND iSite is not occluded
+        for(iy=0;iy<iSiteTotal;iy++)
+        {
+            // if iSite is not occluded
+            if(membraneAndSegmentOcclusion[iy] == 0)
+            {
+                // test how far away each ligand is
+                for(ib=0;ib<bSiteTotal;ib++)
                 {
-                    // if ligand is close enough (distance less than cutoff), ligand can bind
-                    selfBind[iy][ib]++;
+                    if(distiSiteToLigand[iy][ib] < localConcCutoff)
+                    {
+                        // if ligand is close enough (distance less than cutoff), ligand can bind
+                        selfBind[iy][ib]++;
+                    }
                 }
             }
         }
-    }
-    
-    // determine local concentration
-    for(iy=0;iy<iSiteTotal;iy++)
-    {
-        for(ib=0;ib<bSiteTotal;ib++)
-        {
-            localConcentration[iy][ib] = ((double)selfBind[iy][ib]/(double)(nt-NTCHECK)) / ((double) 4/3*pow(localConcCutoff,3)*PI);
-        }
+        
     }
 
     
