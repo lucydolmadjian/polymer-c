@@ -1,129 +1,133 @@
-%% Function to read in files for SHP1
+%% Function to read in files
 
-function output = SphereOcclusionReadFiles(Nrods,irLigand,folder,subfolderprefix,dataThin)
+% WOULD all of this be easier with a structure?
+
+%function [] = Funct_EffConcReadFiles(savename,Nrods,irLigand,folder,subfolderprefix,dataThin)
+function [] = Funct_EffConcReadFiles(savename,Nrods,irLigand,dataThin)
+
+% Initialize data cell arrays
+% size: length of Nrods, length of irLigand, membrane on/off
+ligandBoundrData        = cell(size(Nrods,2),size(irLigand,2),2);
+ligandOffrData          = cell(size(Nrods,2),size(irLigand,2),2);
+ligandBoundcenterData   = cell(size(Nrods,2),size(irLigand,2),2);
+ligandOffcenterData     = cell(size(Nrods,2),size(irLigand,2),2);
+occlusionData           = cell(size(Nrods,2),size(irLigand,2),2);
+
+    for membrane=0:1:1
+
+        % construct appropriate folder/filenames
+        % REALLY need to have this completely separate - shouldn't need to
+        % modify this
+%         if (membrane)
+%             subfoldersuffix = 'HalfSpace';
+%         else
+%             subfoldersuffix = 'FreeSpace';
+%         end
+% 
+%         foldername1 = strcat(folder,'June072017SigmaRSweep',subfoldersuffix,'LigandOn');
+%         foldername2 = strcat(folder,'June072017SigmaRSweep',subfoldersuffix,'LigandOff');
+% 
+%         subfolder1  = strcat(subfolderprefix,subfoldersuffix, 'LigandOn');
+%         subfolder2  = strcat(subfolderprefix,subfoldersuffix, 'LigandOff');
+
+          foldername1 = '~/Documents/polymer-c_runs/';
+          subfolder1  = '2017_08_15_EffectiveConcentrationSingleSegment';
+          
+          
+          foldername2 = '~/Documents/polymer-c_runs/';
+          subfolder2  = '2017_08_15_EffectiveConcentrationSingleSegment';
 
 
+        for n = 1:length(Nrods)
+            
+            disp(Nrods(n));
+            
+            for irL = 1:length(irLigand)
+                
+                disp(irLigand(irL));
+                % clear relevant variables between runs
+                clear M1 M2 r1 r2 ligandCenter1 ligandCenter2 occlusion;
 
-ligandBoundrData = cell(size(Nrods,2),size(irLigand,2),2);
-ligandOffrData = cell(size(Nrods,2),size(irLigand,2),2);
-ligandBoundcenterData = cell(size(Nrods,2),size(irLigand,2),2);
-ligandOffcenterData = cell(size(Nrods,2),size(irLigand,2),2);
-occlusionData = cell(size(Nrods,2),size(irLigand,2),2);
+                % create filenames
+%                 filename1 = strcat(subfolder1,'.',num2str(Nrods(n)),'.',num2str(irLigand(irL)));
+%                 filename2 = strcat(subfolder2,'.',num2str(Nrods(n)),'.',num2str(irLigand(irL)));
 
-for membrane=0:1:1
+                filename1 = 'SingleSegmentFreeSpaceLigandBound.N1.R1';
+                filename2 = 'SingleSegmentFreeSpaceLigandOff.N1.R1';
 
-    if (membrane)
-        subfoldersuffix = 'HalfSpace';
-    else
-        subfoldersuffix = 'FreeSpace';
-    end
-    
-    foldername1 = strcat(folder,'June072017SigmaRSweep',subfoldersuffix,'LigandOn');
-    foldername2 = strcat(folder,'June072017SigmaRSweep',subfoldersuffix,'LigandOff');
+                % read in data
+                M1 = dlmread(fullfile(foldername1,subfolder1,filename1));
+                M2 = dlmread(fullfile(foldername2,subfolder2,filename2));
 
-    subfolder1 = strcat(subfolderprefix,subfoldersuffix, 'LigandOn');
-    subfolder2 = strcat(subfolderprefix,subfoldersuffix, 'LigandOff');
+                % match file sizes, either by trimming or expanding dataset
+                if (size(M1,1) > size(M2,1))
+                    if (dataThin)
+                        % if trimming data down to size, randomly select rows
+                        % to remove from larger dataset
+                        MScrap  = M1;
+                        cutRows = randi([1 size(M1,1)],size(M2,1),1);
+                        M1      = MScrap(cutRows(:),:);
+                    else
+                        % if expanding data, randomly add data back into
+                        % dataset, then double both datasets by randomly
+                        % choosing and attaching more data from each dataset
+                        MScrap  = M2;
+                        addRows = randi([1 size(M2,1)],abs(size(M1,1)-size(M2,1)),1);
+                        M2      = [M2; MScrap(addRows(:),:);];
 
-    
-    for n = 1:length(Nrods)
-        for irL = 1:length(irLigand)
+                        % double the size of the data
+                        addRows1 = randi([1 size(M1,1)],size(M1,1),1);
+                        addRows2 = randi([1 size(M2,1)],size(M2,1),1);
+                        M1       = [M1; M1(addRows1(:),:)]; % removed second semi colon, not sure if it did anything
+                        M2       = [M2; M2(addRows2(:),:)];
+                    end
+                elseif (size(M1,1) < size(M2,1))
+                    if (dataThin)
+                        MScrap  = M2;
+                        cutRows = randi([1 size(M2,1)],size(M1,1),1);
+                        M2      = MScrap(cutRows(:),:);
+                    else
+                        MScrap  = M1;
+                        addRows = randi([1 size(M1,1)],abs(size(M2,1)-size(M1,1)),1);
+                        M1      = [M1; MScrap(addRows(:),:)];
 
-            clear M1 M2 r1 r2 ligandCenter1 ligandCenter2 occlusion;
+                        % double the size of the data
+                        addRows1 = randi([1 size(M1,1)],size(M1,1),1);
+                        addRows2 = randi([1 size(M2,1)],size(M2,1),1);
+                        M1       = [M1; M1(addRows1(:),:)];
+                        M2       = [M2; M2(addRows2(:),:)];
+                    end
 
-            %clearvars -except Nrods delta rho irLigand cutoff folder subfolder1 subfolder2 membrane irL ratio ratioMem ratioNoMem nearEnough available ableToBind;
-
-
-            % read in data
-            filename1 = strcat(subfolder1,'.',num2str(Nrods(n)),'.',num2str(irLigand(irL)));
-            filename2 = strcat(subfolder2,'.',num2str(Nrods(n)),'.',num2str(irLigand(irL)));
-
-            M1 = dlmread(fullfile(foldername1,subfolder1,filename1));
-            M2 = dlmread(fullfile(foldername2,subfolder2,filename2));
-
-            % truncate larger one by removing initial transient 
-            % (is this going to cause problems since kinase bound should be bigger file?  Better to force the
-            %shorter ones to run longer?  
-            if (size(M1,1) > size(M2,1))
-                if (dataThin)
-                    MScrap = M1;
-                    cutRows = randi([1 size(M1,1)],size(M2,1),1);
-                    M1 = MScrap(cutRows(:),:);
-
-                    disp(size(M1));
-                    disp(size(M2));
-                else
-                    MScrap = M2;
-                    addRows = randi([1 size(M2,1)],abs(size(M1,1)-size(M2,1)),1);
-                    M2 = [M2; MScrap(addRows(:),:);];
-                    
-                    % double the size of the data
-                    addRows1 = randi([1 size(M1,1)],size(M1,1),1);
-                    addRows2 = randi([1 size(M2,1)],size(M2,1),1);
-                    M1 = [M1; M1(addRows1(:),:);];
-                    M2 = [M2; M2(addRows2(:),:);];
-
-                    disp(size(M1));
-                    disp(size(M2));
                 end
-            elseif (size(M1,1) < size(M2,1))
-                if (dataThin)
-                    MScrap = M2;
-                    cutRows = randi([1 size(M2,1)],size(M1,1),1);
-                    M2 = MScrap(cutRows(:),:);
-                    
-                    disp(size(M1));
-                    disp(size(M2));
-                else
-                    MScrap = M1;
-                    addRows = randi([1 size(M1,1)],abs(size(M2,1)-size(M1,1)),1);
-                    M1 = [M1; MScrap(addRows(:),:);];
-                    
-                    % double the size of the data
-                    addRows1 = randi([1 size(M1,1)],size(M1,1),1);
-                    addRows2 = randi([1 size(M2,1)],size(M2,1),1);
-                    M1 = [M1; M1(addRows1(:),:);];
-                    M2 = [M2; M2(addRows2(:),:);];
-                    
-                    disp(size(M1));
-                    disp(size(M2));
+
+                % collect data for end point location and ligand center location
+                for i=1:3
+                    r1(:,i)             = M1(:, 11+(i-1));
+                    r2(:,i)             = M2(:, 11+(i-1));
+%                     ligandCenter1(:,i)  = M1(:, 7+3+(i-1));
+                    ligandCenter1(:,i)  = M1(:, 11+3+(i-1));
+                    ligandCenter2(:,i)  = M2(:, 11+3+(i-1));
                 end
+
+                % collect occlusion data from second data set
+                occlusion(:) = M2(:,11+3+3+1);
+
+                % create cell array of data
+                ligandBoundrData{n,irL,membrane+1}      = r1;
+                ligandOffrData{n,irL,membrane+1}        = r2;
+                ligandBoundcenterData{n,irL,membrane+1} = ligandCenter1;
+                ligandOffcenterData{n,irL,membrane+1}   = ligandCenter2;
+                occlusionData{n,irL,membrane+1}         = occlusion;
 
             end
-
-            % collect data for end point location and ligand center location
-            % probably don't need end point location
-            for i=1:3
-                r1(:,i) = M1(:, 4+(i-1));
-                r2(:,i) = M2(:,4+(i-1));
-                ligandCenter1(:,i) = M1(:,7+3+(i-1));
-                ligandCenter2(:,i) = M2(:,7+(i-1));
-            end
-
-%               for i=1:3
-%                   r1(:,i) = M1(:, 12+(Nrods(n)-1)*3+(i-1)); % take end point from bound ligand sim
-%                   r2(:,i) = M2(:,12+(Nrods(n)-1)*3+(i-1)); % take end point from unbound ligand sim
-%                   ligandCenter1(:,i) = M1(:,7+(Nrods(n))*3+3+(i-1)); % take bound ligand center
-%                   ligandCenter2(:,i) = M2(:,7+(Nrods(n))*3+(i-1)); % take unbound ligand center
-%               end
-
-            % create cell array of data
-
-            ligandBoundrData{n,irL,membrane+1} = r1;
-            ligandOffrData{n,irL,membrane+1} = r2;
-            ligandBoundcenterData{n,irL,membrane+1} = ligandCenter1;
-            ligandOffcenterData{n,irL,membrane+1} = ligandCenter2;
-
-            % collect occlusion data from second data set
-            occlusion(:) = M2(:,10);
-
-            occlusionData{n,irL,membrane+1} = occlusion;
-            %available(irL) = size(find(occlusion==0),2)
         end
     end
-
+    
+disp(savename);    
+save(savename,'ligandBoundrData','ligandOffrData','ligandBoundcenterData','ligandOffcenterData','occlusionData');
+if(exist(savename)==2)
+    disp('Exists!');
 end
-
-output = {ligandBoundrData,ligandOffrData,ligandBoundcenterData,ligandOffcenterData,occlusionData};
 
 
 end
