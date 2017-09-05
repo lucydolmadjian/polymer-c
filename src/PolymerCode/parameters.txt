@@ -20,3 +20,4 @@ parabolaWidth		0
 wallParabolaK		0
 repulsionFactor		0
 PhosElectroRange 	0
+localConcCutoff		1

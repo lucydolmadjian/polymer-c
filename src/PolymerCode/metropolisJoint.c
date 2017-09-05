@@ -565,8 +565,9 @@ void metropolisJoint()
                 iLigandCenter[iy][1] = r[iSiteCurrent][1] + irLigand*e1[iSiteCurrent][1];
                 iLigandCenter[iy][2] = r[iSiteCurrent][2] + irLigand*e1[iSiteCurrent][2];
             
-                stericOcclusion[iy] = 0; //set steric occlusion array to 0 for each iSite
-                membraneOcclusion[iy]=0; //set membrane occlusion array to 0 for each iSite
+                stericOcclusion[iy]             = 0; //set steric occlusion array to 0 for each iSite
+                membraneOcclusion[iy]           = 0; //set membrane occlusion array to 0 for each iSite
+                membraneAndSegmentOcclusion[iy] = 0; //set membrane and segment occlusion array to 0 for each iSite
             }
             
             
@@ -638,6 +639,7 @@ void metropolisJoint()
                         if(iSite[iy]==bSite[ib]) //test if iSite is bound already
                         {
                             stericOcclusion[iy]++;
+                            membraneAndSegmentOcclusion[iy]++;
                             ib=bSiteTotal;
                         }
                     }//didn't include base - assuming can't be bound to base
@@ -653,6 +655,7 @@ void metropolisJoint()
                         {
                             stericOcclusion[iy]++; //sterically occluded
                             membraneOcclusion[iy]++; //specifically occluded by the membrane
+                            membraneAndSegmentOcclusion[iy]++; //occluded by membrane or polymer segments (NOT other bound molecules)
                         }
                     }
                     else
@@ -662,6 +665,7 @@ void metropolisJoint()
                              (iLigandCenter[iy][1])*(iLigandCenter[iy][1]) +
                              (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= irLigand*irLigand )
                             stericOcclusion[iy]++;
+                            membraneAndSegmentOcclusion[iy]++;
                     
                         //didn't include base - don't want the base to violate the base
                     } // finished membrane tests
@@ -677,6 +681,7 @@ void metropolisJoint()
                             && i != iSite[iy])
                         {
                             stericOcclusion[iy]++;
+                            membraneAndSegmentOcclusion[iy]++;
                             i=N; // shortcut out of the loop
                         }
                     } // finished loop through joints

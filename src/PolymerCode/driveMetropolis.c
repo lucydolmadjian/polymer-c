@@ -77,7 +77,8 @@ long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;
 
 double baseLigandCenter[3], deliveryDistance;
 long stericOcclusionBase;
-long membraneOcclusion[NMAX];
+long membraneOcclusion[NMAX], membraneAndSegmentOcclusion[NMAX];
+double localConcCutoff;
 int deliveryMethod;
 
 long boundToBaseDeliver[NMAX];

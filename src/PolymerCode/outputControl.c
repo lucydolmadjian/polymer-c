@@ -11,6 +11,7 @@ void dataRecording();
 double reeBar_sum, ree2Bar_sum, rMBar_sum;
 long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX], PMembraneOcclude_sum[NMAX];
 double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX], reeiSite[NMAX], rMBar;
+double distiSiteToLigand[NMAX][NMAX], selfBind[NMAX][NMAX], localConcentration[NMAX][NMAX];
 double occupied[NMAX];
 double binSize;
 
@@ -22,9 +23,9 @@ void initializeSummary()
     ree2Bar_sum  = 0;
     for(iy=0;iy<iSiteTotal;iy++)
     {
-        POcclude_sum[iy]          = 0;
-        Prvec0_sum[iy]            = 0;
-        PMembraneOcclude_sum[iy]  = 0;
+        POcclude_sum[iy]                = 0;
+        Prvec0_sum[iy]                  = 0;
+        PMembraneOcclude_sum[iy]        = 0;
     }
     POccludeBase_sum = 0;
 //    for(ib=0; ib<bSiteTotal; ib++)
@@ -41,15 +42,16 @@ void initializeSummary()
 void finalizeSummary()
 {
     // finalize summary statistics
-    reeBar = reeBar_sum/(double)(nt-NTCHECK);
+    reeBar  = reeBar_sum/(double)(nt-NTCHECK);
     ree2Bar = ree2Bar_sum/(double)(nt-NTCHECK);
 
 	
     for(iy=0;iy<iSiteTotal;iy++)
     {
-        POcclude[iy] = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
-        Prvec0[iy] = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
+        POcclude[iy]         = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
+        Prvec0[iy]           = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
         PMembraneOcclude[iy] = (double)PMembraneOcclude_sum[iy]/(double)(nt-NTCHECK);
+
     }
     
     POccludeBase = (double)POccludeBase_sum/(double)(nt-NTCHECK);
@@ -164,6 +166,60 @@ void dataRecording()
             if (r[i][2]>rH)
                 rH = r[i][2];
     }
+
+    
+    /* LOCAL CONCENTRATION */
+    
+    // initialize local concentration arrays
+    for(iy=0; iy<iSiteTotal;iy++)
+    {
+        for(ib=0;ib<bSiteTotal;ib++)
+        {
+            distiSiteToLigand[iy][ib]  = 0;
+            selfBind[iy][ib]           = 0;
+            localConcentration[iy][ib] = 0;
+        }
+    }
+    // calculate distance between each ligand and iSite center
+    for(iy=0;iy<iSiteTotal;iy++)
+    {
+        for(ib=0;ib<bSiteTotal;ib++)
+        {
+            distiSiteToLigand[iy][ib] = sqrt((iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0])+
+                                             (iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1])+
+                                             (iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2]));
+        }
+    }
+    
+    // determine if distance is less than given cutoff AND iSite is not occluded
+    for(iy=0;iy<iSiteTotal;iy++)
+    {
+        // if iSite is not occluded
+        if(membraneAndSegmentOcclusion[iy] == 0)
+        {
+            // test how far away each ligand is
+            for(ib=0;ib<bSiteTotal;ib++)
+            {
+                if(distiSiteToLigand[iy][ib] < localConcCutoff)
+                {
+                    // if ligand is close enough (distance less than cutoff), ligand can bind
+                    selfBind[iy][ib]++;
+                }
+            }
+        }
+    }
+    
+    // determine local concentration
+    for(iy=0;iy<iSiteTotal;iy++)
+    {
+        for(ib=0;ib<bSiteTotal;ib++)
+        {
+            localConcentration[iy][ib] = ((double)selfBind[iy][ib]/(double)(nt-NTCHECK)) / ((double) 4/3*pow(localConcCutoff,3)*PI);
+        }
+    }
+
+    
+    
 	
     // Verbose output: One line is written each iteration.
     if (verboseTF)
@@ -242,12 +298,12 @@ void dataRecording()
         
         for(iy=0;iy<iSiteTotal;iy++)
         {
-			POcclude_sum[iy] += (long)(stericOcclusion[iy]>0);
-			Prvec0_sum[iy]   += (long)(reeiSite[iy] < (double)N/(double)NBINS);
+			POcclude_sum[iy]         += (long)(stericOcclusion[iy]>0);
+			Prvec0_sum[iy]           += (long)(reeiSite[iy] < (double)N/(double)NBINS);
             PMembraneOcclude_sum[iy] += (long)(membraneOcclusion[iy]>0);
 			
         }
-        POccludeBase_sum += (long)(stericOcclusionBase>0);
+        POccludeBase_sum  += (long)(stericOcclusionBase>0);
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);
         rMBar_sum    += rM;
 
