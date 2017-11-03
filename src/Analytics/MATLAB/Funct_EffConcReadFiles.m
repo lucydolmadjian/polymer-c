@@ -3,7 +3,7 @@
 % WOULD all of this be easier with a structure?
 
 %function [] = Funct_EffConcReadFiles(savename,Nrods,irLigand,folder,subfolderprefix,dataThin)
-function [] = Funct_EffConcReadFiles(savename,Nrods,irLigand,dataThin)
+function [] = Funct_EffConcReadFiles(savename,dataFolder,Nrods,irLigand,dataThin)
 
 % Initialize data cell arrays
 % size: length of Nrods, length of irLigand, membrane on/off
@@ -18,11 +18,11 @@ occlusionData           = cell(size(Nrods,2),size(irLigand,2),2);
         % construct appropriate folder/filenames
         % REALLY need to have this completely separate - shouldn't need to
         % modify this
-%         if (membrane)
-%             subfoldersuffix = 'HalfSpace';
-%         else
-%             subfoldersuffix = 'FreeSpace';
-%         end
+        if (membrane)
+            subfolderprefix = 'HalfSpace_';
+        else
+            subfolderprefix = 'FreeSpace_';
+        end
 % 
 %         foldername1 = strcat(folder,'June072017SigmaRSweep',subfoldersuffix,'LigandOn');
 %         foldername2 = strcat(folder,'June072017SigmaRSweep',subfoldersuffix,'LigandOff');
@@ -30,12 +30,11 @@ occlusionData           = cell(size(Nrods,2),size(irLigand,2),2);
 %         subfolder1  = strcat(subfolderprefix,subfoldersuffix, 'LigandOn');
 %         subfolder2  = strcat(subfolderprefix,subfoldersuffix, 'LigandOff');
 
-          foldername1 = '~/Documents/polymer-c_runs/';
-          subfolder1  = '2017_08_15_EffectiveConcentrationSingleSegment';
+          foldername1 = dataFolder;
+          subfolder1  = strcat(subfolderprefix,'LigandBound');
           
-          
-          foldername2 = '~/Documents/polymer-c_runs/';
-          subfolder2  = '2017_08_15_EffectiveConcentrationSingleSegment';
+          foldername2 = dataFolder;
+          subfolder2  = strcat(subfolderprefix,'LigandOff');
 
 
         for n = 1:length(Nrods)
@@ -49,11 +48,8 @@ occlusionData           = cell(size(Nrods,2),size(irLigand,2),2);
                 clear M1 M2 r1 r2 ligandCenter1 ligandCenter2 occlusion;
 
                 % create filenames
-%                 filename1 = strcat(subfolder1,'.',num2str(Nrods(n)),'.',num2str(irLigand(irL)));
-%                 filename2 = strcat(subfolder2,'.',num2str(Nrods(n)),'.',num2str(irLigand(irL)));
-
-                filename1 = 'SingleSegmentFreeSpaceLigandBound.N1.R1';
-                filename2 = 'SingleSegmentFreeSpaceLigandOff.N1.R1';
+                filename1 = strcat(subfolder1,'.N.',num2str(Nrods(n)),'.R.',num2str(irLigand(irL)));
+                filename2 = strcat(subfolder2,'.N.',num2str(Nrods(n)),'.R.',num2str(irLigand(irL)));
 
                 % read in data
                 M1 = dlmread(fullfile(foldername1,subfolder1,filename1));
@@ -123,10 +119,11 @@ occlusionData           = cell(size(Nrods,2),size(irLigand,2),2);
         end
     end
     
-disp(savename);    
-save(savename,'ligandBoundrData','ligandOffrData','ligandBoundcenterData','ligandOffcenterData','occlusionData');
+disp(savename);   
 if(exist(savename)==2)
     disp('Exists!');
+else
+    save(savename,'ligandBoundrData','ligandOffrData','ligandBoundcenterData','ligandOffcenterData','occlusionData');
 end
 
 
