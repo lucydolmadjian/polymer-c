@@ -49,20 +49,21 @@ double timeArray[STATEMAX];
 int currentState,iy,it,iterations, stepCount;
 
 
-double stateMatrix[STATEMAX][ISITEMAX];
+double rateMatrix[STATEMAX][ISITEMAX],rateMatrix1[STATEMAX][ISITEMAX],rateMatrix2[STATEMAX][ISITEMAX];
 int i,j,k;
 int iSiteTotal,newState;
 
-int sizeOfStateMatrix;
+int sizeOfRateMatrix;
+int totalBound[STATEMAX];
 int verbose, summaryOn;
 
 double reverseRate;
-int reverseRateTotalInstances;
 
 /*******************************************************************************/
 //  INCLUDES
 /*******************************************************************************/
 
+#include "binaryConversion.c"
 #include "outputGillespie.c"
 #include "runGillespie.c"
 
@@ -78,29 +79,34 @@ int main( int argc, char *argv[] )
     printf("This program is starting.\n");
     
     if(argv[1]) // matrixName
-        strcpy(matrixName, argv[1]);
-    if (TALKATIVE) printf("This is argument 1: %s\n", matrixName);
+        strcpy(matrixName1, argv[1]);
+    if (TALKATIVE) printf("This is argument 1: %s\n", matrixName1);
     
-    if(argv[2]) //iSiteTotal
-        iSiteTotal = atoi(argv[2]);
-    if (TALKATIVE) printf("This is argument 2: %d\n", iSiteTotal);
     
-    if(argv[3]) //total number of iterations
-        iterations = atoi(argv[3]);
-    if (TALKATIVE) printf("This is argument 3: %d\n", iterations);
+    if(argv[2]) // matrixName
+        strcpy(matrixName2, argv[2]);
+    if (TALKATIVE) printf("This is argument 2: %s\n", matrixName2);
+    
+    if(argv[3]) //iSiteTotal
+        iSiteTotal = atoi(argv[3]);
+    if (TALKATIVE) printf("This is argument 3: %d\n", iSiteTotal);
     
     if(argv[4]) //total number of iterations
-        reverseRate = atoi(argv[4]);
-    if (TALKATIVE) printf("This is argument 4: %d\n", reverseRate);
+        iterations = atoi(argv[4]);
+    if (TALKATIVE) printf("This is argument 4: %d\n", iterations);
     
-    if(argv[5]) //output file name
-        strcpy(outputName, argv[5]);
-    if (TALKATIVE) printf("This is argument 5: %s\n", outputName);
+    if(argv[5]) //total number of iterations
+        reverseRate = atoi(argv[5]);
+    if (TALKATIVE) printf("This is argument 5: %d\n", reverseRate);
     
     if(argv[6]) //output file name
+        strcpy(outputName, argv[6]);
+    if (TALKATIVE) printf("This is argument 6: %s\n", outputName);
+    
+    if(argv[7]) //output file name
     {
-        strcpy(summaryOutputName, argv[6]);
-    if (TALKATIVE) printf("This is argument 6: %s\n", summaryOutputName);
+        strcpy(summaryOutputName, argv[7]);
+    if (TALKATIVE) printf("This is argument 7: %s\n", summaryOutputName);
         summaryOn = 1;
     }
     else

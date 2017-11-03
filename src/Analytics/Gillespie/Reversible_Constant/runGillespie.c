@@ -7,18 +7,18 @@ void runGillespie()
     
     /****************************** Create State Matrix from File ***********************/
 
-    sizeOfStateMatrix = (int) pow(2,iSiteTotal);
+    sizeOfRateMatrix = (int) pow(2,iSiteTotal);
     
-    
-    char line[200];
+    // import first rate matrix
+    char line1[200];
     i=0;
     j=0;
     
-    ratesFile = fopen(matrixName,"r");
+    ratesFile = fopen(matrixName1,"r");
     
-    while (fgets(line, sizeof(line), ratesFile))
+    while (fgets(line1, sizeof(line1), ratesFile))
     {
-        stateMatrix[i][j]=atof(line);
+        rateMatrix1[i][j]=atof(line1);
         j++;
         if ((j%iSiteTotal) == 0)
         {
@@ -30,16 +30,36 @@ void runGillespie()
     
     fclose(ratesFile);
     
-    // replace 0 rates with reverseRate variable
+    // import second rate matrix
+    char line2[200];
+    i=0;
+    j=0;
     
-    for (i=0;i<sizeOfStateMatrix;i++)
+    ratesFile = fopen(matrixName2,"r");
+    
+    while (fgets(line2, sizeof(line2), ratesFile))
+    {
+        // import reverse values, multiply by variable constant
+        rateMatrix2[i][j]=reverseRate*atof(line2);
+        j++;
+        if ((j%iSiteTotal) == 0)
+        {
+            i++;
+            j=0;
+        }
+        
+    }
+    
+    fclose(ratesFile);
+    
+    // concatenate matrices into full rate matrix
+    
+    for (i=0;i<sizeOfRateMatrix;i++)
     {
         for (j=0;j<iSiteTotal;j++)
         {
-            if (stateMatrix[i][j]==0)
-            {
-                stateMatrix[i][j] = reverseRate;
-            }
+            //efficient, but not as safe - include if/else/reject statements instead?
+            rateMatrix[i][j] = rateMatrix1[i][j] + rateMatrix2[i][j];
         }
     }
             
@@ -48,27 +68,13 @@ void runGillespie()
     if(1)
     {
         
-        // need to improve this debugging part - won't work if reverse = forward in any case
-//        // count instances of reverseRate
-//        for (i=0;i<sizeOfStateMatrix;i++)
-//        {
-//            for (j=0;j<iSiteTotal;j++)
-//            {
-//                if (stateMatrix[i][j]==reverseRate)
-//                {
-//                    reverseRateTotalInstances++;
-//                }
-//            }
-//        }
         
-        printf("Total reverse: %f\n",reverseRateTotalInstances);
-        
-        // print state matrix
-        for (i=0;i<sizeOfStateMatrix;i++)
+        // print rate matrix
+        for (i=0;i<sizeOfRateMatrix;i++)
         {
             for (j=0;j<iSiteTotal;j++)
             {
-                printf("%lf ", stateMatrix[i][j]);
+                printf("%lf ", rateMatrix[i][j]);
             
             }
         
@@ -76,8 +82,9 @@ void runGillespie()
         }
     }
     
+    /******************************* Binary Conversion ******************************************/
     
-
+    binaryConversion();
     
     /******************************* Gillespie ******************************************/
     
@@ -106,9 +113,9 @@ void runGillespie()
             
             for (iy=0;iy<iSiteTotal;iy++)
             {
-                if (stateMatrix[currentState][iy]!=0)
+                if (rateMatrix[currentState][iy]!=0)
                 {
-                    randTime[iy] = - log(TWISTER)/stateMatrix[currentState][iy]; //exponentially distributed random variable based on transition rate
+                    randTime[iy] = - log(TWISTER)/rateMatrix[currentState][iy]; //exponentially distributed random variable based on transition rate
                 }
                 else //this should be redundant since replaced zeros with reverse rates
                 {
