@@ -12,8 +12,6 @@
 #define ISITEMAX   9
 #define STATEMAX   1000000000
 #define ITMAX      1e9
-#define NTOPPATHS  50
-#define TIME       0
 #define TALKATIVE  1
 
 #include <math.h>
@@ -29,25 +27,17 @@
 //  GLOBAL VARIABLES
 /*******************************************************************************/
 
-char matrixName[1000];
+char matrixName1[1000];
+char matrixName2[1000];
 FILE *ratesFile;
 long iseed;
 
 char outputName[1000];
 FILE *outputFile;
 
-char summaryOutputName[1000];
-FILE *summaryOutputFile;
 
-char timeOutputName[1000];
-FILE *timeOutputFile;
-
-
-
-double timeTotal,randTime[ISITEMAX],timeStep,timeSum;
-double timeArray[STATEMAX];
-int currentState,iy,it,iterations, stepCount;
-
+double timeTotal,randTime[ISITEMAX],timeStep,timeEnd;
+int currentState,iy,it,iterations;
 
 double rateMatrix[STATEMAX][ISITEMAX],rateMatrix1[STATEMAX][ISITEMAX],rateMatrix2[STATEMAX][ISITEMAX];
 int i,j,k;
@@ -55,9 +45,14 @@ int iSiteTotal,newState;
 
 int sizeOfRateMatrix;
 int totalBound[STATEMAX];
+double binaryState[STATEMAX];
 int verbose, summaryOn;
+int stateStorage[100000],numberStatesStored;
 
 double reverseRate;
+
+double finalTotalTime;
+int finalState;
 
 /*******************************************************************************/
 //  INCLUDES
@@ -92,30 +87,17 @@ int main( int argc, char *argv[] )
     if (TALKATIVE) printf("This is argument 3: %d\n", iSiteTotal);
     
     if(argv[4]) //total number of iterations
-        iterations = atoi(argv[4]);
-    if (TALKATIVE) printf("This is argument 4: %d\n", iterations);
+        timeEnd = atof(argv[4]);
+    if (TALKATIVE) printf("This is argument 4: %f\n", timeEnd);
     
     if(argv[5]) //total number of iterations
-        reverseRate = atoi(argv[5]);
-    if (TALKATIVE) printf("This is argument 5: %d\n", reverseRate);
+        reverseRate = atof(argv[5]);
+    if (TALKATIVE) printf("This is argument 5: %f\n", reverseRate);
     
     if(argv[6]) //output file name
         strcpy(outputName, argv[6]);
     if (TALKATIVE) printf("This is argument 6: %s\n", outputName);
     
-    if(argv[7]) //output file name
-    {
-        strcpy(summaryOutputName, argv[7]);
-    if (TALKATIVE) printf("This is argument 7: %s\n", summaryOutputName);
-        summaryOn = 1;
-    }
-    else
-    {
-        summaryOn = 0;
-    if (TALKATIVE) printf("No summary file will be created.\n");
-    }
-
-
     
 	iseed = RanInitReturnIseed(0);
 	

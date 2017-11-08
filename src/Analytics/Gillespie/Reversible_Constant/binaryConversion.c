@@ -7,7 +7,8 @@ void binaryConversion();
 //  GLOBAL VARIABLES for binary conversion
 /*******************************************************************************/
 
-int remainder,base,num,no_of_1s;
+int leftover,base,num,no_of_1s;
+double binary;
 
 /*******************************************************************************/
 
@@ -28,16 +29,17 @@ void binaryConversion()
         num      = i;
         while (num > 0)
         {
-            remainder = num % 2;
+            leftover = num % 2;
             /*  To count no.of 1s */
-            if (remainder == 1)
+            if (leftover == 1)
             {
                 no_of_1s++;
             }
-            binary = binary + remainder * base;
+            binary = binary + leftover * base;
             num = num / 2;
             base = base * 10;
         }
+        binaryState[i] = binary;
         totalBound[i] = no_of_1s;
      }
     
@@ -47,7 +49,13 @@ void binaryConversion()
         // print matrix of number bound
         for (i=0;i<sizeOfRateMatrix;i++)
         {
-            printf("Number bound: %lf \n", totalBound[i]);
+            printf("Number bound: %d \n", totalBound[i]);
+        }
+        
+        // print matrix of binary numbers
+        for (i=0;i<sizeOfRateMatrix;i++)
+        {
+            printf("binaryState: %lf \n", binaryState[i]);
         }
     }
     
