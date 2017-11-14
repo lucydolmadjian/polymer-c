@@ -10,7 +10,7 @@
 #define PI         3.14159265359
 #define INF        1e14
 #define ISITEMAX   9
-#define STATEMAX   1000000000
+#define STATEMAX   1000
 #define ITMAX      1e9
 #define TALKATIVE  1
 
@@ -29,17 +29,18 @@
 
 char matrixName1[1000];
 char matrixName2[1000];
-FILE *ratesFile;
+FILE *ratesFile1;
+FILE *ratesFile2;
 long iseed;
 
 char outputName[1000];
 FILE *outputFile;
 
 
-double timeTotal,randTime[ISITEMAX],timeStep,timeEnd;
+double timeTotal,randTime[STATEMAX],timeStep,timeEnd;
 int currentState,iy,it,iterations;
 
-double rateMatrix[STATEMAX][ISITEMAX],rateMatrix1[STATEMAX][ISITEMAX],rateMatrix2[STATEMAX][ISITEMAX];
+double rateMatrix[STATEMAX][STATEMAX],rateMatrix1[STATEMAX][STATEMAX],rateMatrix2[STATEMAX][STATEMAX];
 int i,j,k;
 int iSiteTotal,newState;
 
