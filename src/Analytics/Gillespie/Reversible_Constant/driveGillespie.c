@@ -29,8 +29,7 @@
 
 char matrixName1[1000];
 char matrixName2[1000];
-FILE *ratesFile1;
-FILE *ratesFile2;
+FILE *ratesFile;
 long iseed;
 
 char outputName[1000];
