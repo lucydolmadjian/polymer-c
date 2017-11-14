@@ -122,7 +122,7 @@ void runGillespie()
         }
         
         //pick smallest of random times
-        for (iy=0;iy<iSiteTotal;iy++)
+        for (iy=0;iy<sizeOfRateMatrix;iy++)
         {
             if (randTime[iy]!= 0)  // 0 time is not an option
             {
@@ -174,6 +174,8 @@ void runGillespie()
     
 }
 
+/*************************************Initialize Store States********************************************/
+/************************************************************************************************************************/
 void initializeStoreStates()
 {
     //initialize state storage
@@ -185,8 +187,8 @@ void initializeStoreStates()
     }
     
 }
-
-
+/******************************************Store States*************************************************************/
+/************************************************************************************************************************/
 void storeStates()
 {
     for (i=0;i<numberStatesStored-1;i++)
@@ -194,7 +196,7 @@ void storeStates()
         stateStorage[i] = stateStorage[i+1];
     }
     
-    stateStorage[numberStatesStored] = totalBound[currentState];
+    stateStorage[numberStatesStored-1] = totalBound[currentState];
 }
     
 
