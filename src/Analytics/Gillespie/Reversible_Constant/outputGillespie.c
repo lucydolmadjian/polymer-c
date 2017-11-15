@@ -29,6 +29,9 @@ void outputGillespie()
     outputFile = fopen(outputName, "a");
 
     
+    fprintf(outputFile, "%f ", reverseRate);
+    fprintf(outputFile, "%d ", iSiteTotal);
+    fprintf(outputFile, "%f ", timeEnd);
     fprintf(outputFile, "%f ", averagePhosphorylationState);
     fprintf(outputFile, "%d ", finalState);
     fprintf(outputFile, "%d ", finalPhosphorylationState);

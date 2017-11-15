@@ -44,7 +44,7 @@ void binaryConversion()
      }
     
     //debugging
-    if(1)
+    if(0)
     {
         // print matrix of number bound
         for (i=0;i<sizeOfRateMatrix;i++)

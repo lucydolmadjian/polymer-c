@@ -67,7 +67,7 @@ void runGillespie()
             
     
     //debugging
-    if(1)
+    if(0)
     {
         
         
