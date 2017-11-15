@@ -48,6 +48,7 @@ int totalBound[STATEMAX];
 double binaryState[STATEMAX];
 int verbose, summaryOn;
 int stateStorage[100000],numberStatesStored;
+double timeStorage[100000];
 
 double reverseRate;
 

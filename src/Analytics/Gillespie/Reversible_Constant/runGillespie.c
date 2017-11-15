@@ -149,6 +149,15 @@ void runGillespie()
         
         //update time
         timeTotal += timeStep;
+        
+        // record current state and timestep before updating - matches state with time spent in that state
+        /******************************* Store Last 100 States ******************************************/
+        //update stored states
+        storeStates();
+        /*************************************************************************************************/
+        
+        
+        
         //update state
         currentState = newState;
     
@@ -157,10 +166,7 @@ void runGillespie()
         printf("Current State is: %d \n", currentState);
         
 
-        /******************************* Store Last 100 States ******************************************/
-        //update stored states
-        storeStates();
-        /*************************************************************************************************/
+
         
 
         it++;
@@ -184,6 +190,7 @@ void initializeStoreStates()
     for (i=0;i<numberStatesStored;i++)
     {
         stateStorage[i] = 0;
+        timeStorage[i]  = 0;
     }
     
 }
@@ -194,9 +201,25 @@ void storeStates()
     for (i=0;i<numberStatesStored-1;i++)
     {
         stateStorage[i] = stateStorage[i+1];
+        timeStorage[i]  = timeStorage[i+1];
     }
     
     stateStorage[numberStatesStored-1] = totalBound[currentState];
+    timeStorage[numberStatesStored-1]  = timeStep;
+    
+    if(0)
+    {
+        for (i=0;i<numberStatesStored;i++)
+        {
+            printf("State Storage %d: %d\n", i, stateStorage[i]);
+        }
+    
+        for (i=0;i<numberStatesStored;i++)
+        {
+            printf("Time Storage %d: %f\n", i, timeStorage[i]);
+        }
+    
+    }
 }
     
 
