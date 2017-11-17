@@ -11,7 +11,7 @@
 #define INF        1e14
 #define ISITEMAX   9
 #define STATEMAX   1000
-#define ITMAX      1e9
+#define ITMAX      100000000
 #define TALKATIVE  1
 
 #include <math.h>
@@ -40,7 +40,7 @@ double timeTotal,randTime[STATEMAX],timeStep,timeEnd;
 int currentState,iy,it,iterations;
 
 double rateMatrix[STATEMAX][STATEMAX],rateMatrix1[STATEMAX][STATEMAX],rateMatrix2[STATEMAX][STATEMAX];
-int i,j,k;
+int i,j,k,iter;
 int iSiteTotal,newState;
 
 int sizeOfRateMatrix;
@@ -50,10 +50,15 @@ int verbose, summaryOn;
 int stateStorage[100000],numberStatesStored;
 double timeStorage[100000];
 
+double timeAvgDuration;
+int stateStorage_End[ITMAX];
+double timeStorage_End[ITMAX];
+
 double reverseRate;
 
 double finalTotalTime;
 int finalState;
+int verboseTF;
 
 /*******************************************************************************/
 //  INCLUDES
@@ -98,6 +103,14 @@ int main( int argc, char *argv[] )
     if(argv[6]) //output file name
         strcpy(outputName, argv[6]);
     if (TALKATIVE) printf("This is argument 6: %s\n", outputName);
+    
+    if(argv[7]) //verbose T/F
+        verboseTF = atoi(argv[7]);
+    if (TALKATIVE) printf("This is argument 7: %d\n", verboseTF);
+    
+    if(argv[8]) //time to average over
+        timeAvgDuration = atof(argv[8]);
+    if (TALKATIVE) printf("This is argument 8: %f\n", timeAvgDuration);
     
     
 	iseed = RanInitReturnIseed(0);
