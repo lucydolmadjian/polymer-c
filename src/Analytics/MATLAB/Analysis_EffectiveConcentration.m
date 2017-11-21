@@ -6,10 +6,10 @@ clear all;
 close all;
 
 %% Initialize parameters
-NRODS       = [1];              % number of segments
+NRODS       = [1];                  % number of segments
 delta       = 1;                    % Kuhn length
 rho         = 0:1:10;               % separation distance between two polymers
-irLigand    = [1];           % ligand size
+irLigand    = [1];                  % ligand size
 cutoff      = 2;                    % cutoff for ligand being 'close' to binding site, in Kuhn lengths
 %stDevDex   = (5.6/0.3)/(sqrt(3));  % divide by 0.3 to put in kuhn lengths, divide by sqrt(3) to get each individual dimension stdev
                                         %set to zero to remove influence of dextran
@@ -23,19 +23,20 @@ folder          = '~/Documents/polymer-c_runs/2017_08_15_EffectiveConcentrationS
 %subfolderprefix = 'SPROcclusion';
 
 % filename with appropriate data, or place to save appropriate data
-dataFilename    = strcat('2017_08_22_SPRData_','N',num2str(NRODS(1)),'to',num2str(NRODS(end)),...
-                         '_irL_',num2str(irLigand(1)),'to',num2str(irLigand(end)),'_AlwaysOcc');
+dataFilename    = strcat('2017_08_22_SPRData','_N_',num2str(NRODS(1)),'-',num2str(NRODS(end)),...
+                         '_irL_',num2str(irLigand(1)),'-',num2str(irLigand(end)));
 
 savefolder      = '~/Google Drive/polymer-c/polymer-c_data_and_figures/SurfaceEffects/EffectiveConcentrationKernel/UpdatedJune072017';
  
+dataFolder = '~/Documents/polymer-c_runs/2017_08_15_EffectiveConcentrationSingleSegment';
 %% Read in data
-    
+
 % PLAY WITH THIS - include full file path, possibly 'file' restriction
 if( exist(strcat(dataFilename,'.mat'),'file') == 2 )
     load(dataFilename);
 else
 %     Funct_EffConcReadFiles(dataFilename,NRODS,irLigand,folder,subfolderprefix,dataThin);
-    Funct_EffConcReadFiles(dataFilename,NRODS,irLigand,dataThin);
+    Funct_EffConcReadFiles(dataFilename,dataFolder,NRODS,irLigand,dataThin);
     load(dataFilename);
 end
 
@@ -54,8 +55,7 @@ sigmaTheory         = zeros(length(NRODS),200);
 
 %% Calculate effective concentration    
 for n = 1:length(NRODS)
-    %for membrane=0:1:1
-    for membrane = 0
+    for membrane=0:1:1
         for irL = 1:length(irLigand)
             clear ligandCenter1 occlusion availability;
             
@@ -63,13 +63,6 @@ for n = 1:length(NRODS)
             ligandCenter1 = ligandBoundcenterData{n,irL,membrane+1};
             occlusion     = occlusionData{n,irL,membrane+1};
             availability  = ~occlusion; % need availability, not occlusion
-            
-            % create random matrix of Dextran shifts - only use if in
-            % free-space
-            if (~membrane)
-                dextranShift1        = normrnd(0,stDevDex,[size(ligandCenter1,1),size(ligandCenter1,2)]);
-                ligandCenter1        = ligandCenter1+dextranShift1;
-            end
 
                 for r = 1:length(rho)
                     clear ligandCenter2shifted ligandOffrDatashifted distance distanceClose bindingAvailability;
@@ -91,6 +84,10 @@ for n = 1:length(NRODS)
                     % free-space
 
                     if (~membrane)
+                        
+                        dextranShift1        = normrnd(0,stDevDex,[size(ligandCenter1,1),size(ligandCenter1,2)]);
+                        ligandCenter1        = ligandCenter1+dextranShift1;
+                        
                         dextranShift2        = normrnd(0,stDevDex,[size(ligandCenter2shifted,1),size(ligandCenter2shifted,2)]);
                         ligandCenter2shifted = ligandCenter2shifted+dextranShift2;
                         % SHOULD also shift r data in case want it
@@ -149,9 +146,11 @@ for n = 1:length(NRODS)
     %% Calculate magnitude of concentration ehancement from sigma at r = 0
     % where does the 2*pi come from?  I expect it should be 4*pi*N?
     %cN  = (4*pi/3)^(3/2)*(1/sigma(1));
+    
+    % cN(NRODS, IRLIGAND, MEMBRANE)
     cN(n, :, :) = (4*pi*delta^2*NRODS(n)/3)^(3/2)*sigma(n, :, :, 1);
     
-    %% Ratio of Sigma(r) nondimensionalized without membrane vs with membrane
+    %% Sigma(r) nondimensionalized
 
     sigmaNondim(n,:,:,:)      = sigma(n,:,:,:).*delta^3.*NRODS(n)^(3/2);
     sigmaErrorNondim(n,:,:,:) = sigmaError(n,:,:,:).*delta^3.*NRODS(n)^(3/2);
@@ -164,12 +163,12 @@ for n = 1:length(NRODS)
 
 end
 
-%% Calculate ratios
+%% Calculate ratio of sigma half space to free space, with error
 
 ratioHalftoFreeSpace = sigma(:,:,2,:)./sigma(:,:,1,:);
 ratioError           = abs(sigmaNondim(:,:,2,:)./sigmaNondim(:,:,1,:)).*...
                         sqrt((sigmaErrorNondim(:,:,1,:)./sigmaNondim(:,:,1,:)).^2+...
-                             (sigmaErrorNondim(:,:,2,:)./sigmaNondim(:,:,1,:)).^2);
+                             (sigmaErrorNondim(:,:,2,:)./sigmaNondim(:,:,2,:)).^2);
 
 %% Save variables for plotting
 
@@ -178,7 +177,6 @@ save(saveFilename,'NRODS','irLigand','delta','rho','sigma','sigmaError','rhoArra
     
 %% Plot effective concentration
 
-[plot1, plot2] = Funct_EffConcPlots(saveFilename,saveTF,membrane);
+Funct_EffConcPlots(saveFilename,savefolder,saveTF);
     
 
- 
