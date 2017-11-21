@@ -18,6 +18,7 @@ bSiteCommand		3
 parabolaDepth		0
 parabolaWidth		0
 wallParabolaK		0
-repulsionFactor		0
+Erepulsion		0
+Zrepulsion		0
 PhosElectroRange 	0
 localConcCutoff		1

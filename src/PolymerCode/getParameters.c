@@ -75,8 +75,11 @@ void getParameters()
     fscanf(paramsFile,"%s %lf", tmpString, &wallParabolaK);
     if (TALKATIVE) printf("This is wall parabola K: %lf\n", wallParabolaK);
     
-    fscanf(paramsFile,"%s %lf", tmpString, &repulsionFactor);
-    if (TALKATIVE) printf("This is repulsion factor: %lf\n", repulsionFactor);
+    fscanf(paramsFile,"%s %lf", tmpString, &Erepulsion);
+    if (TALKATIVE) printf("This is Erepulsion: %lf\n", Erepulsion);
+    
+    fscanf(paramsFile,"%s %lf", tmpString, &Zrepulsion);
+    if (TALKATIVE) printf("This is Zrepulsion: %lf\n", Zrepulsion);
     
     fscanf(paramsFile,"%s %d", tmpString, &PhosElectroRange);
     if (TALKATIVE) printf("This is PhosElectroRange: %d\n", PhosElectroRange);
