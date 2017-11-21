@@ -16,8 +16,8 @@ function [plot1,plot2] = Funct_EffConcPlots(saveFilename,saveTF,membrane)
     end
     fig = plot(rhoArray/(delta*sqrt(NRODS(n))), sigmaTheory*delta^3*NRODS(n)^(3/2),'k--','LineWidth',1.5);
         legend('Ligand Radius = 0','Ligand Radius = 1','Ligand Radius = 5','Ligand Radius = 10','WLC Theory');
-        pos = get(gcf, 'position');
-        set(gcf,'units','centimeters','position',[[1 1],40,30]);
+        %pos = get(gcf, 'position');
+        %set(gcf,'units','centimeters','position',[[1 1],40,30]);
         xlabel1 = 'Separation Distance, r/l';
         ylabel1 = 'Concentration, \sigma*l^3';
         title1 = strcat('N = ',num2str(NRODS(n)),'     Membrane = ', num2str(membrane));
@@ -40,8 +40,8 @@ function [plot1,plot2] = Funct_EffConcPlots(saveFilename,saveTF,membrane)
     fig2 = plot(rhoArray, sigmaTheory,'k--','LineWidth',1.5);
         legend('Ligand Radius = 0','Ligand Radius = 1','Ligand Radius = 5',...
                'Ligand Radius = 10','WLC Theory');
-        pos = get(gcf, 'position');
-        set(gcf,'units','centimeters','position',[[1 1],40,30]);
+        %pos = get(gcf, 'position');
+        %set(gcf,'units','centimeters','position',[[1 1],40,30]);
         xlabel1 = 'Separation Distance, r';
         ylabel1 = 'Concentration, \sigma';
         title1 = strcat('N = ',num2str(NRODS(n)),'     Membrane = ', num2str(membrane));
@@ -91,8 +91,8 @@ function [plot1,plot2] = Funct_EffConcPlots(saveFilename,saveTF,membrane)
         %subplot(2,2,membrane+(2*(n-1)+1)); hold on;
         %ylim([0 max(max(max(Fig1Max)))]);
 
-        figure(1);
-        title('Edits');
+        %figure(1);
+        %title('Edits');
         %subplot(2,2,membrane+(2*(n-1)+1)); hold on;
         %ylim([0 max(max(max(Fig3Max)))]);
 

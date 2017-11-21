@@ -24,7 +24,7 @@ folder          = '~/Documents/polymer-c_runs/2017_08_15_EffectiveConcentrationS
 
 % filename with appropriate data, or place to save appropriate data
 dataFilename    = strcat('2017_08_22_SPRData_','N',num2str(NRODS(1)),'to',num2str(NRODS(end)),...
-                         '_irL_',num2str(irLigand(1)),'to',num2str(irLigand(end)));
+                         '_irL_',num2str(irLigand(1)),'to',num2str(irLigand(end)),'_AlwaysOcc');
 
 savefolder      = '~/Google Drive/polymer-c/polymer-c_data_and_figures/SurfaceEffects/EffectiveConcentrationKernel/UpdatedJune072017';
  

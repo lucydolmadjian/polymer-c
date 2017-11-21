@@ -9,8 +9,8 @@ void dataRecording();
 /*******************************************************************************/
 
 double reeBar_sum, ree2Bar_sum, rMBar_sum;
-long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX], PMembraneOcclude_sum[NMAX];
-double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX], reeiSite[NMAX], rMBar;
+long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX], PMembraneOcclude_sum[NMAX],PMembraneSegmentOcclude_sum[NMAX];
+double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX],PMembraneSegmentOcclude[NMAX], reeiSite[NMAX], rMBar;
 double distiSiteToLigand[NMAX][NMAX], selfBind[NMAX][NMAX], selfBindFraction[NMAX][NMAX], localConcentration[NMAX][NMAX];
 double occupied[NMAX];
 double binSize;
@@ -65,6 +65,7 @@ void finalizeSummary()
         POcclude[iy]         = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
         Prvec0[iy]           = (double)Prvec0_sum[iy]/(4/3*PI*pow((double)N/(double)NBINS,3))/(double)(nt-NTCHECK);
         PMembraneOcclude[iy] = (double)PMembraneOcclude_sum[iy]/(double)(nt-NTCHECK);
+        PMembraneSegmentOcclude[iy] = (double)PMembraneSegmentOcclude_sum[iy]/(double)(nt-NTCHECK);
 
     }
     
@@ -153,6 +154,11 @@ void finalizeSummary()
             {
                 fprintf(fList, " %f", localConcentration[iy][ib]);
             }
+        }
+        
+        for(iy=0;iy<iSiteTotal;iy++)
+        {
+            fprintf(fList, " %f", PMembraneSegmentOcclude[iy]);
         }
         
         
@@ -263,6 +269,11 @@ void dataRecording()
             {
                 fprintf(fList, " %ld",membraneOcclusion[iy]);
             }
+            
+            for(iy=0;iy<iSiteTotal;iy++)
+            {
+                fprintf(fList, " %ld",membraneAndSegmentOcclusion[iy]);
+            }
         
             fprintf(fList, " %ld", stericOcclusionBase);
 
@@ -292,6 +303,7 @@ void dataRecording()
 			POcclude_sum[iy]         += (long)(stericOcclusion[iy]>0);
 			Prvec0_sum[iy]           += (long)(reeiSite[iy] < (double)N/(double)NBINS);
             PMembraneOcclude_sum[iy] += (long)(membraneOcclusion[iy]>0);
+            PMembraneSegmentOcclude_sum[iy] += (long)(membraneAndSegmentOcclusion[iy]>0);
 			
         }
         POccludeBase_sum  += (long)(stericOcclusionBase>0);

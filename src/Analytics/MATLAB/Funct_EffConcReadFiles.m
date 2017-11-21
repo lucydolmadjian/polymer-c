@@ -53,7 +53,7 @@ occlusionData           = cell(size(Nrods,2),size(irLigand,2),2);
 %                 filename2 = strcat(subfolder2,'.',num2str(Nrods(n)),'.',num2str(irLigand(irL)));
 
                 filename1 = 'SingleSegmentFreeSpaceLigandBound.N1.R1';
-                filename2 = 'SingleSegmentFreeSpaceLigandOff.N1.R1';
+                filename2 = 'SingleSegmentFreeSpaceLigandBound.N1.R1';
 
                 % read in data
                 M1 = dlmread(fullfile(foldername1,subfolder1,filename1));
