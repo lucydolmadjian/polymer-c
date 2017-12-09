@@ -477,8 +477,8 @@ void metropolisJoint()
                         {
                             if (rPropose[i][2]>0)
                             {
-                                // repulsive force with 1/r^2
-                                EelectroNew += repulsionFactor/(rPropose[i][2]*rPropose[i][2]);
+                                // repulsive force with E*e^(-z/zbar)
+                                EelectroNew += Erepulsion*(exp(rPropose[i][2]/Zrepulsion));
                             }
                             else
                             {

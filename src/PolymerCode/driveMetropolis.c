@@ -99,7 +99,7 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 
 double Eelectro, EelectroNew;
-double repulsionFactor;
+double Erepulsion, Zrepulsion;
 double parabolaDepth, parabolaWidth, wallParabolaK;
 double PhosphorylatedSites[NMAX];
 int PhosElectroRange;
@@ -317,13 +317,19 @@ int main( int argc, char *argv[] )
             
             if(argv[20])
             {
-                repulsionFactor = atof(argv[20]);
-                if (TALKATIVE) printf("This is the repulsion factor: %f\n", repulsionFactor);
+                Erepulsion = atof(argv[20]);
+                if (TALKATIVE) printf("This is the Erepulsion: %f\n", Erepulsion);
             }
             
-            if(argv[21]) //PhosElectroRange
-                PhosElectroRange = atof(argv[21]);
-            if (TALKATIVE) printf("This is argument 21: %d \n", PhosElectroRange);
+            if(argv[21])
+            {
+                Zrepulsion = atof(argv[21]);
+                if (TALKATIVE) printf("This is the Zrepulsion: %f\n", Zrepulsion);
+            }
+            
+            if(argv[22]) //PhosElectroRange
+                PhosElectroRange = atof(argv[22]);
+            if (TALKATIVE) printf("This is argument 22: %d \n", PhosElectroRange);
             
             
         //    if(argv[10]) //Delivery distance - how close to base it needs to be
@@ -392,8 +398,15 @@ int main( int argc, char *argv[] )
             if(argv[8])
             {
                 if(atof(argv[8])!=-1)
-                repulsionFactor = atof(argv[8]);
-                if (TALKATIVE) printf("This is the repulsion factor: %f\n", repulsionFactor);
+                Erepulsion = atof(argv[8]);
+                if (TALKATIVE) printf("This is the Erepulsion: %f\n", Erepulsion);
+            }
+            
+            if(argv[8])
+            {
+                if(atof(argv[8])!=-1)
+                    Zrepulsion = atof(argv[8]);
+                if (TALKATIVE) printf("This is the repulsion factor: %f\n", Zrepulsion);
             }
             
             
