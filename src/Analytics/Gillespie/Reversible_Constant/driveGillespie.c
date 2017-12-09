@@ -11,7 +11,7 @@
 #define INF        1e14
 #define ISITEMAX   9
 #define STATEMAX   1000
-#define ITMAX      100000000
+#define ITMAX      1000000000
 #define TALKATIVE  1
 
 #include <math.h>

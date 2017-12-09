@@ -68,6 +68,12 @@ void outputGillespie()
             }
             
         }
+        
+        if(sum_time_End<timeAvgDuration)
+        {
+            printf("Not Enough Data");
+            exit(0);
+        }
         averageBound_End                    = (double) sum_bound_End / (double) sum_time_End;
         averagePhosphorylationFraction_End  = (double) sum_phosphorylationFraction_End/ (double) sum_time_End;
         
