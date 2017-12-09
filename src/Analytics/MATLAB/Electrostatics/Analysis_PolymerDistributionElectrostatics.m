@@ -26,7 +26,6 @@ model = 1;
 save = 0;
     
 folder = '~/Documents/pub/lclemens/polymer-c_runs';
-%folder = '~/Documents/polymer-c_runs';
 
 saveFolder = '~/Documents/polymer-c_data_and_figures/CD3Zeta_Electrostatics/20171207';
     
@@ -47,7 +46,7 @@ end
 %% Read Files
 
 fileDoesNotExist=0;
-distributionData = zeros(length(PD),length(PW),iSiteTotal+1,NBINS);
+distributionData = zeros(length(PD),length(PW),length(WK),length(ER),length(ZR),iSiteTotal+1,NBINS);
 
 for k = [1 3 5]
     for w = [1 3 5]
@@ -76,100 +75,113 @@ for k = [1 3 5]
                             else
                                 start = 3+9+4*iSiteTotal+3+bSiteTotal+(i-1)*NBINS+1;    
                             end
-                            distributionData(d,w,i,:) = M(1,start:start+NBINS-1)./(ntTotal-NTCHECK);
+                            distributionData(k,w,d,e,z,i,:) = M(1,start:start+NBINS-1)./(ntTotal-NTCHECK);
                         end
-                    else
+                     else
                         fileDoesNotExist=fileDoesNotExist+1;
                         disp(filename);
-                    end
+                     end
 
                 end
             end
         end
     end
+end
 
-    %% Plot histograms
+%% Plot histograms
 
-    bins = 0:1:NBINS-1;
-    xaxis = -N+bins.*BinSize;
+bins = 0:1:NBINS-1;
+xaxis = -N+bins.*BinSize;
+figureNumber = 1;
+    
+for k=[1 3 5]
+    for d=[1 3 5]
+        for w=[1 3 5]
+            subfigureNumber = 1;
+            for e=1:length(ER)
+                for z=1:length(ZR)
+                    %for i=1:iSiteTotal+1
+                    for i=3
+                        plotData = reshape(distributionData(k,w,d,e,z,i,:),[NBINS,1]);
+                        figure(figureNumber); hold on;
+                        %subplot(length(PW),length(PD),d+length(PD)*(w-1));
+                        subplot(5,5,subfigureNumber);
+                        plot(xaxis,plotData,'-r','LineWidth',1.2);
+                        xlim([-5,5]);
+                        xticks([-5 -4 -3 -2 -1 0 1 2 3 4 5]);
+                        title1 = strcat('E: ', num2str(ER(e)), 'Z: ', num2str(ZR(z)));
+                        set(gcf,'units','centimeters','position',[1,4,60,46]);
+                        disp(i);
+                        xlabel1 = 'z-coordinate (Kuhn lengths)';
+                        ylabel1 = 'Probability';
+                        %maxData(j)=max([maxData(j);plotData(:)]);
+            %         
+            %             if(i==iSiteTotal+1)
+            %                 title1 = strcat('Distribution of Polymer Tip');
+            %             else
+            %                 title1 = strcat('Distribution of Tyrosine: ', num2str(i));
+            %             end
 
-    for d=1:1:3
-        for w=1:1:3
-            for i=1:iSiteTotal+1
-                plotData = reshape(distributionData(d,w,i,:),[NBINS,1]);
-                figure((k-1)*(iSiteTotal+1)+i); hold on;
-                %subplot(length(PW),length(PD),d+length(PD)*(w-1));
-                subplot(3,3,d+3*(w-1));
-                plot(xaxis,plotData,'-r','LineWidth',1.2);
-                xlim([-5,5]);
-                xticks([-5 -4 -3 -2 -1 0 1 2 3 4 5]);
-                title1 = strcat('D: ', num2str(PD(d)), 'W: ', num2str(PW(w)));
-                set(gcf,'units','centimeters','position',[1,4,60,46]);
-                disp(i);
-                disp((k-1)*(iSiteTotal+1)+i);
-                xlabel1 = 'z-coordinate (Kuhn lengths)';
-                ylabel1 = 'Probability';
-                %maxData(j)=max([maxData(j);plotData(:)]);
-    %         
-    %             if(i==iSiteTotal+1)
-    %                 title1 = strcat('Distribution of Polymer Tip');
-    %             else
-    %                 title1 = strcat('Distribution of Tyrosine: ', num2str(i));
-    %             end
-
-                xlabel(xlabel1,'FontName','Arial','FontSize',14);
-                ylabel(ylabel1,'FontName','Arial','FontSize',14);
-                title(title1,'FontName','Arial','FontSize',14);
+                        xlabel(xlabel1,'FontName','Arial','FontSize',14);
+                        ylabel(ylabel1,'FontName','Arial','FontSize',14);
+                        title(title1,'FontName','Arial','FontSize',14);
+                        
+                        subfigureNumber = subfigureNumber + 1;
+                    end
+                end
             end
+            figureNumber = figureNumber + 1;
         end
     end
+end
 
     %% Plot energy diagrams
     if (0)
-        for d=1:length(PD)
-            for w=1:length(PW)
-                for i=2
+        for k=[1 3 5]
+            for d=1:length(PD)
+                for w=1:length(PW)
+                    for i=2
 
-                    plotData = reshape(distributionData(d,w,i,:),[NBINS,1]);
-                    figure(((k-1)*(iSiteTotal+1)+i)*100); hold on;
-                    subplot(length(PW),length(PD),d+length(PD)*(w-1));
+                        plotData = reshape(distributionData(k,w,d,e,z,i,:),[NBINS,1]);
+                        figure(((k-1)*(iSiteTotal+1)+i)*100); hold on;
+                        subplot(length(PW),length(PD),d+length(PD)*(w-1));
 
-                    plot(xaxis,KBT*log(plotData),'-r');
-                    xlim([-20,20]);
-                    ylabel('pNnm');
-                    title(strcat('D: ', num2str(PD(d)), 'W: ', num2str(PW(w))));
-                    set(gcf,'units','centimeters','position',[1,4,60,46]);
+                        plot(xaxis,KBT*log(plotData),'-r');
+                        xlim([-20,20]);
+                        ylabel('pNnm');
+                        title(strcat('D: ', num2str(PD(d)), 'W: ', num2str(PW(w))));
+                        set(gcf,'units','centimeters','position',[1,4,60,46]);
 
+                    end
                 end
             end
         end
     end
 
-    %% Save Figures
+%% Save Figures
 
-    if (save)
+if (save)
 
-
-        switch (model)
-            case 1
-                saveSubFolder = 'HarwallPiecewiseBasicsY';
-        end
-
-        for i=15:21
-            figure(i); 
-            saveName = strcat('DistributioniSite',num2str(i-14));
-            saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'fig');
-            saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'epsc');
-        end
-        if (0)
-        for i=11:17
-            figure(i); 
-            saveName = strcat('EnergyBarrieriSite',num2str(i-10));
-            saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'fig');
-            saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'epsc');
-        end
-        end
-
+    switch (model)
+        case 1
+            saveSubFolder = 'RepulsiveSweep1';
     end
+
+    for i=15:21
+        figure(i); 
+        saveName = strcat('DistributioniSite',num2str(i-14));
+        saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'fig');
+        saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'epsc');
+    end
+    if (0)
+    for i=11:17
+        figure(i); 
+        saveName = strcat('EnergyBarrieriSite',num2str(i-10));
+        saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'fig');
+        saveas(gcf,fullfile(saveFolder,saveSubFolder,saveName),'epsc');
+    end
+    end
+
 end
+
 
