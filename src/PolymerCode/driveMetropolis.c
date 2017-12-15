@@ -402,10 +402,10 @@ int main( int argc, char *argv[] )
                 if (TALKATIVE) printf("This is the Erepulsion: %f\n", Erepulsion);
             }
             
-            if(argv[8])
+            if(argv[9])
             {
-                if(atof(argv[8])!=-1)
-                    Zrepulsion = atof(argv[8]);
+                if(atof(argv[9])!=-1)
+                    Zrepulsion = atof(argv[9]);
                 if (TALKATIVE) printf("This is the repulsion factor: %f\n", Zrepulsion);
             }
             

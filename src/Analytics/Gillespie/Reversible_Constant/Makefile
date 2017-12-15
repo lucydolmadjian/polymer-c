@@ -11,7 +11,7 @@ run:
 test:
 	gcc -O3 driveGillespie.c -o gillespie.out -lm
 
-	./gillespie.out Kinase_Constant Phosphatase_Constant 6 10 0.2 OutputTest
+	./gillespie.out Kinase_Constant Phosphatase_Constant 6 10000000 0.2 OutputTest 0 100000
 
 
 

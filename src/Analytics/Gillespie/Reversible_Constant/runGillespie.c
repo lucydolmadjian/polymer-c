@@ -95,6 +95,8 @@ void runGillespie()
     timeTotal=0;
     currentState=0; //start at fully dephosphorylated
     
+    initialize_dataRecording();
+    
     // while less than number of desired steps or less than max steps
     while (timeTotal < timeEnd && it < ITMAX)
     {
@@ -154,6 +156,7 @@ void runGillespie()
         /******************************* Store Last 100 States ******************************************/
         //update stored states
         storeStates();
+        dataRecording();
         /*************************************************************************************************/
         
         
@@ -207,6 +210,7 @@ void storeStates()
     stateStorage[numberStatesStored-1] = totalBound[currentState];
     timeStorage[numberStatesStored-1]  = timeStep;
     
+
     if(0)
     {
         for (i=0;i<numberStatesStored;i++)
