@@ -26,21 +26,25 @@ model = 1;
 save = 0;
     
 folder = '~/Documents/pub/lclemens/polymer-c_runs';
+controlFolder = '~/Documents/polymer-c_runs';
+controlSubfolder = '20180102CD3ZetaElectrostaticsDistributionControl';
 
-saveFolder = '~/Documents/polymer-c_data_and_figures/CD3Zeta_Electrostatics/20171207';
+saveFolder = '~/Documents/polymer-c_data_and_figures/CD3Zeta_Electrostatics/20171220';
     
 switch (model)
     
     case 1
         %subfolder = '20171121CD3ZetaElectrostaticsSweep1/Dephos';
-        subfolder = '20171213CD3ZetaElectrostaticsSweep2';
+        %subfolder = '20171213CD3ZetaElectrostaticsSweep2';
+        %subfolder = '20171215CD3ZetaElectrostaticsSweep3Phos1';
+        subfolder = '20171220CD3ZetaElectrostaticsSweep4Phos2';
         filenamePrefix = 'CD3ZetaElectrostatics';
         
-        PD = 10.^(-1:0.5:3);  % parabola depth
-        PW = 10.^(-2:0.5:2);  % parabola width
-        WK = 10.^(-3:0.5:-1);  % wall parabola k
-        ER = 10.^(-2:1:2);  % repulsive energy multiplier
-        ZR = 10.^(-2:1:2);  % repulsive energy exponent multiplier
+        PD = 10.^(0:1:2);  % parabola depth
+        PW = 10.^(-1:1:2);  % parabola width
+        WK = 10.^(-5:2:-1);  % wall parabola k
+        ER = 10.^(-3:0.5:0);  % repulsive energy multiplier
+        ZR = 10.^(0.5:0.5:3);  % repulsive energy exponent multiplier
 
 end
     
@@ -52,8 +56,8 @@ distributionData = zeros(length(WK),length(PD),length(PW),length(ER),length(ZR),
 for k = 1:length(WK)
     for w = 1:length(PW)
         for d = 1:length(PD)
-            for e = 1
-                for z = 1
+            for e = 1:length(ER)
+                for z = 1:length(ZR)
                     
                     %% Open file and retrieve distribution data
                     switch (model)
@@ -72,9 +76,9 @@ for k = 1:length(WK)
 
                         for i=1:1:iSiteTotal+1
                             if (ZETA)
-                                start = 7+9+4*iSiteTotal+3+bSiteTotal+(i-1)*NBINS+1;  
+                                start = 7+9+5*iSiteTotal+3+bSiteTotal+2*iSiteTotal*bSiteTotal+iSiteTotal+(i-1)*NBINS+1;  
                             else
-                                start = 3+9+4*iSiteTotal+3+bSiteTotal+(i-1)*NBINS+1;    
+                                start = 3+9+5*iSiteTotal+3+bSiteTotal+2*iSiteTotal*bSiteTotal+iSiteTotal+(i-1)*NBINS+1;    
                             end
                             distributionData(k,w,d,e,z,i,:) = M(1,start:start+NBINS-1)./(ntTotal-NTCHECK);
                         end
@@ -89,39 +93,62 @@ for k = 1:length(WK)
     end
 end
 
-%% Plot histograms
+%% Read Files
+distributionDataControl = zeros(iSiteTotal+1,NBINS);
 
+%% Open file and retrieve distribution data
+controlFilename = 'DistributionControl';    
+
+M = dlmread(fullfile(controlFolder,controlSubfolder,controlFilename));
+if (ZETA)
+    ntTotal = M(1,12);
+else
+    ntTotal = M(1,8);
+end
+
+for i=1:1:iSiteTotal+1
+    if (ZETA)
+        start = 7+9+5*iSiteTotal+3+bSiteTotal+2*iSiteTotal*bSiteTotal+iSiteTotal+(i-1)*NBINS+1;  
+    else
+        start = 3+9+5*iSiteTotal+3+bSiteTotal+2*iSiteTotal*bSiteTotal+iSiteTotal+(i-1)*NBINS+1;    
+    end
+    distributionDataControl(i,:) = M(1,start:start+NBINS-1)./(ntTotal-NTCHECK);
+end
+
+
+%% Plot histograms
+lw = 1.2;
 bins = 0:1:NBINS-1;
 xaxis = -N+bins.*BinSize;
 figureNumber = 1;
     
 %for i=1:iSiteTotal+1
-for i=[1 3 5]
+%for i=[1 3 5]
+for i=3
     figureNumber = 100*i;
-    for k=3:length(WK)
+    for k=1:length(WK)
     %for k=1
-        hFig = figure(figureNumber); clf; hold on;
-        subfigureNumber = 1;
-        for w=3:length(PW)
+        for w=1:length(PW)
         %for w=1
-            for d=3:length(PD)
+            for d=1:length(PD)
             %for d=1
-                %hFig = figure(figureNumber); clf; hold on;
-                %subfigureNumber = 1;
-                %for e=1:length(ER)
-                for e = 1
-                    %for z=1:length(ZR)
-                    for z = 1
+                hFig = figure(figureNumber); clf; hold on;
+                subfigureNumber = 1;
+                for e=1:length(ER)
+                %for e = 1
+                    for z=1:length(ZR)
+                    %for z = 1
 
                         plotData = reshape(distributionData(k,w,d,e,z,i,:),[NBINS,1]);
                         %subplot(length(PW),length(PD),d+length(PD)*(w-1));
-                        hSub = subplot(7,7,subfigureNumber);
-                        plot(xaxis,plotData,'-r','LineWidth',1.2);
-                        xlim([-5,5]);
+                        hSub = subplot(7,6,subfigureNumber); hold on;
+                        plot(xaxis,plotData,'-r','LineWidth',lw);
+                        plot(xaxis,distributionDataControl(i,:),'-b','LineWidth',lw);
+                        xlim([-5,10]);
                         xticks([-5 -4 -3 -2 -1 0 1 2 3 4 5]);
-                        %title1 = strcat('E: ', num2str(ER(e)), 'Z: ', num2str(ZR(z)));
-                        title1 = strcat('D: ', num2str(PD(d)), 'W: ', num2str(PW(w)));
-                        set(gcf,'units','centimeters','position',[1,4,60,46]);
+                        title1 = strcat('E: ', num2str(ER(e)), 'Z: ', num2str(ZR(z)));
+                        %title1 = strcat('D: ', num2str(PD(d)), 'W: ', num2str(PW(w)));
+                        set(gcf,'units','centimeters','position',[1,4,50,46]);
                         xlabel1 = 'z-coordinate (Kuhn lengths)';
                         ylabel1 = 'Probability';
                         %maxData(j)=max([maxData(j);plotData(:)]);
@@ -136,16 +163,17 @@ for i=[1 3 5]
                         ylabel(ylabel1,'FontName','Arial','FontSize',14);
                         title(title1,'FontName','Arial','FontSize',14);
 
-                        %subfigureNumber = subfigureNumber + 1;
+                        subfigureNumber = subfigureNumber + 1;
                     end
                 end
-                subfigureNumber = subfigureNumber + 1;
+                str = {['Wall Parabola K: ',num2str(WK(k))],...
+                ['Parabola Depth: ',num2str(PD(d))],...
+                ['Parabola Width: ',num2str(PW(w))]};
+                dim = [0.135 0.72 0.2 0.2];
+                annotation(hFig,'textbox',dim,'String',str,'FitBoxToText','on');
+                figureNumber = figureNumber + 1;
             end
         end
-        str = {['Wall Parabola K: ',num2str(WK(k))]};
-        dim = [0.135 0.72 0.2 0.2];
-        annotation(hFig,'textbox',dim,'String',str,'FitBoxToText','on');
-        figureNumber = figureNumber + 1;
     end
 end
 
