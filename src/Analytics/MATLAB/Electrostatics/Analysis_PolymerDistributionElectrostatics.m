@@ -37,14 +37,15 @@ switch (model)
         %subfolder = '20171121CD3ZetaElectrostaticsSweep1/Dephos';
         %subfolder = '20171213CD3ZetaElectrostaticsSweep2';
         %subfolder = '20171215CD3ZetaElectrostaticsSweep3Phos1';
-        subfolder = '20171220CD3ZetaElectrostaticsSweep4Phos2';
+        %subfolder = '20171220CD3ZetaElectrostaticsSweep4Phos2';
+        subfolder = '20180110CD3ZetaElectrostaticsSweep3Phos1CorrectedPotential';
         filenamePrefix = 'CD3ZetaElectrostatics';
         
-        PD = 10.^(0:1:2);  % parabola depth
+        PD = 10.^(0:0.5:2);  % parabola depth
         PW = 10.^(-1:1:2);  % parabola width
         WK = 10.^(-5:2:-1);  % wall parabola k
-        ER = 10.^(-3:0.5:0);  % repulsive energy multiplier
-        ZR = 10.^(0.5:0.5:3);  % repulsive energy exponent multiplier
+        ER = 10.^(-2:1:2);  % repulsive energy multiplier
+        ZR = 10.^(-2:1:2);  % repulsive energy exponent multiplier
 
 end
     
@@ -124,11 +125,11 @@ figureNumber = 1;
     
 %for i=1:iSiteTotal+1
 %for i=[1 3 5]
-for i=3
+for i=7
     figureNumber = 100*i;
-    for k=1:length(WK)
+    for k=[1 3 5]
     %for k=1
-        for w=1:length(PW)
+        for w=[2 4]
         %for w=1
             for d=1:length(PD)
             %for d=1
@@ -141,7 +142,7 @@ for i=3
 
                         plotData = reshape(distributionData(k,w,d,e,z,i,:),[NBINS,1]);
                         %subplot(length(PW),length(PD),d+length(PD)*(w-1));
-                        hSub = subplot(7,6,subfigureNumber); hold on;
+                        hSub = subplot(5,5,subfigureNumber); hold on;
                         plot(xaxis,plotData,'-r','LineWidth',lw);
                         plot(xaxis,distributionDataControl(i,:),'-b','LineWidth',lw);
                         xlim([-5,10]);
