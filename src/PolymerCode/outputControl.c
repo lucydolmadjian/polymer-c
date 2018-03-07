@@ -8,9 +8,9 @@ void dataRecording();
 //  GLOBAL VARIABLES for output control
 /*******************************************************************************/
 
-double reeBar_sum, ree2Bar_sum, rMBar_sum;
+double reeBar_sum, ree2Bar_sum, rMBar_sum, rM2Bar_sum;
 long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX], PMembraneOcclude_sum[NMAX],PMembraneSegmentOcclude_sum[NMAX];
-double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX],PMembraneSegmentOcclude[NMAX], reeiSite[NMAX], rMBar;
+double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX],PMembraneSegmentOcclude[NMAX], reeiSite[NMAX], rMBar, rM2Bar;
 double distiSiteToLigand[NMAX][NMAX], selfBind[NMAX][NMAX], selfBindFraction[NMAX][NMAX], localConcentration[NMAX][NMAX];
 double occupied[NMAX];
 double binSize;
@@ -33,6 +33,7 @@ void initializeSummary()
 //        PDeliver[ib]=0;
 //    }
     rMBar_sum    = 0;
+    rM2Bar_sum   = 0;
     
     binSize = (double)(2*N) / NBINSPOLYMER;
     
@@ -77,6 +78,7 @@ void finalizeSummary()
 //    }
     
     rMBar = rMBar_sum/(double)(nt-NTCHECK);
+    rM2Bar = rM2Bar_sum/(double)(nt-NTCHECK);
     
     if(MULTIPLE)
     {
@@ -162,7 +164,7 @@ void finalizeSummary()
         }
         
         
-        if(0)
+        if(1)
         {
             for (iy=0;iy<iSiteTotal;iy++)
             {
@@ -175,7 +177,7 @@ void finalizeSummary()
         }
         
         
-        if(0)
+        if(1)
         {
             iSiteCurrent=iSite[iy];
             for (j=0;j<NBINSPOLYMER;j++)
@@ -183,6 +185,8 @@ void finalizeSummary()
                 fprintf(fList, " %ld", polymerLocationCounts[N-1][j]);
             }
         }
+        
+        fprintf(fList, " %f", rM2Bar);
         
         
         fprintf(fList, "\n");
@@ -207,6 +211,7 @@ void dataRecording()
 
     // distance of tip to membrane
 	rM = r[N-1][2];
+    rM2 = r[N-1][2]*r[N-1][2];
 	
     // height (max distance to membrane)
 	if  (0)
@@ -309,6 +314,7 @@ void dataRecording()
         POccludeBase_sum  += (long)(stericOcclusionBase>0);
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);
         rMBar_sum    += rM;
+        rM2Bar_sum   += rM2;
 
         // update bins for KS test (fabs(rM)+ree will never be larger than 2N, so use 2N to normalize)
 		convergenceVariableCounts[(long)floor(NBINS*(fabs(rM)+ree)/(2*N))]++;
