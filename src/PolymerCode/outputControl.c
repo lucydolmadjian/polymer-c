@@ -8,9 +8,9 @@ void dataRecording();
 //  GLOBAL VARIABLES for output control
 /*******************************************************************************/
 
-double reeBar_sum, ree2Bar_sum, rMBar_sum, rM2Bar_sum;
+double reeBar_sum, ree2Bar_sum, rMBar_sum, rM2Bar_sum, rMiSiteBar_sum[NMAX], rM2iSiteBar_sum[NMAX];
 long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX], PMembraneOcclude_sum[NMAX],PMembraneSegmentOcclude_sum[NMAX];
-double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX],PMembraneSegmentOcclude[NMAX], reeiSite[NMAX], rMBar, rM2Bar;
+double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX],PMembraneSegmentOcclude[NMAX], reeiSite[NMAX], rMBar, rM2Bar, rMiSiteBar[NMAX], rM2iSiteBar[NMAX];
 double distiSiteToLigand[NMAX][NMAX], selfBind[NMAX][NMAX], selfBindFraction[NMAX][NMAX], localConcentration[NMAX][NMAX];
 double occupied[NMAX];
 double binSize;
@@ -34,6 +34,13 @@ void initializeSummary()
 //    }
     rMBar_sum    = 0;
     rM2Bar_sum   = 0;
+    
+    //distance of iSites to membrane
+    for (iy=0;iy<iSiteTotal;iy++)
+    {
+        rMiSiteBar_sum[iy] = 0;
+        rM2iSiteBar_sum[iy] = 0;
+    }
     
     binSize = (double)(2*N) / NBINSPOLYMER;
     
@@ -60,7 +67,6 @@ void finalizeSummary()
     reeBar  = reeBar_sum/(double)(nt-NTCHECK);
     ree2Bar = ree2Bar_sum/(double)(nt-NTCHECK);
 
-	
     for(iy=0;iy<iSiteTotal;iy++)
     {
         POcclude[iy]         = (double)POcclude_sum[iy]/(double)(nt-NTCHECK);
@@ -79,6 +85,13 @@ void finalizeSummary()
     
     rMBar = rMBar_sum/(double)(nt-NTCHECK);
     rM2Bar = rM2Bar_sum/(double)(nt-NTCHECK);
+    
+    //average distance of iSites to membrane
+    for (iy=0;iy<iSiteTotal;iy++)
+    {
+        rMiSiteBar[iy] = rMiSiteBar_sum[iy]/(double)(nt-NTCHECK);
+        rM2iSiteBar[iy] = rM2iSiteBar_sum[iy]/(double)(nt-NTCHECK);
+    }
     
     if(MULTIPLE)
     {
@@ -188,6 +201,15 @@ void finalizeSummary()
         
         fprintf(fList, " %f", rM2Bar);
         
+        for (iy=0;iy<iSiteTotal;iy++)
+        {
+            fprintf(fList, " %f", rMiSiteBar[iy]);
+        }
+        
+        for (iy=0;iy<iSiteTotal;iy++)
+        {
+            fprintf(fList, " %f", rM2iSiteBar[iy]);
+        }
         
         fprintf(fList, "\n");
         fclose(fList);
@@ -212,6 +234,14 @@ void dataRecording()
     // distance of tip to membrane
 	rM = r[N-1][2];
     rM2 = r[N-1][2]*r[N-1][2];
+    
+    //distance of iSites to membrane
+    for (iy=0;iy<iSiteTotal;iy++)
+    {
+        iSiteCurrent = iSite[iy];
+        rMiSite[iy] = r[iSiteCurrent][2];
+        rM2iSite[iy] = r[iSiteCurrent][2]*r[iSiteCurrent][2];
+    }
 	
     // height (max distance to membrane)
 	if  (0)
@@ -315,6 +345,12 @@ void dataRecording()
         //PDeliver_sum[ib] += (long)(boundToBaseDeliver>0);
         rMBar_sum    += rM;
         rM2Bar_sum   += rM2;
+        
+        for (iy=0;iy<iSiteTotal;iy++)
+        {
+            rMiSiteBar_sum[iy]    += rMiSite[iy];
+            rM2iSiteBar_sum[iy]   += rM2iSite[iy];
+        }
 
         // update bins for KS test (fabs(rM)+ree will never be larger than 2N, so use 2N to normalize)
 		convergenceVariableCounts[(long)floor(NBINS*(fabs(rM)+ree)/(2*N))]++;

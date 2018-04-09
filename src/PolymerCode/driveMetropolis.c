@@ -48,7 +48,7 @@ long N, ntNextStationarityCheck, iBin;
 long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
 double c0, c1, irLigand, brLigand, baserLigand;
 int baseBoundYN;
-double ree, rM, rM2, rH, ksStatistic;
+double ree, rM, rM2, rMiSite[NMAX], rM2iSite[NMAX], rH, ksStatistic;
 long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
 long polymerLocationCounts[NMAX][NBINSPOLYMER];
 long iseed;
