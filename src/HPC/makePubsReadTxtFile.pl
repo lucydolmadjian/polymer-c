@@ -46,7 +46,7 @@ for (my $i0 = 1; $i0 <= $i0Max; $i0++)
 #\$ -e logs/$runName.err
 #\$ -o logs/$runName.log
 
-cd /pub/laraclemens/Documents/polymer-c_runs/Mar212017ElectrostaticsPhosphorylation
+cd /pub/laraclemens/polymer-c_runs/Mar212017ElectrostaticsPhosphorylation
 
 echo Running on host `hostname`
 echo Time is `date`

@@ -22,7 +22,7 @@ NBINS = 3000;
 KBT = 4.14;
 BinSize = 2*N/NBINS;
 bSiteTotal = 0;
-model = 1;
+model = 2;
 save = 0;
     
 folder = '~/Documents/pub/lclemens/polymer-c_runs';
@@ -55,6 +55,20 @@ switch (model)
         WK = 10.^(-5:2:-1);  % wall parabola k
         ER = 10.^(0:0.5:3);  % repulsive energy multiplier
         ZR = 10.^(-1:0.5:1);  % repulsive energy exponent multiplier
+
+    case 2
+        subfolder = '20180202CD3ZetaElectrostaticsPhosphorylationCorrectedPotentialSweep7';
+                
+
+        PW = [0.1 0.3 0.5 0.7 0.9];  % parabola width
+        PD = 9.*PW;  % parabola depth
+        WK = 0.05;  % wall parabola k
+        ER = 10.^(0:0.5:3);  % repulsive energy multiplier
+        ZR = 3;  % repulsive energy exponent multiplier
+        
+        
+        
+
 end
     
 %% Read Files
