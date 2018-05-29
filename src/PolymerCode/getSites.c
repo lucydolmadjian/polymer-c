@@ -14,33 +14,12 @@ void getSites()
     /********* INITIALIZE ISITES *******************/
     
    
-    switch (testRun) //switch in Batch Script to specify which set of iSites you want to use
+    switch (iSiteInputMethod) //switch in Batch Script to specify which set of iSites you want to use
     {
-//        case 0:  // iSites initialized for human CD3Zeta-Chain
-//            
-//            iSiteTotal = 7;
-//            
-//            
-//            for (iy=0;iy<iSiteTotal;iy++) //initializes iSite array
-//            {
-//                iSite[iy]=0;
-//            }
-//            
-//            //specify iSite locations by rod number (located at n-1) (i.e. if you have a polymer of N=50, and want an iSite at the 36th rod, input iSite[]=35)
-//            
-//            iSite[0]=42;
-//            iSite[1]=50;
-//            iSite[2]=61;
-//            iSite[3]=89;
-//            iSite[4]=101;
-//            iSite[5]=120;
-//            iSite[6]=131;
-//            break;
             
         case 0:  // iSites initialized for human CD3Zeta-Chain
 
             iSiteTotal = 6;
-
 
             for (iy=0;iy<iSiteTotal;iy++) //initializes iSite array
             {
@@ -49,62 +28,19 @@ void getSites()
 
             //specify iSite locations by rod number (located at n-1) (i.e. if you have a polymer of N=50, and want an iSite at the 36th rod, input iSite[]=35)
 
-            iSite[0]=50;
-            iSite[1]=61;
-            iSite[2]=89;
-            iSite[3]=101;
-            iSite[4]=120;
-            iSite[5]=131;
-            break;
-
-            
-        case 1: // iSites for formin //for testing - N=10
-            
-            iSiteTotal = 3;
-            
-            for (iy=0;iy<iSiteTotal;iy++)
-            {
-                iSite[iy]=0;
-            }
-            
-            iSite[0]=0;
-            iSite[1]=3;
-            iSite[2]=7;
-            break;
-
-            
-        case 2: //iSites for testing
-            
-            iSiteTotal = 3;
-            
-            for(iy=0;iy<iSiteTotal;iy++)
-            {
-                iSite[iy]=0;
-            }
-            
-            iSite[0]=0;
-            iSite[1]=1;
-            iSite[2]=2;
-//            iSite[3]=3;
-//            iSite[4]=4;
-//            iSite[5]=5;
-//            iSite[6]=6;
-//            iSite[7]=7;
-//            iSite[8]=8;
-//            iSite[9]=9;
-//            iSite[10]=10;
-//            iSite[11]=11;
-//            iSite[12]=12;
-//            iSite[13]=13;
-
-
+            iSite[0]=20;
+            iSite[1]=31;
+            iSite[2]=59;
+            iSite[3]=71;
+            iSite[4]=90;
+            iSite[5]=101;
             break;
             
-        case 3: //do nothing, use command line input
+        case 1: //do nothing, use command line input
             
             break;
             
-        case 4: //input iSites from file
+        case 2: //input iSites from file
             
             iSiteList = fopen(iSiteFilename, "r");
             char line[200];
@@ -122,7 +58,7 @@ void getSites()
 
             break;
         
-        case 5: // use last site as only iSite
+        case 3: // use last site as only iSite
         
             iSiteTotal = 1;
             for(iy=0;iy<iSiteTotal;iy++)
@@ -131,11 +67,11 @@ void getSites()
             }
             iSite[0] = N-1;
         
-        
             break;
 
     }
     
+    //Warning for possible user error
     for (iy=0; iy<iSiteTotal;iy++)
     {
         if (iSite[iy] >= N)
@@ -146,7 +82,6 @@ void getSites()
     }
     
     //for debugging - prints a list of the iSites
-    
     if (TALKATIVE)
     {
         for (iy=0;iy<iSiteTotal;iy++)
@@ -159,11 +94,13 @@ void getSites()
         fflush(stdout);
     }
     
+    /*****************************************************/
     /********* INITIALIZE BOUND ISITES *******************/
+    /*****************************************************/
     
     if (MULTIPLE) //if looking at multiple binding (i.e. MULTIPLE set to 1 in driveM)
     {
-        switch (bSiteCommand)
+        switch (bSiteInputMethod)
         {
             case 0:
         
@@ -175,12 +112,9 @@ void getSites()
                 bSite[3]=40;
                 break;
 
-                
             case 1: //do nothing, use command line input
                 
-                
                 break;
-                
                 
             case 2: //bSites for multiple binding of ZAP-70 to CD3 Zeta mouse
                 
@@ -203,23 +137,9 @@ void getSites()
                 
                 bSiteTotal=bSiteCounter;
                 
-                //for debugging
-                if (TALKATIVE)
-                {
-                    for (ib=0; ib<bSiteTotal; ib++)
-                    {
-                        printf("bSite[%ld] is %ld \n", ib, bSite[ib]);
-                        fflush(stdout);
-                    }
-                    
-                    
-                    printf("bSiteTotal = %ld \n", bSiteTotal);
-                    fflush(stdout);
-                }
-                
                 break;
                 
-            case 3:
+            case 3: // read bound sites from file
                 
                 bSiteList = fopen(bSiteFilename, "r");
                 char line[200];
@@ -246,11 +166,11 @@ void getSites()
                 }
                 bSite[0] = N-1;
                 
-                
                 break;
                 
         }
         
+        //Warning for possible user error
         for (iy=0; iy<bSiteTotal;iy++)
         {
             if (bSite[iy] >= N)
@@ -260,17 +180,17 @@ void getSites()
             }
         }
         
-        //for debugging - prints a list of the iSites
-        
+        //for debugging - prints a list of the bSites
         if (TALKATIVE)
         {
-            for (iy=0;iy<bSiteTotal;iy++)
+            for (ib=0; ib<bSiteTotal; ib++)
             {
-                printf("bSite: %ld\n", bSite[iy]);
+                printf("bSite[%ld] is %ld \n", ib, bSite[ib]);
                 fflush(stdout);
             }
             
-            printf("bSiteTotal: %ld\n", bSiteTotal);
+            
+            printf("bSiteTotal = %ld \n", bSiteTotal);
             fflush(stdout);
         }
 

@@ -68,13 +68,14 @@ long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationa
 double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 long constraintProposalsTotal;
 
+int iSiteInputMethod;
 long commandiSites;
 char *iSiteLocations;
 char input[4*NMAX];
 long j,m;
 
 /* Convergence Global Variables */
-int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
+int convergedTF, constraintSatisfiedTF, verboseTF;
 long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
 long polymerLocationCounts[NMAX][NBINSPOLYMER];
 
@@ -86,6 +87,7 @@ char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
 double iSiteOccupied[NMAX];
 
 /* MULTIPLE Global Variables*/
+int bSiteInputMethod;
 double brLigand;
 double bLigandCenter[NMAX][3];
 long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;

@@ -6,7 +6,7 @@ baseBoundYN		0
 baserLigand		4
 Force			0
 verboseTF		0
-testRun			4
+iSiteInputMethod	4
 StiffenRange		0
 stiffCase		0
 occupiedSites		0_0_0_0_0_0
@@ -14,7 +14,7 @@ occupiedSitesNoSpace 	000000
 iSiteFilename		iSites.txt
 bSiteFilename		bSites.txt
 basicSiteFilename	basicSites.txt
-bSiteCommand		3
+bSiteInputMethod	3
 parabolaDepth		0
 parabolaWidth		0
 wallParabolaK		0
