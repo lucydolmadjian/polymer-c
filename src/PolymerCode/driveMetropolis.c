@@ -19,7 +19,6 @@
 #define HARDWALL        0
 #define CPMAX           1e8
 #define TALKATIVE       1
-#define LEGACY          0
 #define TXTPARAM        1
 #define VISUALIZE       0
 #define CD3ZETA         1
@@ -38,6 +37,7 @@
 //  GLOBAL VARIABLES
 /*******************************************************************************/
 
+/* General Global Variables */
 char listName[100];
 FILE *fList;
 //
@@ -45,13 +45,11 @@ char paramsFilename[100], iSiteFilename[100], bSiteFilename[100], basicSiteFilen
 FILE *paramsFile, *iSiteList, *bSiteList, *basicSiteList;
 
 long N, ntNextStationarityCheck, iBin;
-
 long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
-double c0, c1, irLigand, brLigand, baserLigand;
-int baseBoundYN;
+double c0, c1, irLigand;
+
 double ree, rM, rM2, rMiSite[NMAX], rM2iSite[NMAX], rH, ksStatistic;
-long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
-long polymerLocationCounts[NMAX][NBINSPOLYMER];
+
 long iseed;
 
 double phi[NMAX], theta[NMAX], psi[NMAX];
@@ -65,49 +63,53 @@ double baseCenter[3];
 double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
-
-double StiffenRange,stiffiSites[NMAX], StiffSites[NMAX];
-int stiffCase, totalStiff, stiffEnd, stiffStart;
-char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
-
-double iSiteOccupied[NMAX];
-long bSiteCounter;
-
-double bLigandCenter[NMAX][3];
-long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;
-
-double baseLigandCenter[3], deliveryDistance;
-long stericOcclusionBase;
-long membraneOcclusion[NMAX], membraneAndSegmentOcclusion[NMAX];
-double localConcCutoff;
-int deliveryMethod;
-
-long boundToBaseDeliver[NMAX];
-
-long j,m;
-
+long st;
+long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationarityCheck,i2, iStart;
+double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
 long constraintProposalsTotal;
 
 long commandiSites;
 char *iSiteLocations;
 char input[4*NMAX];
+long j,m;
 
-long st;
+/* Convergence Global Variables */
+int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
+long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
+long polymerLocationCounts[NMAX][NBINSPOLYMER];
 
+/* STIFFEN Global Variables */
+double StiffenRange,stiffiSites[NMAX], StiffSites[NMAX];
+int stiffCase, totalStiff, stiffEnd, stiffStart;
 
-long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationarityCheck,i2, iStart;
+char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
+double iSiteOccupied[NMAX];
 
-double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
+/* MULTIPLE Global Variables*/
+double brLigand;
+double bLigandCenter[NMAX][3];
+long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;
+long bSiteCounter;
 
+double deliveryDistance;
+long stericOcclusionBase;
+long membraneOcclusion[NMAX], membraneAndSegmentOcclusion[NMAX];
+double localConcCutoff;
+int deliveryMethod;
+long boundToBaseDeliver[NMAX];
+
+/* ELECTRO Global Variables */
 double Eelectro, EelectroNew;
 double Erepulsion, Zrepulsion;
 double parabolaDepth, parabolaWidth, wallParabolaK;
 double PhosphorylatedSites[NMAX];
 int PhosElectroRange;
-
-int convergedTF, constraintSatisfiedTF, verboseTF, testRun, bSiteCommand;
-
 long basicSite[NMAX], BasicSitesYN[NMAX], basicSiteTotal, basicSiteCurrent, iBasic;
+
+/* BASEBOUND Global Variables */
+int baseBoundYN;
+double baserLigand;
+double baseLigandCenter[3];
 
 /*******************************************************************************/
 //  INCLUDES
@@ -126,80 +128,9 @@ long basicSite[NMAX], BasicSitesYN[NMAX], basicSiteTotal, basicSiteCurrent, iBas
 //  MAIN
 /*******************************************************************************/
 
-// arguments: listName, dimension, nBar, N, dt
+// arguments: listName,
 int main( int argc, char *argv[] )
 {
-    if (LEGACY)
-    {
-        printf("This program is starting.");
-        
-        if(argv[1]) // listName
-            strcpy(listName, argv[1]);
-        if (TALKATIVE) printf("This is argument 1: %s\n", listName);
-
-        if(argv[2]) // N - should be 143 for this code - human CD3 iSites specified
-            N = atoi(argv[2]);
-        if (TALKATIVE) printf("This is argument 2: %ld\n", N);
-        
-        //- binding site. iSite=0 is the first joint away from the origin. iSite=N-1 is the furthest joint
-        //if(argv[3]) // iSite
-            //iSite = atoi(argv[3]);
-        
-        //if(iSite == -1)
-            //iSite = floor(N/2);
-            
-        if(argv[3]) // irLigand - RATIO OF ligand radius to kuhn length
-            irLigand = atof(argv[3]);
-        if (TALKATIVE) printf("This is argument 3: %f\n", irLigand);
-        
-        if(argv[4]) // brLigand - RATIO OF ligand radius to kuhn length
-            brLigand = atof(argv[4]);
-        if (TALKATIVE) printf("This is argument 4: %f\n", brLigand);
-        
-        Force = 0;
-        if(argv[5]) // Force - Units of kBT/[kuhn length]
-            Force = atof(argv[5]);
-        if (TALKATIVE) printf("This is argument 5: %f\n", Force);
-        
-        // IF verboseTF = 0, one line summarizing the run is written to the file listName.
-        // IF verboseTF = 1, one line is written each iteration to the file listName. (Use for making histograms).
-        verboseTF = 0;
-        if(argv[6]) // Verbose Output
-            verboseTF = atoi(argv[6]);
-        if (TALKATIVE) printf("This is argument 6: %d\n", verboseTF);
-        
-        if(argv[7]) //Test Run - yes=1, no=0
-            testRun = atoi(argv[7]);
-        if (TALKATIVE) printf("This is argument 7: %d\n", testRun);
-        
-        if(argv[8])
-        {
-            if(atoi(argv[8])!=-1) //iSite Location from command line
-            {
-                iSite[0]= atoi(argv[8]);
-                iSiteTotal=1;
-                if (TALKATIVE) printf("This is argument 8: %ld\n", iSite[0]);
-                testRun=3;
-            }
-        }
-        
-        if(argv[9])
-        {
-            if(atoi(argv[9])!=-1)
-            {
-                bSite[0]=atoi(argv[9]);
-                bSiteTotal=1;
-                if (TALKATIVE) printf("This is argument 9: %ld\n", bSite[0]);
-                bSiteCommand = 1;
-            }
-            else
-            {
-                bSiteCommand = 0;
-            }
-        }
-    }
-    if (!LEGACY)
-    {
         if (!TXTPARAM)
         {
             printf("This program is starting.");
@@ -208,7 +139,7 @@ int main( int argc, char *argv[] )
                 strcpy(listName, argv[1]);
             if (TALKATIVE) printf("This is argument 1: %s\n", listName);
             
-            if(argv[2]) // N - should be 143 for this code - human CD3 iSites specified
+            if(argv[2]) // N - should be 113 for this code - human CD3 iSites specified
                 N = atoi(argv[2]);
             if (TALKATIVE) printf("This is argument 2: %ld\n", N);
             
@@ -413,8 +344,6 @@ int main( int argc, char *argv[] )
             
 
         }
-            
-    }
 
 	iseed = RanInitReturnIseed(0);
 	
