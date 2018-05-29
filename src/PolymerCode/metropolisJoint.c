@@ -708,6 +708,23 @@ void metropolisJoint()
                         }
                     } // finished multiple ligand tests
                 }
+                
+                if (stericOcclusion[iy]==0)
+                {
+                    if (BINDTRANSITION && nt > NTCHECK) // if allow code to transition between unbound and bound ligands and iSite is unoccluded and past initial transient
+                    {
+                        bSiteTotal++; // increase number of bound ligands by 1
+                        bSite[bSiteTotal-1] = iSite[iy]; //make iSite into bSite
+                        
+                        if(1)
+                        {
+                            printf("Adding bound ligand at iSite[%ld] = %ld! \n",iy,iSite[iy]);
+                            fflush(stdout);
+                            printf("Number of bound ligands: %ld \n",bSiteTotal);
+                            fflush(stdout);
+                        }
+                    }
+                }
             } // finished loop through iSites
         
         
