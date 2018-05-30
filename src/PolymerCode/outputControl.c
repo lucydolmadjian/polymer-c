@@ -285,7 +285,7 @@ void dataRecording()
                 {
                     fprintf(fList, " %f %f %f", iLigandCenter[i][0], iLigandCenter[i][1], iLigandCenter[i][2]);
                 }
-                if(baseBoundYN)
+                if(BASEBOUND)
                 {
                     for (i=0;i<3;i++)
                     {

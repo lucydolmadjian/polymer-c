@@ -8,29 +8,24 @@ void rotate(double *tIn, double *e1In, double *e2In, double *tOut, double *e1Out
 void metropolisJoint()
 {
 
-    
-    /********* INITIALIZE ISITES AND BSITES *******************/
+    /********* INITIALIZE ISITES AND BSITES AND BASIC SITES *******************/
 
-        getSites();
+    getSites();
     
     if(ELECTRO)
     {
         getBasicSites();
     }
-    
-    
+
     /************* STIFFEN SEGMENTS *******************/
-    
-    //Ignore for Formin
+
     if (STIFFEN) //stiffen only if STIFFEN is 1 in driveM
     {
         initializeStiffSites();
     }
-    
-    
+
     /************* ELECTRO SEGMENTS *******************/
-    
-    //Ignore for Formin
+
     if (ELECTRO) //phosphorylate sites only if ELECTRO is 1 in driveM
     {
         initializePhosphorylatedSites();
@@ -77,7 +72,7 @@ void metropolisJoint()
         
 	}
     
-    if (baseBoundYN)
+    if (BASEBOUND)
     {
         baseCenter[0] = 0;
         baseCenter[1] = 0;
@@ -241,6 +236,7 @@ void metropolisJoint()
             }
             
             // rotate all segments above (and including) iPropose
+            
             if (iPropose==0)
                 iStart=1;
             else
@@ -274,7 +270,7 @@ void metropolisJoint()
                 } // done checking constraint
             } //finished first constraint
             
-            if (baseBoundYN)
+            if (BASEBOUND)
             {
                 for(i=0;i<N;i++)// for each joint
                 {
@@ -364,7 +360,7 @@ void metropolisJoint()
                         }
                     }
                     
-                    if (constraintSatisfiedTF && baseBoundYN) //if constraint is still satisfied, test ligand sphere with base ligand if exists
+                    if (constraintSatisfiedTF && BASEBOUND) //if constraint is still satisfied, test ligand sphere with base ligand if exists
                     {
                         if ((bLigandCenter[ib][0]-baseCenter[0])*(bLigandCenter[ib][0]-baseCenter[0])+(bLigandCenter[ib][1]-baseCenter[1])*(bLigandCenter[ib][1]-baseCenter[1])+(bLigandCenter[ib][2]-baseCenter[2])*(bLigandCenter[ib][2]-baseCenter[2])<= (brLigand+baserLigand)*(brLigand+baserLigand)) //if distance between centers is less than brLigand+baserLigand, then ligands are intersecting
                         {

@@ -25,9 +25,6 @@ void getParameters()
     fscanf(paramsFile,"%s %lf", tmpString, &brLigand);
     if (TALKATIVE) printf("This is bound ligand radius: %lf\n", brLigand);
     
-    fscanf(paramsFile,"%s %d", tmpString, &baseBoundYN);
-    if (TALKATIVE) printf("This is baseBoundYN: %d\n", baseBoundYN);
-    
     fscanf(paramsFile,"%s %lf", tmpString, &baserLigand);
     if (TALKATIVE) printf("This is base bound ligand radius: %lf\n", baserLigand);
     

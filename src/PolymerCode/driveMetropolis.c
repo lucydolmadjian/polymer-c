@@ -17,6 +17,7 @@
 #define STIFFEN         0
 #define ELECTRO         0
 #define HARDWALL        0
+#define BASEBOUND       0
 #define CPMAX           1e8
 #define TALKATIVE       1
 #define TXTPARAM        1
@@ -109,7 +110,6 @@ int PhosElectroRange;
 long basicSite[NMAX], BasicSitesYN[NMAX], basicSiteTotal, basicSiteCurrent, iBasic;
 
 /* BASEBOUND Global Variables */
-int baseBoundYN;
 double baserLigand;
 double baseLigandCenter[3];
 
@@ -172,9 +172,9 @@ int main( int argc, char *argv[] )
                 verboseTF = atoi(argv[6]);
             if (TALKATIVE) printf("This is argument 6: %d\n", verboseTF);
             
-            if(argv[7]) //Test Run - yes=1, no=0
-                testRun = atoi(argv[7]);
-            if (TALKATIVE) printf("This is argument 7: %d\n", testRun);
+            if(argv[7]) //iSiteInputMethod - switch for how iSites are input
+                iSiteInputMethod = atoi(argv[7]);
+            if (TALKATIVE) printf("This is argument 7: %d\n", iSiteInputMethod);
             
             if(argv[8])
             {
@@ -227,9 +227,9 @@ int main( int argc, char *argv[] )
             if (TALKATIVE) printf("This is argument 15: %s \n", bSiteFilename);
             
             
-            if(argv[16]) //bSiteCommand - switch for how bSites are input
-                bSiteCommand = atoi(argv[16]);
-            if (TALKATIVE) printf("This is argument 16: %d \n", bSiteCommand);
+            if(argv[16]) //bSiteInputMethod - switch for how bSites are input
+                bSiteInputMethod = atoi(argv[16]);
+            if (TALKATIVE) printf("This is argument 16: %d \n", bSiteInputMethod);
             
             if(argv[17])
             {
