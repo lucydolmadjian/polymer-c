@@ -13,6 +13,8 @@ iSiteInputMethod	4
 	% 3 - use last site
 StiffenRange		0
 stiffCase		0
+	% 0 - CD3Zeta
+	% for now, this is the only option
 occupiedSites		0_0_0_0_0_0
 occupiedSitesNoSpace 	000000
 iSiteFilename		iSites.txt

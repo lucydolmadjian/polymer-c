@@ -2,128 +2,113 @@
 
 void initializeStiffSites();
 
-
 /*******************************************************************************/
-//  GLOBAL VARIABLES for output control
+//  GLOBAL VARIABLES for initializing stiff sites
 /*******************************************************************************/
-
+int stiffEnd, stiffStart;
+double stiffiSites[NMAX];
 //
 /********************************************************************************************************/
 void initializeStiffSites()
 {
-        
-        
-        //initializes stiffiSites to 0 (none phosphorylated)
-        for(ty=0;ty<iSiteTotal;ty++)
-        {
-            stiffiSites[ty]=0;
-        }
-        
-        
-        printf("This is a string: %s\n", occupiedSites);
-        
-     
-        if (TALKATIVE) printf("This is a string: %s\n", occupiedSites);
-        
-        //read string and assign to double vector
-        
-        // 1 is occupied iSite (phosphorylated), 0 is unoccupied
-        
-        switch (stiffCase) //do I want this to be testRun? or another variable?
-        {
-            case 0:
-                
-                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5]);
-                break;
-                
-            case 1:
-                
-                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
-                break;
-                
-            case 2:
-                
-                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5],&stiffiSites[6],&stiffiSites[7],&stiffiSites[8],&stiffiSites[9],&stiffiSites[10],&stiffiSites[11],&stiffiSites[12],&stiffiSites[13]);
-                break;
+    //initializes stiffiSites to 0 (none phosphorylated)
+    for(ty=0;ty<iSiteTotal;ty++)
+    {
+        stiffiSites[ty]=0;
+    }
 
-//                sscanf(occupiedSites,"%lf_%lf", &stiffiSites[0], &stiffiSites[1]);
-                //break;
-                
-        }
-        
-        
-        if (TALKATIVE)
-            for (iy=0;iy<iSiteTotal;iy++)
-            {
-                printf("stiffiSites[ %ld ] =  %f\n",iy, stiffiSites[iy]);
-				fflush(stdout);
-            }
-        
-        //initializes stiffened rods to 0 (none stiff)
-        for(i=0;i<N;i++)
+    if (TALKATIVE) printf("These are the occupied sites: %s\n", occupiedSites);
+    
+    //read string and assign to double vector
+    // 1 is occupied iSite (phosphorylated), 0 is unoccupied
+    switch (stiffCase)
+    {
+        case 0:
+            
+            sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[0],&stiffiSites[1],&stiffiSites[2],&stiffiSites[3], &stiffiSites[4],&stiffiSites[5]);
+            break;
+            
+            // could include a case to read occupiedSites from a file of either locations or of 0,1s
+            // for now, this is only useful for CD3Zeta parameters (anything with six iSites)
+            // could get rid of switch altogether for now
+    }
+    
+    // for debugging, print which iSites are declared stiff
+    if (TALKATIVE)
+        for (iy=0;iy<iSiteTotal;iy++)
         {
-            StiffSites[i] =0;
-        }
-        
-        
-        
-        //Stiffen segments
-        for(ty=0;ty<iSiteTotal;ty++)
-        {
-            if(stiffiSites[ty]==1) //might want to check the truth value on this - equals for double?
-            {
-                if(iSite[ty]-StiffenRange >= 0)
-                {
-                    stiffStart=iSite[ty]-StiffenRange;
-                }
-                else
-                {
-                    stiffStart=0;
-                }
-                
-                if(iSite[ty]+StiffenRange+1 >= N)
-                {
-                    stiffEnd=N;
-                }
-                else
-                {
-                    stiffEnd=iSite[ty]+StiffenRange+1;
-                }
-
-                for(i=stiffStart;i<stiffEnd;i++)
-                {
-                    StiffSites[i]=1; //set that joint to "stiff"
-                }
-            }
+            printf("stiffiSites[ %ld ] =  %f\n",iy, stiffiSites[iy]);
+            fflush(stdout);
         }
     
-        if (TALKATIVE)
+    //initializes stiffened rods to 0 (none stiff)
+    for(i=0;i<N;i++)
+    {
+        StiffSites[i] =0;
+    }
+
+    /********************************************************/
+    /******************* STIFFEN SEGMENTS *******************/
+    /********************************************************/
+    for(ty=0;ty<iSiteTotal;ty++)
+    {
+        if(stiffiSites[ty]==1) //might want to check the truth value on this - equals for double?
         {
-            totalStiff = 0;
-            for (i=0;i<N;i++)
+            // set beginning of stiffening range
+            if(iSite[ty]-StiffenRange >= 0)
             {
-                if (StiffSites[i]==1)
-                {
-                    //printf("Stiffen[ %ld ] =  %f\n",i, StiffSites[i]);
-                    //fflush(stdout);
-                    totalStiff++;
-                }
+                stiffStart=iSite[ty]-StiffenRange;
             }
-            printf("Total Stiff: %d\n", totalStiff);
+            else // if stiffenrange goes below 0, start stiffening at 0
+            {
+                stiffStart=0;
+            }
+            
+            //set end of stiffening range
+            // if stiffenrange goes above N, end at N
+            if(iSite[ty]+StiffenRange+1 >= N)
+            {
+                stiffEnd=N;
+            }
+            else
+            {
+                stiffEnd=iSite[ty]+StiffenRange+1;
+            }
+            
+            // declare which segments are stiff, exclusive of right endpoint (because included +1 above)
+            for(i=stiffStart;i<stiffEnd;i++)
+            {
+                StiffSites[i]=1; //set that joint to "stiff"
+            }
+        }
+    }
+
+    // for debugging, count and print the total number of stiff segments
+    if (TALKATIVE)
+    {
+        totalStiff = 0;
+        for (i=0;i<N;i++)
+        {
+            if (StiffSites[i]==1)
+            {
+                //printf("Stiffen[ %ld ] =  %f\n",i, StiffSites[i]);
+                //fflush(stdout);
+                totalStiff++;
+            }
+        }
+        printf("Total Stiff: %d\n", totalStiff);
+        fflush(stdout);
+        
+        if (totalStiff >= N)
+        {
+            // Include error for completely stiff
+            // May cause convergence problems?
+            printf("Error! Completely stiff!\n");
             fflush(stdout);
             
-            if (totalStiff >= N)
-            {
-                printf("Error! Completely stiff!\n");
-                fflush(stdout);
-                
-                exit(0);
-                
-            }
+            exit(0);
         }
-    
-    
-
+    }
 }
 
 /********************************************************************************************************/

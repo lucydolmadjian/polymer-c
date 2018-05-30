@@ -80,8 +80,8 @@ long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
 long polymerLocationCounts[NMAX][NBINSPOLYMER];
 
 /* STIFFEN Global Variables */
-double StiffenRange,stiffiSites[NMAX], StiffSites[NMAX];
-int stiffCase, totalStiff, stiffEnd, stiffStart;
+double StiffenRange, StiffSites[NMAX];
+int stiffCase, totalStiff;
 
 char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
 double iSiteOccupied[NMAX];
