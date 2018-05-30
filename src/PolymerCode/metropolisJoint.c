@@ -141,7 +141,9 @@ void metropolisJoint()
         // 5. test for stationarity (convergence)
         // 6. increment the iteration and repeat
 		
+        /****************************************************************/
         /********* 1. Generate proposal configuration *******************/
+        /****************************************************************/
 
 		for(i=0;i<N;i++)
 		{
@@ -150,13 +152,12 @@ void metropolisJoint()
 			psiPropose[i]   = psi[i];
 		}
 		
-		
 		iPropose = floor(N*TWISTER); // Initialize. This is the joint we will adjust this time.
         
-        
-        
-        //set joints to stiff based on which iSites are occupied and the stiffness range
-        //Ignore for formin
+
+        //If using STIFFEN
+            //test if joint is stiff
+            //replace proposed joint until one is found that is not stiff
         if (STIFFEN)
         {
             while(StiffSites[iPropose]==1) //Test if proposed joint is stiff.
@@ -181,7 +182,7 @@ void metropolisJoint()
         constraintProposalsTotal = 0;
         long rounds = 0;
 		constraintSatisfiedTF = 0;
-        //for(j=0;j<5;j++)
+
 		while(!constraintSatisfiedTF && constraintProposalsTotal < CPMAX) // keep generating proposal configurations until we get one that satisfies the constraint
         {
             iChi = floor(3*TWISTER);
@@ -216,7 +217,7 @@ void metropolisJoint()
                 rPropose[0][ix] = rBase[ix] + tPropose[0][ix];
 				
             // for i<iPropose, proposal configuration is the same as current configuration
-            for(i=1;i<iPropose;i++) //Why start at 1 instead of 0??
+            for(i=1;i<iPropose;i++)
             {
                 rPropose[i][0] = r[i][0];
                 rPropose[i][1] = r[i][1];
@@ -251,10 +252,13 @@ void metropolisJoint()
             
             //how does this work?  only returns first component of t, e1, e2? where are the other components?
 
-				
-            /********* 2. Test constraints *******************/
+            /****************************************************************/
+            /******************* 2. Test constraints ************************/
+            /****************************************************************/
+            
             constraintSatisfiedTF=1;
-            //use membrane constraint on polymer
+            
+            //check if hard membrane occludes polymer (when not using ELECTRO)
             if (MEMBRANE && !ELECTRO)
             {
                 
@@ -270,6 +274,7 @@ void metropolisJoint()
                 } // done checking constraint
             } //finished first constraint
             
+            // check if BASEBOUND (immobile sphere at base) occludes polymer
             if (BASEBOUND)
             {
                 for(i=0;i<N;i++)// for each joint
@@ -285,7 +290,8 @@ void metropolisJoint()
                 }
             }
 
-            if (MULTIPLE && constraintSatisfiedTF) //only test if looking at multiple binding and if membrane constraint passed
+            //only test if looking at multiple binding and if membrane constraint passed
+            if (MULTIPLE && constraintSatisfiedTF)
             {
                 
                 //printf("Testing bound ligands.");
@@ -335,17 +341,17 @@ void metropolisJoint()
                 for (ib=0;ib<bSiteTotal;ib++) //for each bound ligand
                 {
                     
-                    if (MEMBRANE)
-                    {
+                   if (MEMBRANE)
+                   {
                         if(bLigandCenter[ib][2]<brLigand) // if any bound ligands intersect with membrane
                         {
                             constraintSatisfiedTF = 0; //constraint not satisfied
                             ib = bSiteTotal; //shortcut out of outer loop
                         }
-                    }
+                   }
                     
-                    if(constraintSatisfiedTF) //if passed membrane constraint, test joints
-                    {
+                   if(constraintSatisfiedTF) //if passed membrane constraint, test joints
+                   {
                         for(i=0;i<N;i++)// for each joint
                         {
                             if ( ((bLigandCenter[ib][0]-rPropose[i][0])*(bLigandCenter[ib][0]-rPropose[i][0]) +
@@ -367,27 +373,25 @@ void metropolisJoint()
                             constraintSatisfiedTF=0; //constraint not satisfied
                         }
                         
-                    }
+                     }
                     
-                    if (constraintSatisfiedTF) //if constraint is still satisfied, test ligand sphere with other ligands
-                    {
+                     if (constraintSatisfiedTF) //if constraint is still satisfied, test ligand sphere with other ligands
+                     {
                         for (ib2=(ib+1);ib2<bSiteTotal;ib2++) //for each next ligand
                         {
                             
                             if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*brLigand)*(2*brLigand) && bSite[ib]!= bSite[ib2]) //if distance between centers is less than 2*brLigand, then ligands are intersecting, and ligands are not at same joint
 
-                                
+                            
                             {
                                 constraintSatisfiedTF=0; //constraint not satisfied
                                 ib2=bSiteTotal; //shortcut out of loop
                             }
                          }
-                        
-                     }
-                    
-                }
+                      }
+                    }
 
-            } //finished second constraint
+                } //finished second constraint
             
             constraintProposalsTotal++; //count number of times proposals are rejected this time step
         } //finish constraint while loop
@@ -398,9 +402,11 @@ void metropolisJoint()
             fflush(stdout);
             
             exit(0);
-            
         }
-        /********* 3. Metropolis test *******************/
+        
+        /****************************************************************/
+        /********************* 3. Metropolis test ***********************/
+        /****************************************************************/
         // We now have a propsoal configuration that passes the constraints.
         // Step 3 is to see if it passes our acceptance test (Metropolis test).
         
@@ -457,6 +463,7 @@ void metropolisJoint()
                 // 3. Phosphorylated tyrosines feel negative potential (repulsion from membrane)
                 for (i=0;i<N;i++)
                 {
+                    // if basic and not phosphorylated
                     if((BasicSitesYN[i]==1)&&(PhosphorylatedSites[i]!=1))
                     {
                         if(rPropose[i][2]<(sqrt(parabolaDepth/parabolaWidth)))
@@ -468,21 +475,30 @@ void metropolisJoint()
                     }
                     else
                     {
-                        
+                        // if phosphorylated
                         if( PhosphorylatedSites[i]==1 )
                         {
-                            if (rPropose[i][2]>0)
+                            if (HARDWALL) //hard wall for phosphorylated tyrosines too
+                            {
+                                if (rPropose[i][2]>0)
+                                {
+                                    // repulsive force with E*e^(-z/zbar)
+                                    EelectroNew += Erepulsion*(exp(-rPropose[i][2]/Zrepulsion));
+                                }
+                                else
+                                {
+                                    // hardwall at 0 for phosphorylated tyrosines - probably unnecessary
+                                    EelectroNew += INF;
+                                }
+                            }
+                            else //no hardwall for phosphorylated tyrosines - use exponential
                             {
                                 // repulsive force with E*e^(-z/zbar)
                                 EelectroNew += Erepulsion*(exp(-rPropose[i][2]/Zrepulsion));
                             }
-                            else
-                            {
-                                // hardwall at 0 for phosphorylated tyrosines - probably unnecessary
-                                EelectroNew += INF;
-                            }
+
                         }
-                        else
+                        else //if anything else (tyrosine, other amino acid)
                         {
                             if (HARDWALL) // hard wall
                             {
@@ -503,12 +519,8 @@ void metropolisJoint()
                             }
                           }
                         }
-
-
-                
                     }
 
-            
             if (  TWISTER < exp(Eelectro-EelectroNew) ) //always accepts if ENew<E, accepts with normal (?) probability if ENew>E
             {
 
@@ -547,12 +559,16 @@ void metropolisJoint()
 
             } // end configuration loop
         
-        /********* 4. Data collection and output to file *******************/
+        /**************************************************************************/
+        /**************** 4. Data collection and output to file *******************/
+        /**************************************************************************/
+        
         // check if blocking sphere
         if (1)
         {
+            /***********************************/
             /*******Initialize variables********/
-            
+            /***********************************/
             
             for(iy=0;iy<iSiteTotal;iy++) //for each iSite, determine the center of the ligand sphere
             {
@@ -565,7 +581,6 @@ void metropolisJoint()
                 membraneOcclusion[iy]           = 0; //set membrane occlusion array to 0 for each iSite
                 membraneAndSegmentOcclusion[iy] = 0; //set membrane and segment occlusion array to 0 for each iSite
             }
-            
             
             //initialize ligand center at base
             baseLigandCenter[0] = rBase[0] + irLigand*e1Base[0];
@@ -620,8 +635,9 @@ void metropolisJoint()
             }
             
             
-            
+            /*******************************************/
             /**********Test Occlusion of iSites*********/
+            /*******************************************/
             
             //tests occlusion of iSites first
             for(iy=0; iy<iSiteTotal;iy++)
@@ -656,7 +672,7 @@ void metropolisJoint()
                     }
                     else
                     {
-                        // check if sphere violates base
+                        // check if sphere violates base (end point of polymer - origin)
                         if ( (iLigandCenter[iy][0])*(iLigandCenter[iy][0]) +
                              (iLigandCenter[iy][1])*(iLigandCenter[iy][1]) +
                              (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= irLigand*irLigand )
@@ -724,8 +740,10 @@ void metropolisJoint()
             } // finished loop through iSites
         
         
-
+            /**********************************************/
             /***********Check Occlusion of Base************/
+            /**********************************************/
+            
             if (!MEMBRANE) //only check occlusion if there is no membrane (membrane implies always occluded at base)
             {
                 
