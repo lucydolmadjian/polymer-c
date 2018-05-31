@@ -13,9 +13,9 @@
 #define DCHIINIT        0.1
 #define KSCRITICAL      0.01
 #define MEMBRANE        1
-#define MULTIPLE        1
+#define MULTIPLE        0
 #define STIFFEN         0
-#define ELECTRO         0
+#define ELECTRO         1
 #define HARDWALL        0
 #define BASEBOUND       0
 #define CPMAX           1e8
@@ -23,7 +23,7 @@
 #define TXTPARAM        1
 #define VISUALIZE       0
 #define CD3ZETA         1
-#define BINDTRANSITION  1
+#define BINDTRANSITION  0
 
 #include <math.h>
 #include <stdlib.h>
@@ -183,7 +183,7 @@ int main( int argc, char *argv[] )
                     iSite[0]= atoi(argv[8]);
                     iSiteTotal=1;
                     if (TALKATIVE) printf("This is argument 8: %ld\n", iSite[0]);
-                    testRun=3;
+                    iSiteInputMethod=1;
                 }
             }
             
@@ -194,11 +194,11 @@ int main( int argc, char *argv[] )
                     bSite[0]=atoi(argv[9]);
                     bSiteTotal=1;
                     if (TALKATIVE) printf("This is argument 9: %ld\n", bSite[0]);
-                    bSiteCommand = 1;
+                    bSiteInputMethod = 1;
                 }
                 else
                 {
-                    bSiteCommand = 0;
+                    bSiteInputMethod = 0;
                 }
             }
             ///////////Stiffening Parameters/////////////////

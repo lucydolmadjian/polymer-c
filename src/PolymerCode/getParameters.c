@@ -34,8 +34,8 @@ void getParameters()
     fscanf(paramsFile,"%s %d", tmpString, &verboseTF);
     if (TALKATIVE) printf("This is verbose: %d\n", verboseTF);
     
-    fscanf(paramsFile,"%s %d", tmpString, &testRun);
-    if (TALKATIVE) printf("This is test case: %d\n", testRun);
+    fscanf(paramsFile,"%s %d", tmpString, &iSiteInputMethod);
+    if (TALKATIVE) printf("This is iSite Input Method: %d\n", iSiteInputMethod);
     
     // omit argument 8 & 9 from text file - easier to just read iSites in from text file for now
     
@@ -60,8 +60,8 @@ void getParameters()
     fscanf(paramsFile,"%s %s", tmpString, basicSiteFilename);
     if (TALKATIVE) printf("This is basicSite filename: %s\n", basicSiteFilename);
     
-    fscanf(paramsFile,"%s %d", tmpString, &bSiteCommand);
-    if (TALKATIVE) printf("This is bSite command: %d\n", bSiteCommand);
+    fscanf(paramsFile,"%s %d", tmpString, &bSiteInputMethod);
+    if (TALKATIVE) printf("This is bSite input method: %d\n", bSiteInputMethod);
     
     fscanf(paramsFile,"%s %lf", tmpString, &parabolaDepth);
     if (TALKATIVE) printf("This is parabolaDepth: %lf\n", parabolaDepth);
