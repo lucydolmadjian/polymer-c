@@ -1,6 +1,7 @@
 /*** Allard Lab jun.allard@uci.edu                    ***/
 
 #define TWISTER genrand_real3()
+#define NCHAINMAX       10
 #define NMAX            400
 #define NTMAX           2e9
 #define NTADAPT         20000
@@ -45,28 +46,28 @@ FILE *fList;
 char paramsFilename[100], iSiteFilename[100], bSiteFilename[100], basicSiteFilename[100];
 FILE *paramsFile, *iSiteList, *bSiteList, *basicSiteList;
 
-long N, ntNextStationarityCheck, iBin;
-long iSite[NMAX], iSiteTotal, iSiteCurrent, iy,ty, stericOcclusion[NMAX];
+long N[NCHAINMAX], ntNextStationarityCheck, iBin;
+long iSite[NCHAINMAX][NMAX], iSiteTotal[NCHAINMAX], iSiteCurrent, iy,ty, stericOcclusion[NCHAINMAX][NMAX];
 double c0, c1, irLigand;
 
-double ree, rM, rM2, rMiSite[NMAX], rM2iSite[NMAX], rH, ksStatistic;
+double ree[NCHAINMAX], rM[NCHAINMAX], rM2[NCHAINMAX], rMiSite[NMAX], rM2iSite[NMAX], rH[NCHAINMAX], ksStatistic;
 
 long iseed;
 
 double phi[NMAX], theta[NMAX], psi[NMAX];
 double phiPropose[NMAX], thetaPropose[NMAX], psiPropose[NMAX];
-double r[NMAX][3],t[NMAX][3], e1[NMAX][3], e2[NMAX][3],
-       rBase[3], tBase[3], e1Base[3], e2Base[3],
-       rPropose[NMAX][3],tPropose[NMAX][3], e1Propose[NMAX][3], e2Propose[NMAX][3];
+double r[NCHAINMAX][NMAX][3],t[NCHAINMAX][NMAX][3], e1[NCHAINMAX][NMAX][3], e2[NCHAINMAX][NMAX][3],
+       rBase[NCHAINMAX][3], tBase[NCHAINMAX][3], e1Base[NCHAINMAX][3], e2Base[NCHAINMAX][3],
+       rPropose[NCHAINMAX][NMAX][3],tPropose[NCHAINMAX][NMAX][3], e1Propose[NCHAINMAX][NMAX][3], e2Propose[NCHAINMAX][NMAX][3];
 double norm;
-double iLigandCenter[NMAX][3];
-double baseCenter[3];
+double iLigandCenter[NCHAINMAX][NMAX][3];
+
 double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 long st;
 long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationarityCheck,i2, iStart;
-double E, ENew, rate[2], dChi[2], dChiHere, ksStatistic, Force;
+double E, ENew, rate[2], dChi[2], dChiHere, Force;
 long constraintProposalsTotal;
 
 int iSiteInputMethod;
@@ -78,40 +79,41 @@ long j,m;
 /* Convergence Global Variables */
 int convergedTF, constraintSatisfiedTF, verboseTF;
 long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
-long polymerLocationCounts[NMAX][NBINSPOLYMER];
+long polymerLocationCounts[NCHAINMAX][NMAX][NBINSPOLYMER];
 
 /* STIFFEN Global Variables */
-double StiffenRange, StiffSites[NMAX];
-int stiffCase, totalStiff;
+double StiffenRange, StiffSites[NCHAINMAX][NMAX];
+int stiffCase, totalStiff[NCHAINMAX];
 
-char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
-double iSiteOccupied[NMAX];
+char occupiedSites[NCHAINMAX][4*NMAX],occupiedSitesNoSpace[NCHAINMAX][NMAX];
+double iSiteOccupied[NCHAINMAX][NMAX];
 
 /* MULTIPLE Global Variables*/
 int bSiteInputMethod;
 double brLigand;
-double bLigandCenter[NMAX][3];
-long bSite[NMAX], bSiteTotal, bSiteCurrent, ib, ib2;
+double bLigandCenter[NCHAINMAX][NMAX][3];
+long bSite[NCHAINMAX][NMAX], bSiteTotal[NCHAINMAX], bSiteCurrent, ib, ib2;
 long bSiteCounter;
 
 double deliveryDistance;
-long stericOcclusionBase;
-long membraneOcclusion[NMAX], membraneAndSegmentOcclusion[NMAX];
+long stericOcclusionBase[NCHAINMAX];
+long membraneOcclusion[NCHAINMAX][NMAX], membraneAndSegmentOcclusion[NCHAINMAX][NMAX];
 double localConcCutoff;
 int deliveryMethod;
-long boundToBaseDeliver[NMAX];
+long boundToBaseDeliver[NCHAINMAX][NMAX];
 
 /* ELECTRO Global Variables */
 double Eelectro, EelectroNew;
 double Erepulsion, Zrepulsion;
 double parabolaDepth, parabolaWidth, wallParabolaK;
-double PhosphorylatedSites[NMAX];
+double PhosphorylatedSites[NCHAINMAX][NMAX];
 int PhosElectroRange;
-long basicSite[NMAX], BasicSitesYN[NMAX], basicSiteTotal, basicSiteCurrent, iBasic;
+long basicSite[NCHAINMAX][NMAX], BasicSitesYN[NCHAINMAX][NMAX], basicSiteTotal[NCHAINMAX], basicSiteCurrent, iBasic;
 
 /* BASEBOUND Global Variables */
 double baserLigand;
-double baseLigandCenter[3];
+double baseLigandCenter[NCHAINMAX][3];
+double baseCenter[3];
 
 /*******************************************************************************/
 //  INCLUDES

@@ -8,11 +8,15 @@ void dataRecording();
 //  GLOBAL VARIABLES for output control
 /*******************************************************************************/
 
-double reeBar_sum, ree2Bar_sum, rMBar_sum, rM2Bar_sum, rMiSiteBar_sum[NMAX], rM2iSiteBar_sum[NMAX];
-long POcclude_sum[NMAX], Prvec0_sum[NMAX], POccludeBase_sum, PDeliver_sum[NMAX], PMembraneOcclude_sum[NMAX],PMembraneSegmentOcclude_sum[NMAX];
-double reeBar, ree2Bar, POcclude[NMAX], POccludeBase, PDeliver[NMAX], Prvec0[NMAX],PMembraneOcclude[NMAX],PMembraneSegmentOcclude[NMAX], reeiSite[NMAX], rMBar, rM2Bar, rMiSiteBar[NMAX], rM2iSiteBar[NMAX];
-double distiSiteToLigand[NMAX][NMAX], selfBind[NMAX][NMAX], selfBindFraction[NMAX][NMAX], localConcentration[NMAX][NMAX];
-double occupied[NMAX];
+double reeBar_sum[NCHAINMAX], ree2Bar_sum[NCHAINMAX], rMBar_sum[NCHAINMAX], rM2Bar_sum[NCHAINMAX], rMiSiteBar_sum[NCHAINMAX][NMAX], rM2iSiteBar_sum[NCHAINMAX][NMAX];
+
+long POcclude_sum[NCHAINMAX][NMAX], Prvec0_sum[NCHAINMAX][NMAX], POccludeBase_sum[NCHAINMAX], PDeliver_sum[NCHAINMAX][NMAX], PMembraneOcclude_sum[NCHAINMAX][NMAX],PMembraneSegmentOcclude_sum[NCHAINMAX][NMAX];
+
+double reeBar[NCHAINMAX], ree2Bar[NCHAINMAX], POcclude[NCHAINMAX][NMAX], POccludeBase[NCHAINMAX], PDeliver[NCHAINMAX][NMAX], Prvec0[NCHAINMAX][NMAX],PMembraneOcclude[NCHAINMAX][NMAX],PMembraneSegmentOcclude[NCHAINMAX][NMAX], reeiSite[NCHAINMAX][NMAX], rMBar[NCHAINMAX], rM2Bar[NCHAINMAX], rMiSiteBar[NCHAINMAX][NMAX], rM2iSiteBar[NCHAINMAX][NMAX];
+
+double distiSiteToLigand[NCHAINMAX][NMAX][NMAX], selfBind[NCHAINMAX][NMAX][NMAX], selfBindFraction[NCHAINMAX][NMAX][NMAX], localConcentration[NCHAINMAX][NMAX][NMAX];
+
+double occupied[NCHAINMAX][NMAX];
 double binSize;
 
 /********************************************************************************************************/
