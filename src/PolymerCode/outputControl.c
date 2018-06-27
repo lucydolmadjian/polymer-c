@@ -8,15 +8,15 @@ void dataRecording();
 //  GLOBAL VARIABLES for output control
 /*******************************************************************************/
 
-double reeBar_sum[NCHAINMAX], ree2Bar_sum[NCHAINMAX], rMBar_sum[NCHAINMAX], rM2Bar_sum[NCHAINMAX], rMiSiteBar_sum[NCHAINMAX][NMAX], rM2iSiteBar_sum[NCHAINMAX][NMAX];
+double reeBar_sum[NFILMAX], ree2Bar_sum[NFILMAX], rMBar_sum[NFILMAX], rM2Bar_sum[NFILMAX], rMiSiteBar_sum[NFILMAX][NMAX], rM2iSiteBar_sum[NFILMAX][NMAX];
 
-long POcclude_sum[NCHAINMAX][NMAX], Prvec0_sum[NCHAINMAX][NMAX], POccludeBase_sum[NCHAINMAX], PDeliver_sum[NCHAINMAX][NMAX], PMembraneOcclude_sum[NCHAINMAX][NMAX],PMembraneSegmentOcclude_sum[NCHAINMAX][NMAX];
+long POcclude_sum[NFILMAX][NMAX], Prvec0_sum[NFILMAX][NMAX], POccludeBase_sum[NFILMAX], PDeliver_sum[NFILMAX][NMAX], PMembraneOcclude_sum[NFILMAX][NMAX],PMembraneSegmentOcclude_sum[NFILMAX][NMAX];
 
-double reeBar[NCHAINMAX], ree2Bar[NCHAINMAX], POcclude[NCHAINMAX][NMAX], POccludeBase[NCHAINMAX], PDeliver[NCHAINMAX][NMAX], Prvec0[NCHAINMAX][NMAX],PMembraneOcclude[NCHAINMAX][NMAX],PMembraneSegmentOcclude[NCHAINMAX][NMAX], reeiSite[NCHAINMAX][NMAX], rMBar[NCHAINMAX], rM2Bar[NCHAINMAX], rMiSiteBar[NCHAINMAX][NMAX], rM2iSiteBar[NCHAINMAX][NMAX];
+double reeBar[NFILMAX], ree2Bar[NFILMAX], POcclude[NFILMAX][NMAX], POccludeBase[NFILMAX], PDeliver[NFILMAX][NMAX], Prvec0[NFILMAX][NMAX],PMembraneOcclude[NFILMAX][NMAX],PMembraneSegmentOcclude[NFILMAX][NMAX], reeiSite[NFILMAX][NMAX], rMBar[NFILMAX], rM2Bar[NFILMAX], rMiSiteBar[NFILMAX][NMAX], rM2iSiteBar[NFILMAX][NMAX];
 
-double distiSiteToLigand[NCHAINMAX][NMAX][NMAX], selfBind[NCHAINMAX][NMAX][NMAX], selfBindFraction[NCHAINMAX][NMAX][NMAX], localConcentration[NCHAINMAX][NMAX][NMAX];
+double distiSiteToLigand[NFILMAX][NMAX][NMAX], selfBind[NFILMAX][NMAX][NMAX], selfBindFraction[NFILMAX][NMAX][NMAX], localConcentration[NFILMAX][NMAX][NMAX];
 
-double occupied[NCHAINMAX][NMAX];
+double occupied[NFILMAX][NMAX];
 double binSize;
 
 /********************************************************************************************************/

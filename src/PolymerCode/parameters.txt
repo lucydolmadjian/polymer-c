@@ -1,4 +1,5 @@
 listName		outputTest
+NChains			1
 N			120
 irLigand		2
 brLigand		1

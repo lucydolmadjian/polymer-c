@@ -8,7 +8,7 @@ void initializePhosphorylatedSites();
 
 int totalPhosphorylated;
 
-double phosiSites[NCHAINMAX][NMAX];
+double phosiSites[NFILMAX][NMAX];
 /*******************************************************************************/
 void initializePhosphorylatedSites()
 {

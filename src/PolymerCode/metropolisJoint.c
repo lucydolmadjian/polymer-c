@@ -33,6 +33,7 @@ void metropolisJoint()
     
     /********* INITIALIZE CONFIGURATION *******************/
 
+    //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
     //initalize base
 	tBase[0]=0;
 	tBase[1]=0;
@@ -48,30 +49,34 @@ void metropolisJoint()
 	e2Base[2]=0;
 	
 	// initial configuration
-	for(i=0;i<N;i++)
-	{
-		phi[i]   = 0; 
-		theta[i] = 0;
-		psi[i]   = 0;
-		
-		r[i][0]  = 0; 
-		r[i][1]  = 0;
-		r[i][2]  = i+1;
-		
-		t[i][0]  = 0;
-		t[i][1]  = 0;
-		t[i][2]  = 1;
-        
-        e1[i][0] = 1;  
-        e1[i][1] = 0;
-        e1[i][2] = 0;
-        
-        e2[i][0] = 0;
-        e2[i][1] = 1;
-        e2[i][2] = 0;
-        
-	}
+    for(nf=0;nf<NFil;nf++)
+    {
+        for(i=0;i<N[nf];i++)
+        {
+            phi[nf][i]   = 0;
+            theta[nf][i] = 0;
+            psi[nf][i]   = 0;
+            
+            r[nf][i][0]  = 0;
+            r[nf][i][1]  = 0;
+            r[nf][i][2]  = i+1;
+            
+            t[nf][i][0]  = 0;
+            t[nf][i][1]  = 0;
+            t[nf][i][2]  = 1;
+            
+            e1[nf][i][0] = 1;
+            e1[nf][i][1] = 0;
+            e1[nf][i][2] = 0;
+            
+            e2[nf][i][0] = 0;
+            e2[nf][i][1] = 1;
+            e2[nf][i][2] = 0;
+            
+        }
+    }
     
+    //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
     if (BASEBOUND)
     {
         baseCenter[0] = 0;
@@ -79,11 +84,59 @@ void metropolisJoint()
         baseCenter[2] = -baserLigand;
     }
     
+    
+    // Initialize bLigandCenter locations
+    for(nf=0;nf<NFil;nf++)
+    {
+        for(ib=0;ib<bSiteTotal[nf];ib++) //for each bound iSite, find the center of the attached ligand
+        {
+            switch (ib % 4) //currently changes orientation of ligand center based on where it is in list of bound sites
+            {
+                case 0: //standard orientation - same as used for iSite Pocc calculations
+                    
+                    bSiteCurrent = bSite[nf][ib];
+                    bLigandCenter[nf][ib][0] = r[nf][bSiteCurrent][0] + brLigand*e1[nf][bSiteCurrent][0];
+                    bLigandCenter[nf][ib][1] = r[nf][bSiteCurrent][1] + brLigand*e1[nf][bSiteCurrent][1];
+                    bLigandCenter[nf][ib][2] = r[nf][bSiteCurrent][2] + brLigand*e1[nf][bSiteCurrent][2];
+                    break;
+                    
+                case 1: //180 degrees from standard
+                    
+                    bSiteCurrent = bSite[nf][ib];
+                    bLigandCenter[nf][ib][0] = r[nf][bSiteCurrent][0] - brLigand*e1[nf][bSiteCurrent][0];
+                    bLigandCenter[nf][ib][1] = r[nf][bSiteCurrent][1] - brLigand*e1[nf][bSiteCurrent][1];
+                    bLigandCenter[nf][ib][2] = r[nf][bSiteCurrent][2] - brLigand*e1[nf][bSiteCurrent][2];
+                    break;
+                    
+                case 2: //90 degrees from standard
+                    
+                    bSiteCurrent = bSite[nf][ib];
+                    bLigandCenter[nf][ib][0] = r[nf][bSiteCurrent][0] + brLigand*e2[nf][bSiteCurrent][0];
+                    bLigandCenter[nf][ib][1] = r[nf][bSiteCurrent][1] + brLigand*e2[nf][bSiteCurrent][1];
+                    bLigandCenter[nf][ib][2] = r[nf][bSiteCurrent][2] + brLigand*e2[nf][bSiteCurrent][2];
+                    break;
+                    
+                case 3: //270 from standard
+                    
+                    bSiteCurrent = bSite[nf][ib];
+                    bLigandCenter[nf][ib][0] = r[nf][bSiteCurrent][0] - brLigand*e2[nf][bSiteCurrent][0];
+                    bLigandCenter[nf][ib][1] = r[nf][bSiteCurrent][1] - brLigand*e2[nf][bSiteCurrent][1];
+                    bLigandCenter[nf][ib][2] = r[nf][bSiteCurrent][2] - brLigand*e2[nf][bSiteCurrent][2];
+                    break;
+            }
+            
+        }
+    }
+    
+    
+    
+    
 	convergedTF=0;
 	nt=0;
     E = INF;
     Eelectro = INF;
 
+    //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
     // stuff needed for automatic perturbation size adaptation
 	for(iParam=0;iParam<2;iParam++)
 	{
@@ -107,6 +160,7 @@ void metropolisJoint()
         // adapt step size
         if (!(nt % NTADAPT))
         {
+            //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
             rate[0] = (double)accepts[0]/(double)proposals[0];
             rate[1] = (double)accepts[1]/(double)proposals[1];
             
@@ -144,14 +198,17 @@ void metropolisJoint()
         /****************************************************************/
         /********* 1. Generate proposal configuration *******************/
         /****************************************************************/
-
-		for(i=0;i<N;i++)
-		{
-			phiPropose[i]   = phi[i];
-			thetaPropose[i] = theta[i];
-			psiPropose[i]   = psi[i];
-		}
+        for(nf=0;nf<NFil;nf++)
+        {
+            for(i=0;i<N[nf];i++)
+            {
+                phiPropose[nf][i]   = phi[nf][i];
+                thetaPropose[nf][i] = theta[nf][i];
+                psiPropose[nf][i]   = psi[nf][i];
+            }
+        }
 		
+        nfPropose = floor(NFil*TWISTER); // Initialize. This is the filament we will adjust this time.
 		iPropose = floor(N*TWISTER); // Initialize. This is the joint we will adjust this time.
         
 
@@ -160,14 +217,14 @@ void metropolisJoint()
             //replace proposed joint until one is found that is not stiff
         if (STIFFEN)
         {
-            while(StiffSites[iPropose]==1) //Test if proposed joint is stiff.
+            while(StiffSites[nfPropose][iPropose]==1) //Test if proposed joint is stiff.
             {
+                nfPropose = floor(NFil*TWISTER); //If stiff, propose new filament and joint until propose one not stiff.
                 iPropose = floor(N*TWISTER); //If stiff, propose new joint until propose one not stiff.
             }
         }
         
-        
-        
+        //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
 		if(iPropose==0)
 		{
 			dChiHere = dChi[0];
@@ -195,45 +252,75 @@ void metropolisJoint()
             switch (iChi)
             {
                 case 0:
-                    //phiPropose[iPropose]   = phiPropose[iPropose]   + dChiHere*sqrt(-2*log(TWISTER))*cos(2*PI*TWISTER);
-                    phiPropose[iPropose]   = phiPropose[iPropose]   + dChiHere*(2*TWISTER-1);
+                    //phiPropose[nfPropose][iPropose]   = phiPropose[nfPropose][iPropose]   + dChiHere*sqrt(-2*log(TWISTER))*cos(2*PI*TWISTER);
+                    phiPropose[nfPropose][iPropose]   = phiPropose[nfPropose][iPropose]   + dChiHere*(2*TWISTER-1);
                     break;
                 case 1:
-                    //thetaPropose[iPropose] = thetaPropose[iPropose] + dChiHere*sqrt(-2*log(TWISTER))*cos(2*PI*TWISTER);
-                    thetaPropose[iPropose] = thetaPropose[iPropose] + dChiHere*(2*TWISTER-1);
+                    //thetaPropose[nfPropose][iPropose] = thetaPropose[nfPropose][iPropose] + dChiHere*sqrt(-2*log(TWISTER))*cos(2*PI*TWISTER);
+                    thetaPropose[nfPropose][iPropose] = thetaPropose[nfPropose][iPropose] + dChiHere*(2*TWISTER-1);
                     break;
                 case 2:
-                    //psiPropose[iPropose]   = psiPropose[iPropose]   + dChiHere*sqrt(-2*log(TWISTER))*cos(2*PI*TWISTER);
-                    psiPropose[iPropose]   = psiPropose[iPropose]   + dChiHere*(2*TWISTER-1);
+                    //psiPropose[nfPropose][iPropose]   = psiPropose[nfPropose][iPropose]   + dChiHere*sqrt(-2*log(TWISTER))*cos(2*PI*TWISTER);
+                    psiPropose[nfPropose][iPropose]   = psiPropose[nfPropose][iPropose]   + dChiHere*(2*TWISTER-1);
                     break;
             }
 
             // -- translate to proposal configuration --
             // rotate base
-            rotate(&tBase[0], &e1Base[0], &e2Base[0], &tPropose[0][0], &e1Propose[0][0], &e2Propose[0][0], phiPropose[0], thetaPropose[0], psiPropose[0]);
             
             
+            //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
+            rotate(&tBase[0], &e1Base[0], &e2Base[0], &tPropose[nf][0][0], &e1Propose[nf][0][0], &e2Propose[nf][0][0], phiPropose[nf][0], thetaPropose[nf][0], psiPropose[nf][0]);
+            
+            //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
             for(ix=0;ix<3;ix++)
-                rPropose[0][ix] = rBase[ix] + tPropose[0][ix];
+                rPropose[nf][0][ix] = rBase[ix] + tPropose[nf][0][ix];
 				
-            // for i<iPropose, proposal configuration is the same as current configuration
-            for(i=1;i<iPropose;i++)
+            // if nf != nfPropose, proposal configuration is the same as current configuration
+            // if nf = nfPropose and i<iPropose, proposal configuration is the same as current configuration
+            for(nf=0;nf<NFil;nf++)
             {
-                rPropose[i][0] = r[i][0];
-                rPropose[i][1] = r[i][1];
-                rPropose[i][2] = r[i][2];
-                
-                tPropose[i][0] = t[i][0];
-                tPropose[i][1] = t[i][1];
-                tPropose[i][2] = t[i][2];
-                
-                e1Propose[i][0] = e1[i][0];
-                e1Propose[i][1] = e1[i][1];
-                e1Propose[i][2] = e1[i][2];
-                
-                e2Propose[i][0] = e2[i][0];
-                e2Propose[i][1] = e2[i][1];
-                e2Propose[i][2] = e2[i][2];
+                if(nf==nfPropose)
+                {
+                    for(i=1;i<iPropose;i++)
+                    {
+                        rPropose[nf][i][0] = r[nf][i][0];
+                        rPropose[nf][i][1] = r[nf][i][1];
+                        rPropose[nf][i][2] = r[nf][i][2];
+                        
+                        tPropose[nf][i][0] = t[nf][i][0];
+                        tPropose[nf][i][1] = t[nf][i][1];
+                        tPropose[nf][i][2] = t[nf][i][2];
+                        
+                        e1Propose[nf][i][0] = e1[nf][i][0];
+                        e1Propose[nf][i][1] = e1[nf][i][1];
+                        e1Propose[nf][i][2] = e1[nf][i][2];
+                        
+                        e2Propose[nf][i][0] = e2[nf][i][0];
+                        e2Propose[nf][i][1] = e2[nf][i][1];
+                        e2Propose[nf][i][2] = e2[nf][i][2];
+                    }
+                }
+                else{
+                    for(i=1;i<N[nf];i++)
+                    {
+                        rPropose[nf][i][0] = r[nf][i][0];
+                        rPropose[nf][i][1] = r[nf][i][1];
+                        rPropose[nf][i][2] = r[nf][i][2];
+                        
+                        tPropose[nf][i][0] = t[nf][i][0];
+                        tPropose[nf][i][1] = t[nf][i][1];
+                        tPropose[nf][i][2] = t[nf][i][2];
+                        
+                        e1Propose[nf][i][0] = e1[nf][i][0];
+                        e1Propose[nf][i][1] = e1[nf][i][1];
+                        e1Propose[nf][i][2] = e1[nf][i][2];
+                        
+                        e2Propose[nf][i][0] = e2[nf][i][0];
+                        e2Propose[nf][i][1] = e2[nf][i][1];
+                        e2Propose[nf][i][2] = e2[nf][i][2];
+                    }
+                }
             }
             
             // rotate all segments above (and including) iPropose
@@ -242,12 +329,12 @@ void metropolisJoint()
                 iStart=1;
             else
                 iStart=iPropose;
-            for(i=iStart;i<N;i++)
+            for(i=iStart;i<N[nfPropose];i++)
             {
-                rotate(&tPropose[i-1][0], &e1Propose[i-1][0], &e2Propose[i-1][0], &tPropose[i][0], &e1Propose[i][0], &e2Propose[i][0],
-                    phiPropose[i], thetaPropose[i], psiPropose[i]);
+                rotate(&tPropose[nf][i-1][0], &e1Propose[nf][i-1][0], &e2Propose[nf][i-1][0], &tPropose[nf][i][0], &e1Propose[nf][i][0], &e2Propose[nf][i][0],
+                    phiPropose[nf][i], thetaPropose[nf][i], psiPropose[nf][i]);
                 for (ix=0;ix<3;ix++)
-                    rPropose[i][ix] = rPropose[i-1][ix] + tPropose[i][ix];
+                    rPropose[nf][i][ix] = rPropose[nf][i-1][ix] + tPropose[nf][i][ix];
             }
             
             //how does this work?  only returns first component of t, e1, e2? where are the other components?
@@ -263,29 +350,31 @@ void metropolisJoint()
             {
                 
                 //printf("Testing Membrane");
-                for(i=0;i<N;i++)
-                {
-                    if (rPropose[i][2] < 0)
+                // Should only need to test filament you are moving
+                    for(i=0;i<N[nfPropose];i++)
                     {
-                        constraintSatisfiedTF=0;
-                        i=N+1; // shortcut out of the loop
-                        //printf("Membrane constraint failed.");
-                    }
-                } // done checking constraint
+                        if (rPropose[nfPropose][i][2] < 0)
+                        {
+                            constraintSatisfiedTF=0;
+                            i=N[nfPropose]+1; // shortcut out of the loop
+                            //printf("Membrane constraint failed.");
+                        }
+                    } // done checking constraint
             } //finished first constraint
             
             // check if BASEBOUND (immobile sphere at base) occludes polymer
             if (BASEBOUND)
             {
-                for(i=0;i<N;i++)// for each joint
+                // Should only need to test filament you are moving
+                for(i=0;i<N[nfPropose];i++)// for each joint
                 {
                     //test polymer against sphere at base
-                    if ( ((baseCenter[0]-rPropose[i][0])*(baseCenter[0]-rPropose[i][0]) +
-                          (baseCenter[1]-rPropose[i][1])*(baseCenter[1]-rPropose[i][1]) +
-                          (baseCenter[2]-rPropose[i][2])*(baseCenter[2]-rPropose[i][2]) <= baserLigand*baserLigand )) //if proposed joint is inside base ligand sphere
+                    if ( ((baseCenter[0]-rPropose[nfPropose][i][0])*(baseCenter[0]-rPropose[nfPropose][i][0]) +
+                          (baseCenter[1]-rPropose[nfPropose][i][1])*(baseCenter[1]-rPropose[nfPropose][i][1]) +
+                          (baseCenter[2]-rPropose[nfPropose][i][2])*(baseCenter[2]-rPropose[nfPropose][i][2]) <= baserLigand*baserLigand )) //if proposed joint is inside base ligand sphere
                     {
                         constraintSatisfiedTF=0; //constraint not satisfied
-                        i=N; //shortcut out of inner loop
+                        i=N[nfPropose]; //shortcut out of inner loop
                     }
                 }
             }
@@ -296,97 +385,131 @@ void metropolisJoint()
                 
                 //printf("Testing bound ligands.");
                 
-                
                 //NOTE:  If you change the orientation of the ligands here, be sure to change them down in Occlusion Testing to match!!
-                for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
+                for(ib=0;ib<bSiteTotal[nfPropose];ib++) //for each bound iSite, find the center of the attached ligand
                 {
                     switch (ib % 4) //currently changes orientation of ligand center based on where it is in list of bound sites
                     {
                             case 0: //standard orientation - same as used for iSite Pocc calculations
                     
-                                bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + brLigand*e1Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + brLigand*e1Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + brLigand*e1Propose[bSiteCurrent][2];
+                                bSiteCurrent = bSite[nfPropose][ib];
+                                bLigandCenterPropose[nfPropose][ib][0] = rPropose[nfPropose][bSiteCurrent][0] + brLigand*e1Propose[nfPropose][bSiteCurrent][0];
+                                bLigandCenterPropose[nfPropose][ib][1] = rPropose[nfPropose][bSiteCurrent][1] + brLigand*e1Propose[nfPropose][bSiteCurrent][1];
+                                bLigandCenterPropose[nfPropose][ib][2] = rPropose[nfPropose][bSiteCurrent][2] + brLigand*e1Propose[nfPropose][bSiteCurrent][2];
                             break;
                             
                             case 1: //180 degrees from standard
                             
-                                bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - brLigand*e1Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - brLigand*e1Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - brLigand*e1Propose[bSiteCurrent][2];
+                                bSiteCurrent = bSite[nfPropose][ib];
+                                bLigandCenterPropose[nfPropose][ib][0] = rPropose[nfPropose][bSiteCurrent][0] - brLigand*e1Propose[nfPropose][bSiteCurrent][0];
+                                bLigandCenterPropose[nfPropose][ib][1] = rPropose[nfPropose][bSiteCurrent][1] - brLigand*e1Propose[nfPropose][bSiteCurrent][1];
+                                bLigandCenterPropose[nfPropose][ib][2] = rPropose[nfPropose][bSiteCurrent][2] - brLigand*e1Propose[nfPropose][bSiteCurrent][2];
                             break;
                             
                             case 2: //90 degrees from standard
                             
-                                bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] + brLigand*e2Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] + brLigand*e2Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] + brLigand*e2Propose[bSiteCurrent][2];
+                                bSiteCurrent = bSite[nfPropose][ib];
+                                bLigandCenterPropose[nfPropose][ib][0] = rPropose[nfPropose][bSiteCurrent][0] + brLigand*e2Propose[nfPropose][bSiteCurrent][0];
+                                bLigandCenterPropose[nfPropose][ib][1] = rPropose[nfPropose][bSiteCurrent][1] + brLigand*e2Propose[nfPropose][bSiteCurrent][1];
+                                bLigandCenterPropose[nfPropose][ib][2] = rPropose[nfPropose][bSiteCurrent][2] + brLigand*e2Propose[nfPropose][bSiteCurrent][2];
                             break;
                             
                             case 3: //270 from standard
                             
-                                bSiteCurrent = bSite[ib];
-                                bLigandCenter[ib][0] = rPropose[bSiteCurrent][0] - brLigand*e2Propose[bSiteCurrent][0];
-                                bLigandCenter[ib][1] = rPropose[bSiteCurrent][1] - brLigand*e2Propose[bSiteCurrent][1];
-                                bLigandCenter[ib][2] = rPropose[bSiteCurrent][2] - brLigand*e2Propose[bSiteCurrent][2];
+                                bSiteCurrent = bSite[nfPropose][ib];
+                                bLigandCenterPropose[nfPropose][ib][0] = rPropose[nfPropose][bSiteCurrent][0] - brLigand*e2Propose[nfPropose][bSiteCurrent][0];
+                                bLigandCenterPropose[nfPropose][ib][1] = rPropose[nfPropose][bSiteCurrent][1] - brLigand*e2Propose[nfPropose][bSiteCurrent][1];
+                                bLigandCenterPropose[nfPropose][ib][2] = rPropose[nfPropose][bSiteCurrent][2] - brLigand*e2Propose[nfPropose][bSiteCurrent][2];
                             break;
                     }
                     
                 }
                 
 
-                for (ib=0;ib<bSiteTotal;ib++) //for each bound ligand
+                for (ib=0;ib<bSiteTotal[nfPropose];ib++) //for each bound ligand on filament moved
                 {
                     
                    if (MEMBRANE)
                    {
-                        if(bLigandCenter[ib][2]<brLigand) // if any bound ligands intersect with membrane
+                        if(bLigandCenterPropose[nfPropose][ib][2]<brLigand) // if any bound ligands intersect with membrane
                         {
                             constraintSatisfiedTF = 0; //constraint not satisfied
-                            ib = bSiteTotal; //shortcut out of outer loop
+                            ib = bSiteTotal[nfPropose]; //shortcut out of outer loop
                         }
                    }
                     
                    if(constraintSatisfiedTF) //if passed membrane constraint, test joints
                    {
-                        for(i=0;i<N;i++)// for each joint
-                        {
-                            if ( ((bLigandCenter[ib][0]-rPropose[i][0])*(bLigandCenter[ib][0]-rPropose[i][0]) +
-                                (bLigandCenter[ib][1]-rPropose[i][1])*(bLigandCenter[ib][1]-rPropose[i][1]) +
-                                (bLigandCenter[ib][2]-rPropose[i][2])*(bLigandCenter[ib][2]-rPropose[i][2]) <= brLigand*brLigand )
-                                && i != bSite[ib]) //if proposed joint is inside ligand sphere AND joint is not where ligand is attached
+                       for(nf=0;nf<NFil;nf++)
+                       {
+                            for(i=0;i<N[nf];i++)// for each joint
                             {
-                                constraintSatisfiedTF=0; //constraint not satisfied
-                                i=N; //shortcut out of inner loop
-                                ib=bSiteTotal;// shortcut out of outer loop
+                                if ( ((bLigandCenterPropose[nfPropose][ib][0]-rPropose[nf][i][0])*(bLigandCenterPropose[nfPropose][ib][0]-rPropose[nf][i][0]) +
+                                    (bLigandCenterPropose[nfPropose][ib][1]-rPropose[nf][i][1])*(bLigandCenterPropose[nfPropose][ib][1]-rPropose[nf][i][1]) +
+                                    (bLigandCenterPropose[nfPropose][ib][2]-rPropose[nf][i][2])*(bLigandCenterPropose[nfPropose][ib][2]-rPropose[nf][i][2]) <= brLigand*brLigand )
+                                    && !( nf == nfPropose && i == bSite[nfPropose][ib]) ) //if proposed joint is inside ligand sphere AND joint is not where tested ligand is attached
+                                {
+                                    constraintSatisfiedTF=0; //constraint not satisfied
+                                    i=N[nf]; //shortcut out of inner loop
+                                    nf = NFil; //shortcut out of middle loop
+                                    ib=bSiteTotal[nfPropose];// shortcut out of outer loop
+                                }
                             }
-                        }
+                       }
                     }
                     
+                    // only have 1 base ligand for all filaments
                     if (constraintSatisfiedTF && BASEBOUND) //if constraint is still satisfied, test ligand sphere with base ligand if exists
                     {
-                        if ((bLigandCenter[ib][0]-baseCenter[0])*(bLigandCenter[ib][0]-baseCenter[0])+(bLigandCenter[ib][1]-baseCenter[1])*(bLigandCenter[ib][1]-baseCenter[1])+(bLigandCenter[ib][2]-baseCenter[2])*(bLigandCenter[ib][2]-baseCenter[2])<= (brLigand+baserLigand)*(brLigand+baserLigand)) //if distance between centers is less than brLigand+baserLigand, then ligands are intersecting
+                        if ((bLigandCenterPropose[nfPropose][ib][0]-baseCenter[0])*(bLigandCenterPropose[nfPropose][ib][0]-baseCenter[0])+(bLigandCenterPropose[nfPropose][ib][1]-baseCenter[1])*(bLigandCenterPropose[nfPropose][ib][1]-baseCenter[1])+(bLigandCenterPropose[nfPropose][ib][2]-baseCenter[2])*(bLigandCenterPropose[nfPropose][ib][2]-baseCenter[2])<= (brLigand+baserLigand)*(brLigand+baserLigand)) //if distance between centers is less than brLigand+baserLigand, then ligands are intersecting
                         {
                             constraintSatisfiedTF=0; //constraint not satisfied
+                            ib=bSiteTotal[nfPropose];// shortcut out of outer loop
                         }
                         
                      }
                     
-                     if (constraintSatisfiedTF) //if constraint is still satisfied, test ligand sphere with other ligands
+                     if (constraintSatisfiedTF) //if constraint is still satisfied, test ligand sphere with other ligands on same filament
                      {
-                        for (ib2=(ib+1);ib2<bSiteTotal;ib2++) //for each next ligand
-                        {
-                            
-                            if ((bLigandCenter[ib][0]-bLigandCenter[ib2][0])*(bLigandCenter[ib][0]-bLigandCenter[ib2][0])+(bLigandCenter[ib][1]-bLigandCenter[ib2][1])*(bLigandCenter[ib][1]-bLigandCenter[ib2][1])+(bLigandCenter[ib][2]-bLigandCenter[ib2][2])*(bLigandCenter[ib][2]-bLigandCenter[ib2][2])<= (2*brLigand)*(2*brLigand) && bSite[ib]!= bSite[ib2]) //if distance between centers is less than 2*brLigand, then ligands are intersecting, and ligands are not at same joint
-
-                            
+                         // check ligand against ligands on same filament
+                         for (ib2=(ib+1);ib2<bSiteTotal[nfPropose];ib2++) //for each next ligand
+                         {
+                             
+                             if ((bLigandCenterPropose[nfPropose][ib][0]-bLigandCenterPropose[nfPropose][ib2][0])*(bLigandCenterPropose[nfPropose][ib][0]-bLigandCenterPropose[nfPropose][ib2][0]) +
+                                 (bLigandCenterPropose[nfPropose][ib][1]-bLigandCenterPropose[nfPropose][ib2][1])*(bLigandCenterPropose[nfPropose][ib][1]-bLigandCenterPropose[nfPropose][ib2][1]) +
+                                 (bLigandCenterPropose[nfPropose][ib][2]-bLigandCenterPropose[nfPropose][ib2][2])*(bLigandCenterPropose[nfPropose][ib][2]-bLigandCenterPropose[nfPropose][ib2][2])<=
+                                 (2*brLigand)*(2*brLigand) && bSite[nfPropose][ib]!= bSite[nfPropose][ib2]) //if distance between centers is less than 2*brLigand, then ligands are intersecting, and ligands are not at same joint
+                                 
+                                 
+                             {
+                                 constraintSatisfiedTF=0; //constraint not satisfied
+                                 ib2=bSiteTotal[nfPropose]; //shortcut out of loop
+                                 ib=bSiteTotal[nfPropose]; //shortcut out of outer loop
+                             }
+                         }
+                     }
+                         
+                         
+                     if (constraintSatisfiedTF) //if constraint is still satisfied, test ligand sphere with other ligands on other filaments
+                     {
+                         // check ligand against ligands on other filaments
+                         for(nf=0;nf<NFil;nf++)
+                         {
+                            for (ib2=0;ib2<bSiteTotal[nf];ib2++) //for each next ligand
                             {
-                                constraintSatisfiedTF=0; //constraint not satisfied
-                                ib2=bSiteTotal; //shortcut out of loop
-                            }
+                                
+                                if ((bLigandCenterPropose[nfPropose][ib][0]-bLigandCenter[nf][ib2][0])*(bLigandCenterPropose[nfPropose][ib][0]-bLigandCenter[nf][ib2][0]) +
+                                    (bLigandCenterPropose[nfPropose][ib][1]-bLigandCenter[nf][ib2][1])*(bLigandCenterPropose[nfPropose][ib][1]-bLigandCenter[nf][ib2][1]) +
+                                    (bLigandCenterPropose[nfPropose][ib][2]-bLigandCenter[nf][ib2][2])*(bLigandCenterPropose[nfPropose][ib][2]-bLigandCenter[nf][ib2][2])<=
+                                    (2*brLigand)*(2*brLigand)) //if distance between centers is less than 2*brLigand, then ligands are intersecting
+
+                                
+                                {
+                                    constraintSatisfiedTF=0; //constraint not satisfied
+                                    ib2=bSiteTotal[nf]; //shortcut out of loop
+                                    ib=bSiteTotal[nfPropose]; //shortcut out of outer loop
+                                }
+                             }
                          }
                       }
                     }

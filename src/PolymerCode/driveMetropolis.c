@@ -1,7 +1,7 @@
 /*** Allard Lab jun.allard@uci.edu                    ***/
 
 #define TWISTER genrand_real3()
-#define NCHAINMAX       10
+#define NFILMAX       10
 #define NMAX            400
 #define NTMAX           2e9
 #define NTADAPT         20000
@@ -46,26 +46,27 @@ FILE *fList;
 char paramsFilename[100], iSiteFilename[100], bSiteFilename[100], basicSiteFilename[100];
 FILE *paramsFile, *iSiteList, *bSiteList, *basicSiteList;
 
-long N[NCHAINMAX], ntNextStationarityCheck, iBin;
-long iSite[NCHAINMAX][NMAX], iSiteTotal[NCHAINMAX], iSiteCurrent, iy,ty, stericOcclusion[NCHAINMAX][NMAX];
+long NFil,N[NFILMAX], ntNextStationarityCheck, iBin;
+long iSite[NFILMAX][NMAX], iSiteTotal[NFILMAX], iSiteCurrent, iy,ty, stericOcclusion[NFILMAX][NMAX];
 double c0, c1, irLigand;
 
-double ree[NCHAINMAX], rM[NCHAINMAX], rM2[NCHAINMAX], rMiSite[NMAX], rM2iSite[NMAX], rH[NCHAINMAX], ksStatistic;
+double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NMAX], rM2iSite[NMAX], rH[NFILMAX], ksStatistic;
 
 long iseed;
 
-double phi[NMAX], theta[NMAX], psi[NMAX];
+double phi[NFILMAX][NMAX], theta[NFILMAX][NMAX], psi[NFILMAX][NMAX];
 double phiPropose[NMAX], thetaPropose[NMAX], psiPropose[NMAX];
-double r[NCHAINMAX][NMAX][3],t[NCHAINMAX][NMAX][3], e1[NCHAINMAX][NMAX][3], e2[NCHAINMAX][NMAX][3],
-       rBase[NCHAINMAX][3], tBase[NCHAINMAX][3], e1Base[NCHAINMAX][3], e2Base[NCHAINMAX][3],
-       rPropose[NCHAINMAX][NMAX][3],tPropose[NCHAINMAX][NMAX][3], e1Propose[NCHAINMAX][NMAX][3], e2Propose[NCHAINMAX][NMAX][3];
+double r[NFILMAX][NMAX][3],t[NFILMAX][NMAX][3], e1[NFILMAX][NMAX][3], e2[NFILMAX][NMAX][3],
+       rBase[NFILMAX][3], tBase[NFILMAX][3], e1Base[NFILMAX][3], e2Base[NFILMAX][3],
+       rPropose[NFILMAX][NMAX][3],tPropose[NFILMAX][NMAX][3], e1Propose[NFILMAX][NMAX][3], e2Propose[NFILMAX][NMAX][3];
 double norm;
-double iLigandCenter[NCHAINMAX][NMAX][3];
+double iLigandCenter[NFILMAX][NMAX][3];
 
 double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 long st;
+long nf, nfPropose;
 long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationarityCheck,i2, iStart;
 double E, ENew, rate[2], dChi[2], dChiHere, Force;
 long constraintProposalsTotal;
@@ -79,40 +80,42 @@ long j,m;
 /* Convergence Global Variables */
 int convergedTF, constraintSatisfiedTF, verboseTF;
 long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
-long polymerLocationCounts[NCHAINMAX][NMAX][NBINSPOLYMER];
+long polymerLocationCounts[NFILMAX][NMAX][NBINSPOLYMER];
 
 /* STIFFEN Global Variables */
-double StiffenRange, StiffSites[NCHAINMAX][NMAX];
-int stiffCase, totalStiff[NCHAINMAX];
+double StiffenRange, StiffSites[NFILMAX][NMAX];
+int stiffCase, totalStiff[NFILMAX];
 
-char occupiedSites[NCHAINMAX][4*NMAX],occupiedSitesNoSpace[NCHAINMAX][NMAX];
-double iSiteOccupied[NCHAINMAX][NMAX];
+char occupiedSites[NFILMAX][4*NMAX],occupiedSitesNoSpace[NFILMAX][NMAX];
+double iSiteOccupied[NFILMAX][NMAX];
 
 /* MULTIPLE Global Variables*/
 int bSiteInputMethod;
 double brLigand;
-double bLigandCenter[NCHAINMAX][NMAX][3];
-long bSite[NCHAINMAX][NMAX], bSiteTotal[NCHAINMAX], bSiteCurrent, ib, ib2;
+double bLigandCenter[NFILMAX][NMAX][3];
+long bSite[NFILMAX][NMAX], bSiteTotal[NFILMAX], bSiteCurrent, ib, ib2;
 long bSiteCounter;
 
+double bLigandCenterPropose[NFILMAX][NMAX][3];
+
 double deliveryDistance;
-long stericOcclusionBase[NCHAINMAX];
-long membraneOcclusion[NCHAINMAX][NMAX], membraneAndSegmentOcclusion[NCHAINMAX][NMAX];
+long stericOcclusionBase[NFILMAX];
+long membraneOcclusion[NFILMAX][NMAX], membraneAndSegmentOcclusion[NFILMAX][NMAX];
 double localConcCutoff;
 int deliveryMethod;
-long boundToBaseDeliver[NCHAINMAX][NMAX];
+long boundToBaseDeliver[NFILMAX][NMAX];
 
 /* ELECTRO Global Variables */
 double Eelectro, EelectroNew;
 double Erepulsion, Zrepulsion;
 double parabolaDepth, parabolaWidth, wallParabolaK;
-double PhosphorylatedSites[NCHAINMAX][NMAX];
+double PhosphorylatedSites[NFILMAX][NMAX];
 int PhosElectroRange;
-long basicSite[NCHAINMAX][NMAX], BasicSitesYN[NCHAINMAX][NMAX], basicSiteTotal[NCHAINMAX], basicSiteCurrent, iBasic;
+long basicSite[NFILMAX][NMAX], BasicSitesYN[NFILMAX][NMAX], basicSiteTotal[NFILMAX], basicSiteCurrent, iBasic;
 
 /* BASEBOUND Global Variables */
 double baserLigand;
-double baseLigandCenter[NCHAINMAX][3];
+double baseLigandCenter[NFILMAX][3];
 double baseCenter[3];
 
 /*******************************************************************************/
@@ -313,37 +316,10 @@ int main( int argc, char *argv[] )
             if(argv[5])
             {
                 if(atof(argv[5])!=-1)
-                    parabolaDepth = atof(argv[5]);
-                if (TALKATIVE) printf("This is the parabola depth: %f\n", parabolaDepth);
+                    Force = atof(argv[5]);
+                if (TALKATIVE) printf("This is the parabola depth: %f\n", Force);
             }
             
-            if(argv[6])
-            {
-                if(atof(argv[6])!=-1)
-                    parabolaWidth = atof(argv[6]);
-                if (TALKATIVE) printf("This is the parabola width: %f\n", parabolaWidth);
-            }
-            
-            if(argv[7])
-            {
-                if(atof(argv[7])!=-1)
-                wallParabolaK = atof(argv[7]);
-                if (TALKATIVE) printf("This is the wall parabola K: %f\n", wallParabolaK);
-            }
-            
-            if(argv[8])
-            {
-                if(atof(argv[8])!=-1)
-                Erepulsion = atof(argv[8]);
-                if (TALKATIVE) printf("This is the Erepulsion: %f\n", Erepulsion);
-            }
-            
-            if(argv[9])
-            {
-                if(atof(argv[9])!=-1)
-                    Zrepulsion = atof(argv[9]);
-                if (TALKATIVE) printf("This is the repulsion factor: %f\n", Zrepulsion);
-            }
             
             
 

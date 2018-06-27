@@ -6,7 +6,7 @@ void initializeStiffSites();
 //  GLOBAL VARIABLES for initializing stiff sites
 /*******************************************************************************/
 int stiffEnd, stiffStart;
-double stiffiSites[NCHAINMAX][NMAX];
+double stiffiSites[NFILMAX][NMAX];
 //
 /********************************************************************************************************/
 void initializeStiffSites()

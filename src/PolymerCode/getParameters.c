@@ -16,6 +16,9 @@ void getParameters()
     fscanf(paramsFile,"%s %s", tmpString, listName);
     if (TALKATIVE) printf("This is output file name: %s\n", listName);
     
+    fscanf(paramsFile,"%s %ld", tmpString, &NFil);
+    if (TALKATIVE) printf("This is number of filaments: %ld\n", NFil);
+    
     fscanf(paramsFile,"%s %ld", tmpString, &N);
     if (TALKATIVE) printf("This is number of rods: %ld\n", N);
 
