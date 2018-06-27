@@ -34,20 +34,27 @@ void metropolisJoint()
     /********* INITIALIZE CONFIGURATION *******************/
 
     //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
+    // How do we want base locations to be determined?
+    // Randomly spaced? Fixed separation distance from origin?
+    // Could set it like set iSites etc
     //initalize base
-	tBase[0]=0;
-	tBase[1]=0;
-	tBase[2]=1;
-	rBase[0]=0;
-	rBase[1]=0;
-	rBase[2]=0;
-	e1Base[0]=1;
-	e1Base[1]=0;
-	e1Base[2]=0;
-	e2Base[0]=0;
-	e2Base[1]=1;
-	e2Base[2]=0;
+    for(nf=0;nf<NFil;nf++)
+    {
+        tBase[nf][0]=0;
+        tBase[nf][1]=0;
+        tBase[nf][2]=1;
+        rBase[nf][0]=0;
+        rBase[nf][1]=0;
+        rBase[nf][2]=0;
+        e1Base[nf][0]=1;
+        e1Base[nf][1]=0;
+        e1Base[nf][2]=0;
+        e2Base[nf][0]=0;
+        e2Base[nf][1]=1;
+        e2Base[nf][2]=0;
+    }
 	
+    //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
 	// initial configuration
     for(nf=0;nf<NFil;nf++)
     {
@@ -57,8 +64,8 @@ void metropolisJoint()
             theta[nf][i] = 0;
             psi[nf][i]   = 0;
             
-            r[nf][i][0]  = 0;
-            r[nf][i][1]  = 0;
+            r[nf][i][0]  = rBase[nf][0];
+            r[nf][i][1]  = rBase[nf][1];
             r[nf][i][2]  = i+1;
             
             t[nf][i][0]  = 0;
@@ -76,7 +83,7 @@ void metropolisJoint()
         }
     }
     
-    //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
+    // Only have one 'base ligand' - not one per filament
     if (BASEBOUND)
     {
         baseCenter[0] = 0;
@@ -86,6 +93,7 @@ void metropolisJoint()
     
     
     // Initialize bLigandCenter locations
+    // Need to make sure these will not interact in initial condition (if they do then only moving one filament will probably never be enough to find an acceptable configuration)
     for(nf=0;nf<NFil;nf++)
     {
         for(ib=0;ib<bSiteTotal[nf];ib++) //for each bound iSite, find the center of the attached ligand
@@ -137,6 +145,7 @@ void metropolisJoint()
     Eelectro = INF;
 
     //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
+    // Do we need a different dChi for each filament? or is one ok?
     // stuff needed for automatic perturbation size adaptation
 	for(iParam=0;iParam<2;iParam++)
 	{
@@ -270,11 +279,13 @@ void metropolisJoint()
             
             
             //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
-            rotate(&tBase[0], &e1Base[0], &e2Base[0], &tPropose[nf][0][0], &e1Propose[nf][0][0], &e2Propose[nf][0][0], phiPropose[nf][0], thetaPropose[nf][0], psiPropose[nf][0]);
+            // rotate only the proposed filament
+            // do I need to 'set/rotate' proposed base for other filaments??
+            rotate(&tBase[nfPropose][0], &e1Base[nfPropose][0], &e2Base[nfPropose][0], &tPropose[nfPropose][0][0], &e1Propose[nfPropose][0][0], &e2Propose[nfPropose][0][0], phiPropose[nfPropose][0], thetaPropose[nfPropose][0], psiPropose[nfPropose][0]);
             
             //THINK ABOUT THIS PART HERE!!!!!!!!!!!!!
             for(ix=0;ix<3;ix++)
-                rPropose[nf][0][ix] = rBase[ix] + tPropose[nf][0][ix];
+                rPropose[nfPropose][0][ix] = rBase[nfPropose][ix] + tPropose[nfPropose][0][ix];
 				
             // if nf != nfPropose, proposal configuration is the same as current configuration
             // if nf = nfPropose and i<iPropose, proposal configuration is the same as current configuration
@@ -302,7 +313,8 @@ void metropolisJoint()
                     }
                 }
                 else{ //if not proposed filament, keep all segments the same
-                    for(i=1;i<N[nf];i++)
+                    // start this one at 0 since didn't rotate base/0 segment above
+                    for(i=0;i<N[nf];i++)
                     {
                         rPropose[nf][i][0] = r[nf][i][0];
                         rPropose[nf][i][1] = r[nf][i][1];
@@ -323,7 +335,7 @@ void metropolisJoint()
                 }
             }
             
-            // rotate all segments above (and including) iPropose
+            // rotate all segments above (and including) iPropose on proposed filament nfPropose
             
             if (iPropose==0)
                 iStart=1;
@@ -331,10 +343,11 @@ void metropolisJoint()
                 iStart=iPropose;
             for(i=iStart;i<N[nfPropose];i++)
             {
-                rotate(&tPropose[nf][i-1][0], &e1Propose[nf][i-1][0], &e2Propose[nf][i-1][0], &tPropose[nf][i][0], &e1Propose[nf][i][0], &e2Propose[nf][i][0],
-                    phiPropose[nf][i], thetaPropose[nf][i], psiPropose[nf][i]);
+                rotate(&tPropose[nfPropose][i-1][0], &e1Propose[nfPropose][i-1][0], &e2Propose[nfPropose][i-1][0],
+                       &tPropose[nfPropose][i][0], &e1Propose[nfPropose][i][0], &e2Propose[nfPropose][i][0],
+                    phiPropose[nfPropose][i], thetaPropose[nfPropose][i], psiPropose[nfPropose][i]);
                 for (ix=0;ix<3;ix++)
-                    rPropose[nf][i][ix] = rPropose[nf][i-1][ix] + tPropose[nf][i][ix];
+                    rPropose[nfPropose][i][ix] = rPropose[nfPropose][i-1][ix] + tPropose[nfPropose][i][ix];
             }
             
             //how does this work?  only returns first component of t, e1, e2? where are the other components?
