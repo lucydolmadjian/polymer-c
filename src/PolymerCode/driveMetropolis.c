@@ -1,7 +1,7 @@
 /*** Allard Lab jun.allard@uci.edu                    ***/
 
 #define TWISTER genrand_real3()
-#define NFILMAX       10
+#define NFILMAX         10
 #define NMAX            400
 #define NTMAX           2e9
 #define NTADAPT         20000
@@ -50,7 +50,7 @@ long NFil,N[NFILMAX], ntNextStationarityCheck, iBin;
 long iSite[NFILMAX][NMAX], iSiteTotal[NFILMAX], iSiteCurrent, iy,ty, stericOcclusion[NFILMAX][NMAX];
 double c0, c1, irLigand;
 
-double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NMAX], rM2iSite[NMAX], rH[NFILMAX], ksStatistic;
+double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NFILMAX][NMAX], rM2iSite[NFILMAX][NMAX], rH[NFILMAX], ksStatistic;
 
 long iseed;
 
@@ -66,7 +66,7 @@ double RGlobal[3][3], RLocal[3][3];
 double e1_dot_t, e2_dot_t, e2_dot_e1;
 
 long st;
-long nf, nfPropose;
+long nf, nf2, nfPropose;
 long proposals[2], accepts[2], nt, iChi, i, iPropose, ix, iParam, ntNextStationarityCheck,i2, iStart;
 double E, ENew, rate[2], dChi[2], dChiHere, Force;
 long constraintProposalsTotal;

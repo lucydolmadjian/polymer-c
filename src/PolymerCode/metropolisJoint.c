@@ -424,7 +424,7 @@ void metropolisJoint()
             } //finished first constraint
             
             // check if BASEBOUND (immobile sphere at base) occludes polymer
-            if (BASEBOUND)
+            if (BASEBOUND && constraintSatisfiedTF)
             {
                 for(nf=0;nf<NFil;nf++)
                 {
@@ -976,6 +976,7 @@ void metropolisJoint()
     //                            case 1:
     //
     //                                //for each bound iSite, test if bound ligand is within "delivery" distance
+ 
     //                                for (ib=0;ib<bSiteTotal;ib++)
     //                                {
     //                                    if ((bLigandCenter[ib][0])*(bLigandCenter[ib][0])+(bLigandCenter[ib][1])*(bLigandCenter[ib][1])+(bLigandCenter[ib][2])*(bLigandCenter[ib][2]) <= deliveryDistance)
