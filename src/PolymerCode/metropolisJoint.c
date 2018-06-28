@@ -484,7 +484,7 @@ void metropolisJoint()
                         }
                         
                         // only have 1 base ligand for all filaments
-                        if (constraintSatisfiedTF && BASEBOUND) //if constraint is still satisfied, test ligand sphere with base ligand if exists
+                        if (constraintSatisfiedTF && BASEBOUND) //if constraint is still satisfied, test bound ligand sphere with base ligand if exists
                         {
                             if ((bLigandCenterPropose[nf][ib][0]-baseCenter[0])*(bLigandCenterPropose[nf][ib][0]-baseCenter[0])+
                                 (bLigandCenterPropose[nf][ib][1]-baseCenter[1])*(bLigandCenterPropose[nf][ib][1]-baseCenter[1])+
@@ -813,7 +813,7 @@ void metropolisJoint()
                                 {
                                     stericOcclusion[nf][iy]++;
                                     membraneAndSegmentOcclusion[nf][iy]++;
-                                    nf2 = nFil; // shortcut out of the loop
+                                    nf2 = NFil; // shortcut out of the loop
                                 }
                             }
                             //didn't include base ligand - don't want the base to violate the base
@@ -834,7 +834,7 @@ void metropolisJoint()
                                     stericOcclusion[nf][iy]++;
                                     membraneAndSegmentOcclusion[nf][iy]++;
                                     i=N[nf2]; // shortcut out of the loop
-                                    nf2 = nFil; //shortcut out of outer loop
+                                    nf2 = NFil; //shortcut out of outer loop
                                 }
                             }
                         } // finished loop through joints
@@ -857,11 +857,26 @@ void metropolisJoint()
                                     {
                                         stericOcclusion[nf][iy]++;
                                         ib=bSiteTotal[nf2]; //shortcut out of the loop
-                                        nf2 = nFil; //shortcut out of outer loop
+                                        nf2 = NFil; //shortcut out of outer loop
                                     }
                                 }
                             }
                         } // finished multiple ligand tests
+                    }
+                    
+                    if (stericOcclusion[nf][iy]==0) //if not occluded yet, do further tests
+                    {
+                        // check if BASEBOUND (immobile sphere at base) occludes iSite
+                        if (BASEBOUND)
+                        {
+                            if ( (iLigandCenter[nf][iy][0]-baseCenter[0])*(iLigandCenter[nf][iy][0]-baseCenter[0]) +
+                                (iLigandCenter[nf][iy][1]-baseCenter[1])*(iLigandCenter[nf][iy][1]-baseCenter[1]) +
+                                (iLigandCenter[nf][iy][2]-baseCenter[2])*(iLigandCenter[nf][iy][2]-baseCenter[2]) <= (irLigand+baserLigand)*(irLigand+baserLigand))
+                                // if potential ligand intersects with base ligand (immobile sphere at base of polymer cluster)
+                            {
+                                stericOcclusion[nf][iy]++;
+                            }
+                        } // finished third constraint
                     }
                     
                     if (stericOcclusion[nf][iy]==0)
@@ -890,76 +905,96 @@ void metropolisJoint()
             
             if (!MEMBRANE) //only check occlusion if there is no membrane (membrane implies always occluded at base)
             {
-                
-                /*****Initialize******/
-                //initialize ligand center and stericOcclusion
-                baseLigandCenter[0] = rBase[0] + irLigand*e1Base[0];
-                baseLigandCenter[1] = rBase[1] + irLigand*e1Base[1];
-                baseLigandCenter[2] = rBase[2] + irLigand*e1Base[2];
-                
-                stericOcclusionBase = 0;
-
+                // initialization of baseLigandCenter up in initializations of Data Collection section
                 
                 /*****Test Occlusion of Base*****/
                 //check occlusion with joints
-                for(i=0;i<N;i++)
+                for(nf=0;nf<NFil;nf++)
                 {
-                    if ( (baseLigandCenter[0]-r[i][0])*(baseLigandCenter[0]-r[i][0]) +
-                        (baseLigandCenter[1]-r[i][1])*(baseLigandCenter[1]-r[i][1]) +
-                        (baseLigandCenter[2]-r[i][2])*(baseLigandCenter[2]-r[i][2]) <= irLigand*irLigand)
+                    
+                    // test base ligand against all filament segments
+                    for(nf2=0;nf2<NFil;nf2++)
                     {
-                        stericOcclusionBase+=N;
-                        i=N; // shortcut out of the loop
+                        for(i=0;i<N[nf2];i++)
+                        {
+                            if ( (baseLigandCenter[nf][0]-r[nf2][i][0])*(baseLigandCenter[nf][0]-r[nf2][i][0]) +
+                                (baseLigandCenter[nf][1]-r[nf2][i][1])*(baseLigandCenter[nf][1]-r[nf2][i][1]) +
+                                (baseLigandCenter[nf][2]-r[nf2][i][2])*(baseLigandCenter[nf][2]-r[nf2][i][2]) <= irLigand*irLigand)
+                            {
+                                stericOcclusionBase[nf]+=N[nf2];
+                                i=N[nf2]; // shortcut out of the loop
+                                nf2 = NFil; // shortcut out of outer loop
+                            }
+                        }
                     }
-                }
-                
-                //check occlusion with other ligands  - to test if they "deliver" their cargo
-                //or do we want to test Occlusion of base with ligands? Could do both?
-                if (MULTIPLE && stericOcclusionBase==0)
-                {
-//                    //initialize
-//                    for (ib=0;ib<bSiteTotal;ib++)
-//                    {
-//                        boundToBaseDeliver[ib]=0;
-//                    }
                     
-                    
-//                    switch (deliveryMethod)
-//                    {
-//                            case 0:
-                                //for each bound iSite, test if bound ligand intersects with base ligand site
-                    for (ib=0; ib<bSiteTotal;ib++)
+                    if (BASEBOUND && stericOcclusionBase[nf]==0) //if not occluded yet, do further tests
                     {
-                       if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
-                          {
-                              //boundToBaseDeliver[ib]++;
-                              stericOcclusionBase++;
-                           }
-                     } // finished loop through bSites
+                            if ( (baseLigandCenter[nf][0]-baseCenter[0])*(baseLigandCenter[nf][0]-baseCenter[0]) +
+                                (baseLigandCenter[nf][1]-baseCenter[1])*(baseLigandCenter[nf][1]-baseCenter[1]) +
+                                (baseLigandCenter[nf][2]-baseCenter[2])*(baseLigandCenter[nf][2]-baseCenter[2]) < (irLigand+baserLigand)*(irLigand+baserLigand))
+                                // if potential ligand intersects with base ligand (immobile sphere at base of polymer cluster)
+                                // do not include equality - that way e.g. baseLigand at origin won't always be occluded by baseCenter sphere
+                            {
+                                stericOcclusionBase[nf]++;
+                            }
+                    }
+
+                    //check occlusion with other ligands  - to test if they "deliver" their cargo
+                    //or do we want to test Occlusion of base with ligands? Could do both?
+                    if (MULTIPLE && stericOcclusionBase[nf]==0)
+                    {
+    //                    //initialize
+    //                    for (ib=0;ib<bSiteTotal;ib++)
+    //                    {
+    //                        boundToBaseDeliver[ib]=0;
+    //                    }
+                        
+                        
+    //                    switch (deliveryMethod)
+    //                    {
+    //                            case 0:
+                        
+                        //for each bound iSite, test if bound ligand intersects with base ligand site
+                        for(nf2=0;nf2<NFil;nf2++)
+                        {
+                            for (ib=0; ib<bSiteTotal[nf2];ib++)
+                            {
+                               if ((baseLigandCenter[nf][0]-bLigandCenter[nf2][ib][0])*(baseLigandCenter[nf][0]-bLigandCenter[nf2][ib][0])+(baseLigandCenter[nf][1]-bLigandCenter[nf2][ib][1])*(baseLigandCenter[nf][1]-bLigandCenter[nf2][ib][1])+(baseLigandCenter[nf][2]-bLigandCenter[nf2][ib][2])*(baseLigandCenter[nf][2]-bLigandCenter[nf2][ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
+                                  {
+                                      //boundToBaseDeliver[ib]++;
+                                      stericOcclusionBase[nf]++;
+                                      ib = bSiteTotal[nf2]; // shortcut out of inner loop
+                                      nf2 = NFil; // shortcut out of outer loop
+                                   }
+                             } // finished loop through bSites
+                        }
+                        
+                        
+                                //break;
+                        
+    //                            case 1:
+    //
+    //                                //for each bound iSite, test if bound ligand is within "delivery" distance
+    //                                for (ib=0;ib<bSiteTotal;ib++)
+    //                                {
+    //                                    if ((bLigandCenter[ib][0])*(bLigandCenter[ib][0])+(bLigandCenter[ib][1])*(bLigandCenter[ib][1])+(bLigandCenter[ib][2])*(bLigandCenter[ib][2]) <= deliveryDistance)
+    //                                    {
+    //                                        boundToBaseDeliver[ib]++;
+    //                                    }
+    //
+    //                                    //test if bound ligand intersects base site
+    //                                    if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
+    //                                    {
+    //                                        stericOcclusionBase++;
+    //                                    }
+    //                                }
+    //                            break;
+    //                     }
+                    } // finished checking bound ligands occlusion of base
                     
-                            //break;
-                            
-//                            case 1:
-//
-//                                //for each bound iSite, test if bound ligand is within "delivery" distance
-//                                for (ib=0;ib<bSiteTotal;ib++)
-//                                {
-//                                    if ((bLigandCenter[ib][0])*(bLigandCenter[ib][0])+(bLigandCenter[ib][1])*(bLigandCenter[ib][1])+(bLigandCenter[ib][2])*(bLigandCenter[ib][2]) <= deliveryDistance)
-//                                    {
-//                                        boundToBaseDeliver[ib]++;
-//                                    }
-//                                    
-//                                    //test if bound ligand intersects base site
-//                                    if ((baseLigandCenter[0]-bLigandCenter[ib][0])*(baseLigandCenter[0]-bLigandCenter[ib][0])+(baseLigandCenter[1]-bLigandCenter[ib][1])*(baseLigandCenter[1]-bLigandCenter[ib][1])+(baseLigandCenter[2]-bLigandCenter[ib][2])*(baseLigandCenter[2]-bLigandCenter[ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
-//                                    {
-//                                        stericOcclusionBase++;
-//                                    }
-//                                }
-//                            break;
-//                     }
-                } // finished checking bound ligands occlusion of base
-                
-            }//end checking occlusion of base
+                }//end checking occlusion of base
+            }
         
         } //end checking occlusion
 
