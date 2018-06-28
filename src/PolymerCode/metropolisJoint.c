@@ -471,7 +471,7 @@ void metropolisJoint()
                                     if ( ((bLigandCenterPropose[nf][ib][0]-rPropose[nf2][i][0])*(bLigandCenterPropose[nf][ib][0]-rPropose[nf2][i][0]) +
                                         (bLigandCenterPropose[nf][ib][1]-rPropose[nf2][i][1])*(bLigandCenterPropose[nf][ib][1]-rPropose[nf2][i][1]) +
                                         (bLigandCenterPropose[nf][ib][2]-rPropose[nf2][i][2])*(bLigandCenterPropose[nf][ib][2]-rPropose[nf2][i][2]) <= brLigand*brLigand )
-                                        && !( nf2 == nf && i == bSite[nf][ib]) ) //if proposed joint is inside ligand sphere AND joint is not where tested ligand is attached
+                                        && !( nf == nf2 && i == bSite[nf][ib]) ) //if proposed joint is inside ligand sphere AND joint is not where tested ligand is attached
                                     {
                                         constraintSatisfiedTF=0; //constraint not satisfied
                                         i=N[nf2]; //shortcut out of inner loop
@@ -510,7 +510,7 @@ void metropolisJoint()
                                     if ((bLigandCenterPropose[nf][ib][0]-bLigandCenter[nf2][ib2][0])*(bLigandCenterPropose[nf][ib][0]-bLigandCenter[nf2][ib2][0]) +
                                         (bLigandCenterPropose[nf][ib][1]-bLigandCenter[nf2][ib2][1])*(bLigandCenterPropose[nf][ib][1]-bLigandCenter[nf2][ib2][1]) +
                                         (bLigandCenterPropose[nf][ib][2]-bLigandCenter[nf2][ib2][2])*(bLigandCenterPropose[nf][ib][2]-bLigandCenter[nf2][ib2][2])<=
-                                        (2*brLigand)*(2*brLigand) && bSite[nf][ib]!= bSite[nf2][ib2]) //if distance between centers is less than 2*brLigand, then ligands are intersecting, && bound ligands being compared are not the same ligand
+                                        (2*brLigand)*(2*brLigand) && !(nf == nf2 && bSite[nf][ib] == bSite[nf2][ib2])) //if distance between centers is less than 2*brLigand, then ligands are intersecting, && bound ligands being compared are not the same ligand
                                     {
                                         constraintSatisfiedTF=0; //constraint not satisfied
                                         ib2=bSiteTotal[nf2]; //shortcut out of loop
@@ -567,9 +567,9 @@ void metropolisJoint()
                     r[nfPropose][i][1] = rPropose[nfPropose][i][1];
                     r[nfPropose][i][2] = rPropose[nfPropose][i][2];
                     
-                    t[nfPropose][i][0] = tPropose[i][0];
-                    t[nfPropose][i][1] = tPropose[i][1];
-                    t[nfPropose][i][2] = tPropose[i][2];
+                    t[nfPropose][i][0] = tPropose[nfPropose][i][0];
+                    t[nfPropose][i][1] = tPropose[nfPropose][i][1];
+                    t[nfPropose][i][2] = tPropose[nfPropose][i][2];
                     
                     e1[nfPropose][i][0] = e1Propose[nfPropose][i][0];
                     e1[nfPropose][i][1] = e1Propose[nfPropose][i][1];
@@ -739,175 +739,149 @@ void metropolisJoint()
             /***********************************/
             /*******Initialize variables********/
             /***********************************/
-            
-            for(iy=0;iy<iSiteTotal;iy++) //for each iSite, determine the center of the ligand sphere
+            for(nf=0;nf<NFil;nf++)
             {
-                iSiteCurrent = iSite[iy];
-                iLigandCenter[iy][0] = r[iSiteCurrent][0] + irLigand*e1[iSiteCurrent][0];
-                iLigandCenter[iy][1] = r[iSiteCurrent][1] + irLigand*e1[iSiteCurrent][1];
-                iLigandCenter[iy][2] = r[iSiteCurrent][2] + irLigand*e1[iSiteCurrent][2];
-            
-                stericOcclusion[iy]             = 0; //set steric occlusion array to 0 for each iSite
-                membraneOcclusion[iy]           = 0; //set membrane occlusion array to 0 for each iSite
-                membraneAndSegmentOcclusion[iy] = 0; //set membrane and segment occlusion array to 0 for each iSite
-            }
-            
-            //initialize ligand center at base
-            baseLigandCenter[0] = rBase[0] + irLigand*e1Base[0];
-            baseLigandCenter[1] = rBase[1] + irLigand*e1Base[1];
-            baseLigandCenter[2] = rBase[2] + irLigand*e1Base[2];
-            
-            //initialize steric occlusion at base to 0
-            stericOcclusionBase = 0;
-            
-            if(MULTIPLE)
-            {
-                //Is it better to write over bLigandCenter or to reinitialize or to create bLigandCenterPropose and copy it over when it passes?
-                //determine center of bound ligand sphere, maintaining orientation as in proposals above
-                for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
+                for(iy=0;iy<iSiteTotal[nf];iy++) //for each iSite, determine the center of the ligand sphere
                 {
-                    switch (ib % 4) //currently changes orientation of ligand center based on where it is in list of bound sites
-                    {
-                        case 0: //standard orientation - same as used for iSite Pocc calculations
-                            
-                            bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + brLigand*e1[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + brLigand*e1[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + brLigand*e1[bSiteCurrent][2];
-                            break;
-                            
-                        case 1: //180 degrees from standard
-                            
-                            bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - brLigand*e1[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - brLigand*e1[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - brLigand*e1[bSiteCurrent][2];
-                            break;
-                            
-                        case 2: //90 degrees from standard
-                            
-                            bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] + brLigand*e2[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] + brLigand*e2[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] + brLigand*e2[bSiteCurrent][2];
-                            break;
-                            
-                        case 3: //270 from standard
-                            
-                            bSiteCurrent = bSite[ib];
-                            bLigandCenter[ib][0] = r[bSiteCurrent][0] - brLigand*e2[bSiteCurrent][0];
-                            bLigandCenter[ib][1] = r[bSiteCurrent][1] - brLigand*e2[bSiteCurrent][1];
-                            bLigandCenter[ib][2] = r[bSiteCurrent][2] - brLigand*e2[bSiteCurrent][2];
-                            break;
-                    }
-                    
+                    iSiteCurrent = iSite[nf][iy];
+                    iLigandCenter[nf][iy][0] = r[nf][iSiteCurrent][0] + irLigand*e1[nf][iSiteCurrent][0];
+                    iLigandCenter[nf][iy][1] = r[nf][iSiteCurrent][1] + irLigand*e1[nf][iSiteCurrent][1];
+                    iLigandCenter[nf][iy][2] = r[nf][iSiteCurrent][2] + irLigand*e1[nf][iSiteCurrent][2];
+                
+                    stericOcclusion[nf][iy]             = 0; //set steric occlusion array to 0 for each iSite
+                    membraneOcclusion[nf][iy]           = 0; //set membrane occlusion array to 0 for each iSite
+                    membraneAndSegmentOcclusion[nf][iy] = 0; //set membrane and segment occlusion array to 0 for each iSite
                 }
             }
             
+            //initialize ligand center at base
+            for(nf=0;nf<NFil;nf++)
+            {
+                baseLigandCenter[nf][0] = rBase[nf][0] + irLigand*e1Base[nf][0];
+                baseLigandCenter[nf][1] = rBase[nf][1] + irLigand*e1Base[nf][1];
+                baseLigandCenter[nf][2] = rBase[nf][2] + irLigand*e1Base[nf][2];
+                
+                //initialize steric occlusion at base to 0
+                stericOcclusionBase[nf] = 0;
+            }
             
             /*******************************************/
             /**********Test Occlusion of iSites*********/
             /*******************************************/
             
             //tests occlusion of iSites first
-            for(iy=0; iy<iSiteTotal;iy++)
+            for(nf=0;nf<NFil;nf++)
             {
-                
-                // test if iSite is already bound
-                if (MULTIPLE)
+                for(iy=0; iy<iSiteTotal[nf];iy++)
                 {
-                    for (ib=0;ib<bSiteTotal;ib++)
-                    {
-                        if(iSite[iy]==bSite[ib]) //test if iSite is bound already
-                        {
-                            stericOcclusion[iy]++;
-                            membraneAndSegmentOcclusion[iy]++;
-                            ib=bSiteTotal;
-                        }
-                    }//didn't include base - assuming can't be bound to base
-                }
-                
-                //test if iSite occluded by membrane
-                if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
-                {
-                    if (MEMBRANE)
-                    {
-                        // check if sphere violates membrane
-                        if (iLigandCenter[iy][2]<irLigand)
-                        {
-                            stericOcclusion[iy]++; //sterically occluded
-                            membraneOcclusion[iy]++; //specifically occluded by the membrane
-                            membraneAndSegmentOcclusion[iy]++; //occluded by membrane or polymer segments (NOT other bound molecules)
-                        }
-                    }
-                    else
-                    {
-                        // check if sphere violates base (end point of polymer - origin)
-                        if ( (iLigandCenter[iy][0])*(iLigandCenter[iy][0]) +
-                             (iLigandCenter[iy][1])*(iLigandCenter[iy][1]) +
-                             (iLigandCenter[iy][2])*(iLigandCenter[iy][2]) <= irLigand*irLigand )
-                        {
-                            stericOcclusion[iy]++;
-                            membraneAndSegmentOcclusion[iy]++;
-                        }
                     
-                        //didn't include base - don't want the base to violate the base
-                    } // finished membrane tests
-                }
-                
-                if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
-                {
-                    for(i=0;i<N;i++) // loop through joints
+                    // test if iSite is already bound
+                    if (MULTIPLE)
                     {
-                        if ( (iLigandCenter[iy][0]-r[i][0])*(iLigandCenter[iy][0]-r[i][0]) +
-                             (iLigandCenter[iy][1]-r[i][1])*(iLigandCenter[iy][1]-r[i][1]) +
-                             (iLigandCenter[iy][2]-r[i][2])*(iLigandCenter[iy][2]-r[i][2]) <= irLigand*irLigand
-                            && i != iSite[iy])
+                        for (ib=0;ib<bSiteTotal[nf];ib++)
                         {
-                            stericOcclusion[iy]++;
-                            membraneAndSegmentOcclusion[iy]++;
-                            i=N; // shortcut out of the loop
-                        }
-                    } // finished loop through joints
-
-                } 
-                
-                if (stericOcclusion[iy]==0) //if not occluded yet, do further tests
-                {
-                    if (MULTIPLE) //if there are multiple ligands and not occluded yet, test other ligands
-                    {
-                        for(ib=0;ib<bSiteTotal;ib++) //for each bound iSite, find the center of the attached ligand
-                        {
-                            
-                            if ( (iLigandCenter[iy][0]-bLigandCenter[ib][0])*(iLigandCenter[iy][0]-bLigandCenter[ib][0]) +
-                                 (iLigandCenter[iy][1]-bLigandCenter[ib][1])*(iLigandCenter[iy][1]-bLigandCenter[ib][1]) +
-                                 (iLigandCenter[iy][2]-bLigandCenter[ib][2])*(iLigandCenter[iy][2]-bLigandCenter[ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
-                                // if potential ligand intersects with bound ligand
+                            if(iSite[nf][iy]==bSite[nf][ib]) //test if iSite is bound already
                             {
-                                stericOcclusion[iy]++;
-                                ib=bSiteTotal; //shortcut out of the loop
+                                stericOcclusion[nf][iy]++;
+                                membraneAndSegmentOcclusion[nf][iy]++;
+                                ib=bSiteTotal[nf];
+                            }
+                        }//didn't include base - assuming can't be bound to base
+                    }
+                    
+                    //test if iSite occluded by membrane
+                    if (stericOcclusion[nf][iy]==0) //if not occluded yet, do further tests
+                    {
+                        if (MEMBRANE)
+                        {
+                            // check if sphere violates membrane
+                            if (iLigandCenter[nf][iy][2]<irLigand)
+                            {
+                                stericOcclusion[nf][iy]++; //sterically occluded
+                                membraneOcclusion[nf][iy]++; //specifically occluded by the membrane
+                                membraneAndSegmentOcclusion[nf][iy]++; //occluded by membrane or polymer segments (NOT other bound molecules)
                             }
                         }
-                    } // finished multiple ligand tests
-                }
-                
-                if (stericOcclusion[iy]==0)
-                {
-                    if (BINDTRANSITION && nt > NTCHECK) // if allow code to transition between unbound and bound ligands and iSite is unoccluded and past initial transient
-                    {
-                        bSiteTotal++; // increase number of bound ligands by 1
-                        bSite[bSiteTotal-1] = iSite[iy]; //make iSite into bSite
-                        
-                        if(1)
+                        else
                         {
-                            printf("Adding bound ligand at iSite[%ld] = %ld! \n",iy,iSite[iy]);
-                            fflush(stdout);
-                            printf("Number of bound ligands: %ld \n",bSiteTotal);
-                            fflush(stdout);
+                            // check if sphere violates base (end point of polymer - origin or specified base location)
+                            for(nf2=0;nf2<NFil;nf2++)
+                            {
+                                if ( (iLigandCenter[nf][iy][0]-rBase[nf2][0])*(iLigandCenter[nf][iy][0]-rBase[nf2][0]) +
+                                    (iLigandCenter[nf][iy][1]-rBase[nf2][1])*(iLigandCenter[nf][iy][1]-rBase[nf2][1]) +
+                                    (iLigandCenter[nf][iy][2]-rBase[nf2][2])*(iLigandCenter[nf][iy][2]-rBase[nf2][2]) <= irLigand*irLigand )
+                                {
+                                    stericOcclusion[nf][iy]++;
+                                    membraneAndSegmentOcclusion[nf][iy]++;
+                                    nf2 = nFil; // shortcut out of the loop
+                                }
+                            }
+                            //didn't include base ligand - don't want the base to violate the base
+                        } // finished membrane tests
+                    }
+                    
+                    if (stericOcclusion[nf][iy]==0) //if not occluded yet, do further tests
+                    {
+                        for(nf2=0;nf2<NFil;nf2++)
+                        {
+                            for(i=0;i<N[nf2];i++) // loop through joints
+                            {
+                                if ( (iLigandCenter[nf][iy][0]-r[nf2][i][0])*(iLigandCenter[nf][iy][0]-r[nf2][i][0]) +
+                                     (iLigandCenter[nf][iy][1]-r[nf2][i][1])*(iLigandCenter[nf][iy][1]-r[nf2][i][1]) +
+                                     (iLigandCenter[nf][iy][2]-r[nf2][i][2])*(iLigandCenter[nf][iy][2]-r[nf2][i][2]) <= irLigand*irLigand
+                                    && !(nf == nf2 && i == iSite[nf][iy]))
+                                {
+                                    stericOcclusion[nf][iy]++;
+                                    membraneAndSegmentOcclusion[nf][iy]++;
+                                    i=N[nf2]; // shortcut out of the loop
+                                    nf2 = nFil; //shortcut out of outer loop
+                                }
+                            }
+                        } // finished loop through joints
+
+                    }
+                    
+                    if (stericOcclusion[nf][iy]==0) //if not occluded yet, do further tests
+                    {
+                        if (MULTIPLE) //if there are multiple ligands and not occluded yet, test other ligands
+                        {
+                            for(nf2=0;nf2<NFil;nf2++)
+                            {
+                                for(ib=0;ib<bSiteTotal[nf2];ib++) // for each bound ligand, see if iSite is occluded by it
+                                {
+                                    
+                                    if ( (iLigandCenter[nf][iy][0]-bLigandCenter[nf2][ib][0])*(iLigandCenter[nf][iy][0]-bLigandCenter[nf2][ib][0]) +
+                                         (iLigandCenter[nf][iy][1]-bLigandCenter[nf2][ib][1])*(iLigandCenter[nf][iy][1]-bLigandCenter[nf2][ib][1]) +
+                                         (iLigandCenter[nf][iy][2]-bLigandCenter[nf2][ib][2])*(iLigandCenter[nf][iy][2]-bLigandCenter[nf2][ib][2]) <= (irLigand+brLigand)*(irLigand+brLigand))
+                                        // if potential ligand intersects with bound ligand
+                                    {
+                                        stericOcclusion[nf][iy]++;
+                                        ib=bSiteTotal[nf2]; //shortcut out of the loop
+                                        nf2 = nFil; //shortcut out of outer loop
+                                    }
+                                }
+                            }
+                        } // finished multiple ligand tests
+                    }
+                    
+                    if (stericOcclusion[nf][iy]==0)
+                    {
+                        if (BINDTRANSITION && nt > NTCHECK) // if allow code to transition between unbound and bound ligands and iSite is unoccluded and past initial transient
+                        {
+                            bSiteTotal[nf]++; // increase number of bound ligands by 1
+                            bSite[nf][bSiteTotal-1] = iSite[nf][iy]; //make iSite into bSite
+                            
+                            if(1)
+                            {
+                                printf("Adding bound ligand at iSite[%ld][%ld] = %ld! \n",nf,iy,iSite[nf][iy]);
+                                fflush(stdout);
+                                printf("Number of bound ligands: %ld \n",bSiteTotal[nf]);
+                                fflush(stdout);
+                            }
                         }
                     }
-                }
-            } // finished loop through iSites
+                } // finished loop through iSites
+            }
         
         
             /**********************************************/
