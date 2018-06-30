@@ -48,6 +48,7 @@ FILE *paramsFile, *iSiteList, *bSiteList, *basicSiteList;
 
 long NFil,N[NFILMAX], ntNextStationarityCheck, iBin;
 long iSite[NFILMAX][NMAX], iSiteTotal[NFILMAX], iSiteCurrent, iy,ty, stericOcclusion[NFILMAX][NMAX];
+long Ncurrent;
 double c0, c1, irLigand;
 
 double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NFILMAX][NMAX], rM2iSite[NFILMAX][NMAX], rH[NFILMAX], ksStatistic;
