@@ -1,5 +1,5 @@
 listName		outputTest
-NChains			1
+NFil			1
 N			120
 irLigand		2
 brLigand		1

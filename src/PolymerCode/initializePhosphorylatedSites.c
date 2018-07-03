@@ -25,7 +25,7 @@ void initializePhosphorylatedSites()
     {
         for(nf=0;nf<NFil;nf++)
         {
-            printf("These are the occupied (phosphorylated) sites on filament %ld : %s\n", nf, occupiedSites[nf]);
+            printf("These are the occupied (phosphorylated) sites on filament %ld : %s\n", nf, occupiedSites);
         }
     }
     
@@ -34,7 +34,8 @@ void initializePhosphorylatedSites()
     //read string or read and interpret which of CD3Zeta Mouse tyrosines are phosphorylated
     for(nf=0;nf<NFil;nf++)
     {
-        sscanf(occupiedSites[nf],"%lf_%lf_%lf_%lf_%lf_%lf", &phosiSites[nf][0],&phosiSites[nf][1],&phosiSites[nf][2],&phosiSites[nf][3], &phosiSites[nf][4],&phosiSites[nf][5]);
+        // Eventually want to have different phosphorylated sites depending on filament
+        sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &phosiSites[nf][0],&phosiSites[nf][1],&phosiSites[nf][2],&phosiSites[nf][3], &phosiSites[nf][4],&phosiSites[nf][5]);
     }
 
     //print which of the iSites are phosphorylated

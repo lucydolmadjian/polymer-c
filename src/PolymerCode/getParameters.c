@@ -7,6 +7,7 @@ void getParameters();
 //  GLOBAL VARIABLES for output control
 /*******************************************************************************/
 char tmpString[100];
+long Ntemp;
 
 /********************************************************************************************************/
 void getParameters()
@@ -19,8 +20,13 @@ void getParameters()
     fscanf(paramsFile,"%s %ld", tmpString, &NFil);
     if (TALKATIVE) printf("This is number of filaments: %ld\n", NFil);
     
-    fscanf(paramsFile,"%s %ld", tmpString, &N);
-    if (TALKATIVE) printf("This is number of rods: %ld\n", N);
+    // eventually want different N per filament
+    fscanf(paramsFile,"%s %ld", tmpString, &Ntemp);
+    for(nf=0;nf<NFil;nf++)
+    {
+        N[nf]=Ntemp;
+        if (TALKATIVE) printf("This is number of rods in filament %ld: %ld\n",nf, N[nf]);
+    }
 
     fscanf(paramsFile,"%s %lf", tmpString, &irLigand);
     if (TALKATIVE) printf("This is ligand radius: %lf\n", irLigand);

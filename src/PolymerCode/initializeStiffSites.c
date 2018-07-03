@@ -24,7 +24,7 @@ void initializeStiffSites()
     {
         for(nf=0;nf<NFil;nf++)
         {
-            printf("These are the occupied sites for filament %ld : %s\n", nf, occupiedSites[nf]);
+            printf("These are the occupied sites for filament %ld: %s\n", nf, occupiedSites);
         }
     }
     
@@ -36,6 +36,7 @@ void initializeStiffSites()
             
             for(nf=0;nf<NFil;nf++)
             {
+                // eventually want to be able have different phosphorylation settings per iSite per filament
                 sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &stiffiSites[nf][0],&stiffiSites[nf][1],&stiffiSites[nf][2],&stiffiSites[nf][3],&stiffiSites[nf][4],&stiffiSites[nf][5]);
             }
             break;
@@ -120,7 +121,7 @@ void initializeStiffSites()
                     totalStiff[nf]++;
                 }
             }
-            printf("Total Stiff on filament %ld : %d\n",nf, totalStiff[nf]);
+            printf("Total Stiff on filament %ld: %d\n",nf, totalStiff[nf]);
             fflush(stdout);
             
             if (totalStiff[nf] >= N[nf])

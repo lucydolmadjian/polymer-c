@@ -138,36 +138,37 @@ void finalizeSummary()
             
             if (CD3ZETA)
             {
-
-                    sscanf(occupiedSites[nf],"%lf_%lf_%lf_%lf_%lf_%lf", &occupied[nf][0],&occupied[nf][1],&occupied[nf][2],&occupied[nf][3], &occupied[nf][4],&occupied[nf][5]);
+                    sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &occupied[nf][0],&occupied[nf][1],&occupied[nf][2],&occupied[nf][3], &occupied[nf][4],&occupied[nf][5]);
                 
                     for (iy=0; iy<iSiteTotal[nf];iy++)
                     {
                         fprintf(fList, "%lf ", occupied[nf][iy]);
                     }
                 
-                    fprintf(fList, "%s ", occupiedSitesNoSpace[nf]);
+                // eventually want this to depend on filament
+                    fprintf(fList, "%s ", occupiedSitesNoSpace);
             }
             
-            fprintf(fList, "%ld %f %f %f %ld %f %f %f %e",
-                    N[nf],           // 1
-                    irLigand,    // 2
-                    brLigand,    // 3
-                    Force,       // 4
-                    nt,          // 5
-                    ksStatistic, // 6
-                    reeBar[nf],      // 7
-                    ree2Bar[nf],     // 8
-                    rMBar[nf]);      // 9
+            fprintf(fList, "%ld %ld %f %f %f %ld %f %f %f %e",
+                    NFil,            // 1
+                    N[nf],           // 2
+                    irLigand,       // 3
+                    brLigand,       // 4
+                    Force,          // 5
+                    nt,             // 6
+                    ksStatistic,    // 7
+                    reeBar[nf],      // 8
+                    ree2Bar[nf],     // 9
+                    rMBar[nf]);      // 10
             
             for (iy=0;iy<iSiteTotal[nf];iy++)
             {
                 fprintf(fList, " %ld %e %e %e %e",
-                    iSite[nf][iy], //10 + 4*iBind
-                    POcclude[nf][iy], //11 + 4*iBind
-                    1-POcclude[nf][iy], //12 + 4*iBind
-                    PMembraneOcclude[nf][iy], //13 +4*iBind
-                    Prvec0[nf][iy]); //14 + 4*iBind
+                    iSite[nf][iy], //11 + 4*iBind
+                    POcclude[nf][iy], //12 + 4*iBind
+                    1-POcclude[nf][iy], //13 + 4*iBind
+                    PMembraneOcclude[nf][iy], //14 +4*iBind
+                    Prvec0[nf][iy]); //15 + 4*iBind
             
             }
 
@@ -238,8 +239,9 @@ void finalizeSummary()
                 fprintf(fList, " %f", rM2iSiteBar[nf][iy]);
             }
             
-            fprintf(fList, "\n");
+            
         } // end printing data for each filament
+        fprintf(fList, "\n");
         fclose(fList);
     }
 }
@@ -367,9 +369,10 @@ void dataRecording()
     //        {
     //            fprintf(fList, " %ld", boundToBaseDeliver[nf][ib]);
     //        }
+
+        } // end of filament loop
             
-                fprintf(fList, "\n");
-        }
+            fprintf(fList, "\n");
 
             fclose(fList);
         }

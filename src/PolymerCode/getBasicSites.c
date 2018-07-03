@@ -20,40 +20,57 @@ void getBasicSites()
     
     while (fgets(line, sizeof(line), basicSiteList))
     {
-        basicSite[iBasic]=atoi(line);
-        iBasic++;
+        // For now, let all filaments have the same basic sites
+        // Eventually allow each filament to have different basic sites
+        for(nf=0;nf<NFil;nf++)
+        {
+            basicSite[nf][iBasic]=atoi(line);
+        }
+        // Eventually count sites separately for each filament
+        iBasic++; // count how many basic sites per filament
     }
     
     fclose(iSiteList);
     
-    basicSiteTotal=iBasic;
-
-    
-    for (iBasic=0; iBasic<basicSiteTotal;iBasic++)
+    for(nf=0;nf<NFil;nf++)
     {
-        if (basicSite[iBasic] >= N)
+        basicSiteTotal[nf]=iBasic;
+    }
+
+    for(nf=0;nf<NFil;nf++)
+    {
+        for (iBasic=0; iBasic<basicSiteTotal[nf];iBasic++)
         {
-            printf("Warning! Site is located past end of polymer!");
-            fflush(stdout);
+            if (basicSite[nf][iBasic] >= N[nf])
+            {
+                printf("Warning! Site is located past end of polymer number %ld !",nf);
+                fflush(stdout);
+            }
         }
     }
     
-    //initializes basic residues to 0 
-    for(i=0;i<N;i++)
+    //initializes basic residues to 0
+    for(nf=0;nf<NFil;nf++)
     {
-        BasicSitesYN[i] =0;
+        for(i=0;i<N[nf];i++)
+        {
+            BasicSitesYN[nf][i] = 0;
+        }
     }
     
     //Full residue list of basic yes or no
-    for (i=0;i<N;i++)
+    for(nf=0;nf<NFil;nf++)
     {
-        for(iBasic=0;iBasic<basicSiteTotal;iBasic++)
+        for (i=0;i<N[nf];i++)
         {
-            if(i==basicSite[iBasic])
+            for(iBasic=0;iBasic<basicSiteTotal[nf];iBasic++)
             {
+                if(i==basicSite[nf][iBasic])
+                {
 
-                BasicSitesYN[i]=1; //set that joint to "basic"
+                    BasicSitesYN[nf][i]=1; //set that joint to "basic"
 
+                }
             }
         }
     }
@@ -62,14 +79,20 @@ void getBasicSites()
     
     if (TALKATIVE)
     {
-        for (iBasic=0;iBasic<basicSiteTotal;iBasic++)
+        for(nf=0;nf<NFil;nf++)
         {
-            printf("basicSite: %ld\n", basicSite[iBasic]);
+            printf("Filament: %ld\n", nf);
+            fflush(stdout);
+            
+            for (iBasic=0;iBasic<basicSiteTotal[nf];iBasic++)
+            {
+                printf("basicSite: %ld\n", basicSite[nf][iBasic]);
+                fflush(stdout);
+            }
+            
+            printf("basicSiteTotal: %ld\n", basicSiteTotal[nf]);
             fflush(stdout);
         }
-        
-        printf("basicSiteTotal: %ld\n", basicSiteTotal);
-        fflush(stdout);
     }
 
 

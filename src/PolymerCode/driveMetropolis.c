@@ -87,7 +87,7 @@ long polymerLocationCounts[NFILMAX][NMAX][NBINSPOLYMER];
 double StiffenRange, StiffSites[NFILMAX][NMAX];
 int stiffCase, totalStiff[NFILMAX];
 
-char occupiedSites[NFILMAX][4*NMAX],occupiedSitesNoSpace[NFILMAX][NMAX];
+char occupiedSites[4*NMAX],occupiedSitesNoSpace[NMAX];
 double iSiteOccupied[NFILMAX][NMAX];
 
 /* MULTIPLE Global Variables*/
@@ -300,28 +300,21 @@ int main( int argc, char *argv[] )
                 if (TALKATIVE) printf("This is the output filename: %s\n", listName);
             }
                 
-            if(argv[3])
-            {
-                if(atoi(argv[3])!=-1)
-                    strcpy(occupiedSites,argv[3]);
-                if (TALKATIVE) printf("This is the occupied sites: %s\n", occupiedSites);
-            }
+//            if(argv[3])
+//            {
+//                if(atoi(argv[3])!=-1)
+//                    strcpy(occupiedSites,argv[3]);
+//                if (TALKATIVE) printf("This is the occupied sites: %s\n", occupiedSites);
+//            }
+//
+//            if(argv[4])
+//            {
+//                if(atoi(argv[4])!=-1)
+//                    strcpy(occupiedSitesNoSpace,argv[4]);
+//                if (TALKATIVE) printf("This is the occupied sites: %s\n", occupiedSitesNoSpace);
+//            }
             
-            if(argv[4])
-            {
-                if(atoi(argv[4])!=-1)
-                    strcpy(occupiedSitesNoSpace,argv[4]);
-                if (TALKATIVE) printf("This is the occupied sites: %s\n", occupiedSitesNoSpace);
-            }
-            
-            if(argv[5])
-            {
-                if(atof(argv[5])!=-1)
-                    Force = atof(argv[5]);
-                if (TALKATIVE) printf("This is the parabola depth: %f\n", Force);
-            }
-            
-            
+
             
 
         }
