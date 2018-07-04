@@ -43,7 +43,7 @@ void metropolisJoint()
         tBase[nf][0]=0;
         tBase[nf][1]=0;
         tBase[nf][2]=1;
-        rBase[nf][0]=0;
+        rBase[nf][0]=0 + nf*baseSepDistance;
         rBase[nf][1]=0;
         rBase[nf][2]=0;
         e1Base[nf][0]=1;

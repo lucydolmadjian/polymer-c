@@ -329,6 +329,9 @@ void dataRecording()
             
                  if (VISUALIZE)
                  {
+                     
+                    fprintf(fList, " %f %f %f", rBase[nf][0],rBase[nf][1],rBase[nf][2]);
+                     
                     for (i=0;i<N[nf];i++)
                     {
                         fprintf(fList, " %f %f %f", r[nf][i][0],r[nf][i][1],r[nf][i][2]);

@@ -1,6 +1,7 @@
 listName		outputTest
 NFil			1
 N			120
+baseSepDistance		1
 irLigand		2
 brLigand		1
 baserLigand		4

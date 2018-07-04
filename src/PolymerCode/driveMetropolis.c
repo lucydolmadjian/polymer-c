@@ -119,6 +119,9 @@ double baserLigand;
 double baseLigandCenter[NFILMAX][3];
 double baseCenter[3];
 
+/* MULTIPLE FILAMENT Variables*/
+double baseSepDistance;
+
 /*******************************************************************************/
 //  INCLUDES
 /*******************************************************************************/

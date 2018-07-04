@@ -28,6 +28,9 @@ void getParameters()
         if (TALKATIVE) printf("This is number of rods in filament %ld: %ld\n",nf, N[nf]);
     }
 
+    fscanf(paramsFile,"%s %lf", tmpString, &baseSepDistance);
+    if (TALKATIVE) printf("This is the filament base separation distance: %lf\n", baseSepDistance);
+    
     fscanf(paramsFile,"%s %lf", tmpString, &irLigand);
     if (TALKATIVE) printf("This is ligand radius: %lf\n", irLigand);
     
