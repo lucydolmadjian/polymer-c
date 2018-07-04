@@ -273,17 +273,7 @@ int main( int argc, char *argv[] )
             if(argv[22]) //PhosElectroRange
                 PhosElectroRange = atof(argv[22]);
             if (TALKATIVE) printf("This is argument 22: %d \n", PhosElectroRange);
-            
-            
-        //    if(argv[10]) //Delivery distance - how close to base it needs to be
-        //        deliveryDistance = atof(argv[10]);
-        //    if (TALKATIVE) printf("This is argument 10: %f\n", deliveryDistance);
-        //    
-        //    if(argv[11]) //Delivery method - 0 = within Base ligand site, 1 = within deliveryDistance
-        //        deliveryMethod = atoi(argv[11]);
-        //    if (TALKATIVE) printf("This is argument 11: %d\n", deliveryMethod);
-            
-            
+
             
         }
         if (TXTPARAM) // majority of parameters are in text file
@@ -302,23 +292,34 @@ int main( int argc, char *argv[] )
                     strcpy(listName,argv[2]);
                 if (TALKATIVE) printf("This is the output filename: %s\n", listName);
             }
-                
-//            if(argv[3])
-//            {
-//                if(atoi(argv[3])!=-1)
-//                    strcpy(occupiedSites,argv[3]);
-//                if (TALKATIVE) printf("This is the occupied sites: %s\n", occupiedSites);
-//            }
-//
-//            if(argv[4])
-//            {
-//                if(atoi(argv[4])!=-1)
-//                    strcpy(occupiedSitesNoSpace,argv[4]);
-//                if (TALKATIVE) printf("This is the occupied sites: %s\n", occupiedSitesNoSpace);
-//            }
             
-
+            if(argv[3])
+            {
+                if(atoi(argv[3])!=-1)
+                    verboseTF = atoi(argv[3]);
+                if (TALKATIVE) printf("This will print verbose: %ld\n", verboseTF);
+            }
             
+            if(argv[4])
+            {
+                if(atoi(argv[4])!=-1)
+                    NFil = atoi(argv[4]);
+                if (TALKATIVE) printf("This is the number of filaments: %ld\n", NFil);
+            }
+            
+            if(argv[5])
+            {
+                if(atoi(argv[5])!=-1)
+                    baseSepDistance = atof(argv[5]);
+                if (TALKATIVE) printf("This is the base separation distance: %lf\n", baseSepDistance);
+            }
+            
+            if(argv[6])
+            {
+                if(atoi(argv[6])!=-1)
+                    Force = atof(argv[6]);
+                if (TALKATIVE) printf("This is the force: %lf\n", Force);
+            }
 
         }
 
