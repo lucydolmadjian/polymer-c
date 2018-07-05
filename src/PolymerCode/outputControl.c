@@ -133,79 +133,72 @@ void finalizeSummary()
     {
         fList = fopen(listName, "a");
         
+        // formulas only work for identical filaments
+        fprintf(fList, "%ld %ld %f %f %f",
+                nt,         // 1
+                NFil,       // 2
+                irLigand,   // 3
+                brLigand,   // 4
+                Force);     // 5
+        
         for(nf=0;nf<NFil;nf++)
         {
             
-            if (CD3ZETA)
-            {
-                    sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &occupied[nf][0],&occupied[nf][1],&occupied[nf][2],&occupied[nf][3], &occupied[nf][4],&occupied[nf][5]);
-                
-                    for (iy=0; iy<iSiteTotal[nf];iy++)
-                    {
-                        fprintf(fList, "%lf ", occupied[nf][iy]);
-                    }
-                
-                // eventually want this to depend on filament
-                    fprintf(fList, "%s ", occupiedSitesNoSpace);
-            }
-            
-            fprintf(fList, "%ld %ld %f %f %f %ld %f %f %f %e",
-                    NFil,            // 1
-                    N[nf],           // 2
-                    irLigand,       // 3
-                    brLigand,       // 4
-                    Force,          // 5
-                    nt,             // 6
-                    ksStatistic[nf],    // 7
-                    reeBar[nf],      // 8
-                    ree2Bar[nf],     // 9
-                    rMBar[nf]);      // 10
+            fprintf(fList, " %ld %f %f %f %f %f",
+                    N[nf],              // 6 + (6 + 7*iSiteTotal + 2)*nf
+                    ksStatistic[nf],    // 7 + (6 + 7*iSiteTotal + 2)*nf
+                    reeBar[nf],         // 8 + (6 + 7*iSiteTotal + 2)*nf
+                    ree2Bar[nf],        // 9 + (6 + 7*iSiteTotal + 2)*nf
+                    rMBar[nf],          // 10 + (6 + 7*iSiteTotal + 2)*nf
+                    rM2Bar[nf]);        // 11 + (6 + 7*iSiteTotal + 2)*nf
             
             for (iy=0;iy<iSiteTotal[nf];iy++)
             {
-                fprintf(fList, " %ld %e %e %e %e",
-                    iSite[nf][iy], //11 + 4*iBind
-                    POcclude[nf][iy], //12 + 4*iBind
-                    1-POcclude[nf][iy], //13 + 4*iBind
-                    PMembraneOcclude[nf][iy], //14 +4*iBind
-                    Prvec0[nf][iy]); //15 + 4*iBind
-            
+                fprintf(fList, " %ld %e %e %e %e %f %f",
+                    iSite[nf][iy],              // 12 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
+                    POcclude[nf][iy],           // 13 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
+                    1-POcclude[nf][iy],         // 14 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
+                    PMembraneOcclude[nf][iy],   // 15 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
+                    Prvec0[nf][iy],             // 16 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
+                    rMiSiteBar[nf][iy],         // 17 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
+                    rM2iSiteBar[nf][iy]);       // 18 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
             }
 
             
-            fprintf(fList, " %d %e %e", -1, POccludeBase[nf], 1-POccludeBase[nf]);
+            fprintf(fList, " %e %e",
+                    POccludeBase[nf],           // 19 + 7*iSiteTotal + (6 + 7*iSiteTotal + 2)*nf
+                    1-POccludeBase[nf]);        // 20 + 7*iSiteTotal + (6 + 7*iSiteTotal + 2)*nf
             
-            for (ib=0;ib<bSiteTotal[nf];ib++)
-            {
-                fprintf(fList, " %ld",
-                    bSite[nf][ib]);
-                        //PDeliver[nf][ib]);
-            }
-            
-            for (iy=0; iy<iSiteTotal[nf]; iy++)
-            {
-                for (ib=0; ib<bSiteTotal[nf]; ib++)
-                {
-                    fprintf(fList, " %f", selfBindFraction[nf][iy][ib]);
-                }
-            }
-            
-            for (iy=0; iy<iSiteTotal[nf]; iy++)
-            {
-                for (ib=0; ib<bSiteTotal[nf]; ib++)
-                {
-                    fprintf(fList, " %f", localConcentration[nf][iy][ib]);
-                }
-            }
-            
-            for(iy=0;iy<iSiteTotal[nf];iy++)
-            {
-                fprintf(fList, " %f", PMembraneSegmentOcclude[nf][iy]);
-            }
+//            for (ib=0;ib<bSiteTotal[nf];ib++)
+//            {
+//                fprintf(fList, " %ld",
+//                    bSite[nf][ib]);             // 21 + 7*iSiteTotal + ib
+//            }
+//
+//            for (iy=0; iy<iSiteTotal[nf]; iy++)
+//            {
+//                for (ib=0; ib<bSiteTotal[nf]; ib++)
+//                {
+//                    fprintf(fList, " %f", selfBindFraction[nf][iy][ib]);
+//                }
+//            }
+//
+//            for (iy=0; iy<iSiteTotal[nf]; iy++)
+//            {
+//                for (ib=0; ib<bSiteTotal[nf]; ib++)
+//                {
+//                    fprintf(fList, " %f", localConcentration[nf][iy][ib]);
+//                }
+//            }
+//
+//            for(iy=0;iy<iSiteTotal[nf];iy++)
+//            {
+//                fprintf(fList, " %f", PMembraneSegmentOcclude[nf][iy]);
+//            }
             
             
             // print distribution of iSite Locations
-            if(1)
+            if(0)
             {
                 for (iy=0;iy<iSiteTotal[nf];iy++)
                 {
@@ -218,7 +211,7 @@ void finalizeSummary()
             }
             
             // print distributions of end segments locations
-            if(1)
+            if(0)
             {
                 for (j=0;j<NBINSPOLYMER;j++)
                 {
@@ -227,16 +220,17 @@ void finalizeSummary()
                 }
             }
             
-            fprintf(fList, " %f", rM2Bar[nf]);
-            
-            for (iy=0;iy<iSiteTotal[nf];iy++)
+            if (CD3ZETA)
             {
-                fprintf(fList, " %f", rMiSiteBar[nf][iy]);
-            }
-            
-            for (iy=0;iy<iSiteTotal[nf];iy++)
-            {
-                fprintf(fList, " %f", rM2iSiteBar[nf][iy]);
+                sscanf(occupiedSites,"%lf_%lf_%lf_%lf_%lf_%lf", &occupied[nf][0],&occupied[nf][1],&occupied[nf][2],&occupied[nf][3], &occupied[nf][4],&occupied[nf][5]);
+                
+                for (iy=0; iy<iSiteTotal[nf];iy++)
+                {
+                    fprintf(fList, "%lf ", occupied[nf][iy]);
+                }
+                
+                // eventually want this to depend on filament
+                fprintf(fList, "%s ", occupiedSitesNoSpace);
             }
             
             
@@ -312,71 +306,69 @@ void dataRecording()
         {
         // output results to file
         fList = fopen(listName, "a");
+        
+        fprintf(fList, "%ld %f %f %f %f %f %ld",
+                nt,                         // 1
+                E,                          // 2
+                dChi[0],                    // 3
+                dChi[1],                    // 4
+                rate[0],                    // 5
+                rate[1],                    // 6
+                constraintProposalsTotal);  // 7
+        
         for(nf=0;nf<NFil;nf++)
         {
-            fprintf(fList, "%ld %f %f %f %f %f %f %f %f %f %ld",
-                    nt,               // 1
-                    ree[nf],          // 2
-                    rM[nf],           // 3
-                    rH[nf],           // 4
-                    E,                // 5
-                    dChi[0],          // 6
-                    dChi[1],          // 7
-                    rate[0],          // 8
-                    rate[1],          // 9
-                    ksStatistic[nf],      // 10
-                    constraintProposalsTotal);// 11
-            
-                 if (VISUALIZE)
-                 {
-                     
-                    fprintf(fList, " %f %f %f", rBase[nf][0],rBase[nf][1],rBase[nf][2]);
-                     
-                    for (i=0;i<N[nf];i++)
-                    {
-                        fprintf(fList, " %f %f %f", r[nf][i][0],r[nf][i][1],r[nf][i][2]);
-                    }
-                     
-                    for (i=0;i<iSiteTotal[nf];i++)
-                    {
-                        fprintf(fList, " %f %f %f", iLigandCenter[nf][i][0], iLigandCenter[nf][i][1], iLigandCenter[nf][i][2]);
-                    }
-                    if(BASEBOUND)
-                    {
-                        for (i=0;i<3;i++)
-                        {
-                            fprintf(fList," %f", baseCenter[i]);
-                        }
-                    }
-                     
-                 }
-            
-                for(iy=0;iy<iSiteTotal[nf];iy++)
-                {
-                    fprintf(fList, " %ld",stericOcclusion[nf][iy]);
-                }
-            
-                for(iy=0;iy<iSiteTotal[nf];iy++)
-                {
-                    fprintf(fList, " %ld",membraneOcclusion[nf][iy]);
-                }
-            
-                for(iy=0;iy<iSiteTotal[nf];iy++)
-                {
-                    fprintf(fList, " %ld",membraneAndSegmentOcclusion[nf][iy]);
-                }
-            
-                fprintf(fList, " %ld", stericOcclusionBase[nf]);
-            
-    //        for(ib=0;ib<bSiteTotal[nf];ib++)
-    //        {
-    //            fprintf(fList, " %ld", boundToBaseDeliver[nf][ib]);
-    //        }
 
+            fprintf(fList, " %f %f %f %f",
+                    ree[nf],                // 8 + (4 + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf
+                    rM[nf],                 // 9
+                    rH[nf],                 // 10
+                    ksStatistic[nf]);       // 11
+            
+            for(iy=0;iy<iSiteTotal[nf];iy++)
+            {
+                fprintf(fList, " %ld %ld %ld",
+                        stericOcclusion[nf][iy],                // 12 + 3*iy
+                        membraneOcclusion[nf][iy],              // 13 + 3*iy
+                        membraneAndSegmentOcclusion[nf][iy]);   // 14 + 3*iy
+            }
+            
+            fprintf(fList, " %ld", stericOcclusionBase[nf]);    // 15 + 3*iSiteTotal[nf]
+            
+            if (VISUALIZE)
+            {
+                 
+                fprintf(fList, " %f %f %f",
+                        rBase[nf][0],   // 16
+                        rBase[nf][1],   // 17
+                        rBase[nf][2]);  // 18
+                 
+                for (i=0;i<N[nf];i++)
+                {
+                    fprintf(fList, " %f %f %f",
+                            r[nf][i][0],    // 19
+                            r[nf][i][1],    // 20
+                            r[nf][i][2]);   // 21
+                }
+                 
+                for (i=0;i<iSiteTotal[nf];i++)
+                {
+                    fprintf(fList, " %f %f %f",
+                            iLigandCenter[nf][i][0],    // 22
+                            iLigandCenter[nf][i][1],    // 23
+                            iLigandCenter[nf][i][2]);   // 24
+                }
+                if(BASEBOUND)
+                {
+                        fprintf(fList," %f %f %f",
+                                baseCenter[0],      // 25
+                                baseCenter[1],      // 26
+                                baseCenter[2]);     // 27
+                }
+            }
         } // end of filament loop
             
             fprintf(fList, "\n");
-
             fclose(fList);
         }
     } // finished verbose output
