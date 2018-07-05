@@ -135,10 +135,7 @@ void metropolisJoint()
             
         }
     }
-    
-    
-    
-    
+
 	convergedTF=0;
 	nt=0;
     E = INF;
@@ -156,8 +153,11 @@ void metropolisJoint()
     
     // stuff needed for automatic stationarity (convergence) check
 	ntNextStationarityCheck = 3*NTCHECK;
-	for(iBin=0;iBin<NBINS;iBin++)
-		convergenceVariableCounts[iBin] = 0;
+    for(nf=0;nf<NFil;nf++)
+    {
+        for(iBin=0;iBin<NBINS;iBin++)
+            convergenceVariableCounts[nf][iBin] = 0;
+    }
 	
     // summary variables
     initializeSummary();
@@ -218,7 +218,7 @@ void metropolisJoint()
         }
 		
         nfPropose = floor(NFil*TWISTER); // Initialize. This is the filament we will adjust this time.
-		iPropose = floor(N*TWISTER); // Initialize. This is the joint we will adjust this time.
+		iPropose = floor(N[nfPropose]*TWISTER); // Initialize. This is the joint we will adjust this time.
         
 
         //If using STIFFEN
@@ -229,7 +229,7 @@ void metropolisJoint()
             while(StiffSites[nfPropose][iPropose]==1) //Test if proposed joint is stiff.
             {
                 nfPropose = floor(NFil*TWISTER); //If stiff, propose new filament and joint until propose one not stiff.
-                iPropose = floor(N*TWISTER); //If stiff, propose new joint until propose one not stiff.
+                iPropose = floor(N[nfPropose]*TWISTER); //If stiff, propose new joint until propose one not stiff.
             }
         }
         
@@ -548,7 +548,8 @@ void metropolisJoint()
             // Compute energy
             for(nf=0;nf<NFil;nf++)
             {
-                ENew = -rPropose[nf][N-1][2]*Force; // Energy in units of kBT. Force in units of kBT/Kuhn
+                Ncurrent = N[nf];
+                ENew = -rPropose[nf][Ncurrent-1][2]*Force; // Energy in units of kBT. Force in units of kBT/Kuhn
             }
             
             // should this be <=? Do we reject normal probability for no force?
@@ -884,7 +885,7 @@ void metropolisJoint()
                         if (BINDTRANSITION && nt > NTCHECK) // if allow code to transition between unbound and bound ligands and iSite is unoccluded and past initial transient
                         {
                             bSiteTotal[nf]++; // increase number of bound ligands by 1
-                            bSite[nf][bSiteTotal-1] = iSite[nf][iy]; //make iSite into bSite
+                            bSite[nf][bSiteTotal[nf]-1] = iSite[nf][iy]; //make iSite into bSite
                             
                             if(1)
                             {

@@ -55,7 +55,7 @@ double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NFILMAX][NMAX], rM2iSite
 long iseed;
 
 double phi[NFILMAX][NMAX], theta[NFILMAX][NMAX], psi[NFILMAX][NMAX];
-double phiPropose[NMAX], thetaPropose[NMAX], psiPropose[NMAX];
+double phiPropose[NFILMAX][NMAX], thetaPropose[NFILMAX][NMAX], psiPropose[NFILMAX][NMAX];
 double r[NFILMAX][NMAX][3],t[NFILMAX][NMAX][3], e1[NFILMAX][NMAX][3], e2[NFILMAX][NMAX][3],
        rBase[NFILMAX][3], tBase[NFILMAX][3], e1Base[NFILMAX][3], e2Base[NFILMAX][3],
        rPropose[NFILMAX][NMAX][3],tPropose[NFILMAX][NMAX][3], e1Propose[NFILMAX][NMAX][3], e2Propose[NFILMAX][NMAX][3];
@@ -164,7 +164,7 @@ int main( int argc, char *argv[] )
     {
         if(atoi(argv[3])!=-1)
             verboseTF = atoi(argv[3]);
-        if (TALKATIVE) printf("This will print verbose: %ld\n", verboseTF);
+        if (TALKATIVE) printf("This will print verbose: %d\n", verboseTF);
     }
 
     if(argv[4])

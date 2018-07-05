@@ -422,7 +422,7 @@ void dataRecording()
         {
             for(i=0;i<N[nf];i++)
             {
-                binCurrent = (long)floor(((double)r[nf][i][2]+N[nf])/binSize[nf])
+                binCurrent = (long)floor(((double)r[nf][i][2]+N[nf])/binSize[nf]);
                 polymerLocationCounts[nf][i][binCurrent]++;
             }
         }
