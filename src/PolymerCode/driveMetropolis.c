@@ -45,12 +45,12 @@ FILE *fList;
 char paramsFilename[100], iSiteFilename[100], bSiteFilename[100], basicSiteFilename[100];
 FILE *paramsFile, *iSiteList, *bSiteList, *basicSiteList;
 
-long NFil,N[NFILMAX], ntNextStationarityCheck, iBin;
+long NFil,N[NFILMAX];
 long iSite[NFILMAX][NMAX], iSiteTotal[NFILMAX], iSiteCurrent, iy,ty, stericOcclusion[NFILMAX][NMAX];
 long Ncurrent;
 double c0, c1, irLigand;
 
-double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NFILMAX][NMAX], rM2iSite[NFILMAX][NMAX], rH[NFILMAX], ksStatistic;
+double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NFILMAX][NMAX], rM2iSite[NFILMAX][NMAX], rH[NFILMAX];
 
 long iseed;
 
@@ -76,10 +76,13 @@ long commandiSites;
 char *iSiteLocations;
 char input[4*NMAX];
 long j,m;
+int verboseTF;
 
 /* Convergence Global Variables */
-int convergedTF, constraintSatisfiedTF, verboseTF;
-long convergenceVariableCounts[NBINS], convergenceVariableCountsPrevious[NBINS];
+double ksStatistic[NFILMAX];
+long ntNextStationarityCheck, iBin;
+int convergedTF, constraintSatisfiedTF;
+long convergenceVariableCounts[NFILMAX][NBINS], convergenceVariableCountsPrevious[NFILMAX][NBINS];
 long polymerLocationCounts[NFILMAX][NMAX][NBINSPOLYMER];
 
 /* STIFFEN Global Variables */

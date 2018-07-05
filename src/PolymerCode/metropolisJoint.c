@@ -1029,26 +1029,40 @@ void metropolisJoint()
 // Test for convergence ("stationarity")
 void stationarity()
 {
-	double cdf1, cdf2;
-	ksStatistic = 0;
-	cdf1=0; 
-	cdf2=0;
-	for(iBin=0;iBin<NBINS;iBin++)
-	{
-		
-		cdf1 += (double)convergenceVariableCountsPrevious[iBin]/(((double)nt-(double)NTCHECK)/2.0);
-		cdf2 += (double)convergenceVariableCounts[iBin]/(((double)nt-(double)NTCHECK)/2.0);
-		
-		if (fabs(cdf1-cdf2)>ksStatistic)
-			ksStatistic = fabs(cdf1-cdf2);
-		//printf("convergenceVariableCounts[%d]: %d, %d \t\t\t cdf: %f, %f\n", iBin, convergenceVariableCountsPrevious[iBin],convergenceVariableCounts[iBin], cdf1, cdf2);
-		
-	}
-	
-	//printf("ksStatistic=%f\n", ksStatistic);
-	
-	if (ksStatistic<KSCRITICAL)
-		convergedTF=1;
+	double cdf1[NFILMAX], cdf2[NFILMAX];
+    for(nf=0;nf<NFil;nf++)
+    {
+        ksStatistic[nf] = 0;
+        cdf1[nf] = 0;
+        cdf2[nf] = 0;
+    }
+    for(nf=0;nf<NFil;nf++)
+    {
+        for(iBin=0;iBin<NBINS;iBin++)
+        {
+            
+            cdf1[nf] += (double)convergenceVariableCountsPrevious[nf][iBin]/(((double)nt-(double)NTCHECK)/2.0);
+            cdf2[nf] += (double)convergenceVariableCounts[nf][iBin]/(((double)nt-(double)NTCHECK)/2.0);
+            
+            if (fabs(cdf1[nf]-cdf2[nf])>ksStatistic[nf])
+                ksStatistic[nf] = fabs(cdf1[nf]-cdf2[nf]);
+            //printf("convergenceVariableCounts[%ld][%d]: %d, %d \t\t\t cdf: %f, %f\n", nf, iBin, convergenceVariableCountsPrevious[nf][iBin],convergenceVariableCounts[nf][iBin], cdf1[nf], cdf2[nf]);
+            
+        }
+    }
+    
+    //for(nf=0;nf<NFil;nf++)
+    //{
+	//printf("ksStatistic[%ld]=%f\n", nf, ksStatistic[nf]);
+    //}
+    
+    // assume converged, then if any are not converged, set to not converged
+    convergedTF=1;
+    for(nf=0;nf<NFil;nf++)
+    {
+        if (ksStatistic[nf] >= KSCRITICAL)
+            convergedTF=0;
+    }
 	
 	appendBins();
 	
@@ -1059,10 +1073,13 @@ void stationarity()
 // Helper function needed by test for convergence ("stationarity")
 void appendBins()
 {
-    for(iBin=0;iBin<NBINS;iBin++)
+    for(nf=0;nf<NFil;nf++)
     {
-        convergenceVariableCountsPrevious[iBin] += convergenceVariableCounts[iBin];
-        convergenceVariableCounts[iBin] = 0;
+        for(iBin=0;iBin<NBINS;iBin++)
+        {
+            convergenceVariableCountsPrevious[nf][iBin] += convergenceVariableCounts[nf][iBin];
+            convergenceVariableCounts[nf][iBin] = 0;
+        }
     }
 }
 

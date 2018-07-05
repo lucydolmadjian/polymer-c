@@ -156,7 +156,7 @@ void finalizeSummary()
                     brLigand,       // 4
                     Force,          // 5
                     nt,             // 6
-                    ksStatistic,    // 7
+                    ksStatistic[nf],    // 7
                     reeBar[nf],      // 8
                     ree2Bar[nf],     // 9
                     rMBar[nf]);      // 10
@@ -324,7 +324,7 @@ void dataRecording()
                     dChi[1],          // 7
                     rate[0],          // 8
                     rate[1],          // 9
-                    ksStatistic,      // 10
+                    ksStatistic[nf],      // 10
                     constraintProposalsTotal);// 11
             
                  if (VISUALIZE)
@@ -422,7 +422,7 @@ void dataRecording()
         // update bins for KS test (fabs(rM)+ree will never be larger than 2N, so use 2N to normalize)
         for(nf=0;nf<NFil;nf++)
         {
-            convergenceVariableCounts[(long)floor(NBINS*(fabs(rM[nf])+ree[nf])/(2*N[nf]))]++;
+            convergenceVariableCounts[nf][(long)floor(NBINS*(fabs(rM[nf])+ree[nf])/(2*N[nf]))]++;
         }
         
         // Distributions for polymer location
