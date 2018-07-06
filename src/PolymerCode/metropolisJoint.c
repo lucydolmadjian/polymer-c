@@ -546,10 +546,11 @@ void metropolisJoint()
         if (!ELECTRO)
         {
             // Compute energy
+            ENew = 0;
             for(nf=0;nf<NFil;nf++)
             {
                 Ncurrent = N[nf];
-                ENew = -rPropose[nf][Ncurrent-1][2]*Force; // Energy in units of kBT. Force in units of kBT/Kuhn
+                ENew += -rPropose[nf][Ncurrent-1][2]*Force; // Energy in units of kBT. Force in units of kBT/Kuhn
             }
             
             // should this be <=? Do we reject normal probability for no force?
