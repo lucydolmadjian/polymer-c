@@ -124,6 +124,9 @@ double baseCenter[3];
 /* MULTIPLE FILAMENT Variables*/
 double baseSepDistance;
 
+/* Filament tail dimerization force */
+double dimerForce;
+
 /*******************************************************************************/
 //  INCLUDES
 /*******************************************************************************/

@@ -547,10 +547,23 @@ void metropolisJoint()
         {
             // Compute energy
             ENew = 0;
+            
+            // Force pulling filaments out in the z direction
             for(nf=0;nf<NFil;nf++)
             {
                 Ncurrent = N[nf];
                 ENew += -rPropose[nf][Ncurrent-1][2]*Force; // Energy in units of kBT. Force in units of kBT/Kuhn
+            }
+            // Force pulling filaments together at the end
+            for(nf=0;nf<NFil;nf++)
+            {
+                for(nf2=(nf+1);nf2<NFil;nf2++)
+                {
+                    ENew += -sqrt(rPropose[nf][Ncurrent-1][0]-rPropose[nf2][Ncurrent-1][0])*(rPropose[nf][Ncurrent-1][0]-rPropose[nf2][Ncurrent-1][0])+
+                    (rPropose[nf][Ncurrent-1][1]-rPropose[nf2][Ncurrent-1][1])*(rPropose[nf][Ncurrent-1][1]-rPropose[nf2][Ncurrent-1][1])+
+                    (rPropose[nf][Ncurrent-1][2]-rPropose[nf2][Ncurrent-1][2])*(rPropose[nf][Ncurrent-1][2]-rPropose[nf2][Ncurrent-1][2]))*
+                    dimerForce;
+                }
             }
             
             // should this be <=? Do we reject normal probability for no force?
