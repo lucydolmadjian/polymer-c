@@ -334,40 +334,40 @@ void dataRecording()
                         membraneAndSegmentOcclusion[nf][iy]);   // 14 + 3*iy
             }
             
-            fprintf(fList, " %ld", stericOcclusionBase[nf]);    // 15 + 3*iSiteTotal[nf]
+            fprintf(fList, " %ld", stericOcclusionBase[nf]);    // 15 + 3*(iSiteTotal[nf]-1)
             
             if (VISUALIZE)
             {
                  
                 fprintf(fList, " %f %f %f",
-                        rBase[nf][0],   // 16
-                        rBase[nf][1],   // 17
-                        rBase[nf][2]);  // 18
+                        rBase[nf][0],   // 16 + 3*(iSiteTotal[nf]-1)
+                        rBase[nf][1],   // 17 + 3*(iSiteTotal[nf]-1)
+                        rBase[nf][2]);  // 18 + 3*(iSiteTotal[nf]-1)
                  
                 for (i=0;i<N[nf];i++)
                 {
                     fprintf(fList, " %f %f %f",
-                            r[nf][i][0],    // 19
-                            r[nf][i][1],    // 20
-                            r[nf][i][2]);   // 21
+                            r[nf][i][0],    // 19 + 3*(iSiteTotal[nf]-1) + 3*i
+                            r[nf][i][1],    // 20 + 3*(iSiteTotal[nf]-1) + 3*i
+                            r[nf][i][2]);   // 21 + 3*(iSiteTotal[nf]-1) + 3*i
                 }
                  
-                for (i=0;i<iSiteTotal[nf];i++)
+                for (iy=0;iy<iSiteTotal[nf];iy++)
                 {
                     fprintf(fList, " %f %f %f",
-                            iLigandCenter[nf][i][0],    // 22
-                            iLigandCenter[nf][i][1],    // 23
-                            iLigandCenter[nf][i][2]);   // 24
+                            iLigandCenter[nf][iy][0],    // 22 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
+                            iLigandCenter[nf][iy][1],    // 23 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
+                            iLigandCenter[nf][iy][2]);   // 24 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
                 }
                 if(BASEBOUND)
                 {
                         fprintf(fList," %f %f %f",
-                                baseCenter[0],      // 25
-                                baseCenter[1],      // 26
-                                baseCenter[2]);     // 27
+                                baseCenter[0],      // 25 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
+                                baseCenter[1],      // 26 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
+                                baseCenter[2]);     // 27 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
                 }
             }
-        } // end of filament loop
+        } // end of filament loop (all output location numbers + (4 + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf )
             
             fprintf(fList, "\n");
             fclose(fList);
