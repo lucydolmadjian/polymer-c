@@ -187,6 +187,13 @@ int main( int argc, char *argv[] )
             Force = atof(argv[6]);
         if (TALKATIVE) printf("This is the force: %lf\n", Force);
     }
+    
+    // assign Ntemp to each filament
+    for(nf=0;nf<NFil;nf++)
+    {
+        N[nf]=Ntemp;
+        if (TALKATIVE) printf("This is number of rods in filament %ld: %ld\n",nf, N[nf]);
+    }
 
 	iseed = RanInitReturnIseed(0);
 	

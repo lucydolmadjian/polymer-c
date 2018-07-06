@@ -22,11 +22,7 @@ void getParameters()
     
     // eventually want different N per filament
     fscanf(paramsFile,"%s %ld", tmpString, &Ntemp);
-    for(nf=0;nf<NFil;nf++)
-    {
-        N[nf]=Ntemp;
-        if (TALKATIVE) printf("This is number of rods in filament %ld: %ld\n",nf, N[nf]);
-    }
+    if (TALKATIVE) printf("This is number of rods in each filament: %ld\n",Ntemp);
 
     fscanf(paramsFile,"%s %lf", tmpString, &baseSepDistance);
     if (TALKATIVE) printf("This is the filament base separation distance: %lf\n", baseSepDistance);
