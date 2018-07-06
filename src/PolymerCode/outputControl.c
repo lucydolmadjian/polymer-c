@@ -250,9 +250,9 @@ void dataRecording()
     for(nf=0;nf<NFil;nf++)
     {
         Ncurrent = N[nf];
-        ree[nf]  = sqrt(r[nf][Ncurrent-1][0]*r[nf][Ncurrent-1][0]+
-                        r[nf][Ncurrent-1][1]*r[nf][Ncurrent-1][1]+
-                        r[nf][Ncurrent-1][2]*r[nf][Ncurrent-1][2]);
+        ree[nf]  = sqrt((r[nf][Ncurrent-1][0]-rBase[nf][0])*(r[nf][Ncurrent-1][0]-rBase[nf][0])+
+                        (r[nf][Ncurrent-1][1]-rBase[nf][1])*(r[nf][Ncurrent-1][1]-rBase[nf][1])+
+                        (r[nf][Ncurrent-1][2]-rBase[nf][2])*(r[nf][Ncurrent-1][2]-rBase[nf][2]));
     }
 	
     // distance from base to iSite
@@ -261,9 +261,9 @@ void dataRecording()
         for(iy=0;iy<iSiteTotal[nf];iy++)
         {
             iSiteCurrent = iSite[nf][iy];
-            reeiSite[nf][iy] = sqrt(r[nf][iSiteCurrent][0]*r[nf][iSiteCurrent][0] +
-                                    r[nf][iSiteCurrent][1]*r[nf][iSiteCurrent][1] +
-                                    r[nf][iSiteCurrent][2]*r[nf][iSiteCurrent][2]);
+            reeiSite[nf][iy] = sqrt((r[nf][iSiteCurrent][0]-rBase[nf][0])*(r[nf][iSiteCurrent][0]-rBase[nf][0]) +
+                                    (r[nf][iSiteCurrent][1]-rBase[nf][1])*(r[nf][iSiteCurrent][1]-rBase[nf][1]) +
+                                    (r[nf][iSiteCurrent][2]-rBase[nf][2])*(r[nf][iSiteCurrent][2]-rBase[nf][2]));
         }
     }
 
