@@ -6,6 +6,7 @@ irLigand		2
 brLigand		1
 baserLigand		4
 Force			0
+dimerForce		0
 verboseTF		0
 iSiteInputMethod	2
 StiffenRange		0

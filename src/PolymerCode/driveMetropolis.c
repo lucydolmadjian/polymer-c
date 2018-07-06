@@ -191,6 +191,13 @@ int main( int argc, char *argv[] )
         if (TALKATIVE) printf("This is the force: %lf\n", Force);
     }
     
+    if(argv[7])
+    {
+        if(atoi(argv[7])!=-1)
+            dimerForce = atof(argv[7]);
+        if (TALKATIVE) printf("This is the dimerization force: %lf\n", dimerForce);
+    }
+    
     // assign Ntemp to each filament
     for(nf=0;nf<NFil;nf++)
     {
