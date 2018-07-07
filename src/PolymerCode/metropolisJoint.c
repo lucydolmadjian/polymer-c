@@ -559,7 +559,7 @@ void metropolisJoint()
             {
                 for(nf2=(nf+1);nf2<NFil;nf2++)
                 {
-                    ENew += -sqrt((rPropose[nf][Ncurrent-1][0]-rPropose[nf2][Ncurrent-1][0])*(rPropose[nf][Ncurrent-1][0]-rPropose[nf2][Ncurrent-1][0])+
+                    ENew += sqrt((rPropose[nf][Ncurrent-1][0]-rPropose[nf2][Ncurrent-1][0])*(rPropose[nf][Ncurrent-1][0]-rPropose[nf2][Ncurrent-1][0])+
                     (rPropose[nf][Ncurrent-1][1]-rPropose[nf2][Ncurrent-1][1])*(rPropose[nf][Ncurrent-1][1]-rPropose[nf2][Ncurrent-1][1])+
                     (rPropose[nf][Ncurrent-1][2]-rPropose[nf2][Ncurrent-1][2])*(rPropose[nf][Ncurrent-1][2]-rPropose[nf2][Ncurrent-1][2]))*dimerForce;
                 }
