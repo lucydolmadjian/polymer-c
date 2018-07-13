@@ -198,6 +198,9 @@ int main( int argc, char *argv[] )
         if (TALKATIVE) printf("This is the dimerization force: %lf\n", dimerForce);
     }
     
+    
+    /* Finish setting up initial variables */
+    
     // assign Ntemp to each filament
     for(nf=0;nf<NFil;nf++)
     {
