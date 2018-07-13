@@ -405,15 +405,21 @@ void dataRecording()
                             iLigandCenter[nf][iy][1],    // 24 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
                             iLigandCenter[nf][iy][2]);   // 25 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
                 }
+
+            }
+
+        } // end of filament loop (all output location numbers + (4 + NFil + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf )
+            
+            if (VISUALIZE)
+            {
                 if(BASEBOUND)
                 {
-                        fprintf(fList," %f %f %f",
-                                baseCenter[0],      // 26 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
-                                baseCenter[1],      // 27 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
-                                baseCenter[2]);     // 28 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
+                    fprintf(fList," %f %f %f",
+                            baseCenter[0],      // 1 + 7 + (4 + NFil + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*NFil
+                            baseCenter[1],      // 2 + 7 + (4 + NFil + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*NFil
+                            baseCenter[2]);     // 3 + 7 + (4 + NFil + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*NFil
                 }
             }
-        } // end of filament loop (all output location numbers + (4 + NFil + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf )
             
             fprintf(fList, "\n");
             fclose(fList);
