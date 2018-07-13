@@ -189,13 +189,13 @@ void finalizeSummary()
             for(nf2=0;nf2<NFil;nf2++)
             {
                 fprintf(fList, " %f",
-                    reeBarFil[nf][nf2]);        // 22 + 7*iSiteTotal + nf2 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    reeFilBar[nf][nf2]);        // 22 + 7*iSiteTotal + nf2 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
             }
             
             for(nf2=0;nf2<NFil;nf2++)
             {
                 fprintf(fList, " %f",
-                        ree2BarFil[nf][nf2]);   // 23 + 7*iSiteTotal + NFil + nf2 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                        ree2FilBar[nf][nf2]);   // 23 + 7*iSiteTotal + NFil + nf2 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
             }
             
 //            for (ib=0;ib<bSiteTotal[nf];ib++)
@@ -343,7 +343,7 @@ void dataRecording()
     if (verboseTF)
     {
         
-        if ( (nt > NTCHECK && nt <= NTCHECK+4000) ) //only output 4000 runs, after initial transient
+        if ( (nt > NTCHECK && nt <= NTCHECK+100000) ) //only output 4000 runs, after initial transient
         {
         // output results to file
         fList = fopen(listName, "a");
