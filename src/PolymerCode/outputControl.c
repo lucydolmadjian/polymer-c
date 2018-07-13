@@ -10,6 +10,9 @@ void dataRecording();
 
 double reeBar_sum[NFILMAX], ree2Bar_sum[NFILMAX], rMBar_sum[NFILMAX], rM2Bar_sum[NFILMAX], rMiSiteBar_sum[NFILMAX][NMAX], rM2iSiteBar_sum[NFILMAX][NMAX];
 
+double reeFilBar_sum[NFILMAX][NFILMAX],ree2FilBar_sum[NFILMAX][NFILMAX];
+double reeFilBar[NFILMAX][NFILMAX], ree2FilBar[NFILMAX][NFILMAX];
+
 long POcclude_sum[NFILMAX][NMAX], Prvec0_sum[NFILMAX][NMAX], POccludeBase_sum[NFILMAX], PDeliver_sum[NFILMAX][NMAX], PMembraneOcclude_sum[NFILMAX][NMAX],PMembraneSegmentOcclude_sum[NFILMAX][NMAX];
 
 double reeBar[NFILMAX], ree2Bar[NFILMAX];
@@ -31,6 +34,13 @@ void initializeSummary()
     {
         reeBar_sum[nf]   = 0;
         ree2Bar_sum[nf]  = 0;
+        
+        for(nf2=0;nf2<NFil;nf2++)
+        {
+            reeFilBar_sum[nf][nf2] = 0;
+            ree2FilBar_sum[nf][nf2] = 0;
+        }
+        
         for(iy=0;iy<iSiteTotal[nf];iy++)
         {
             POcclude_sum[nf][iy]                = 0;
@@ -85,6 +95,12 @@ void finalizeSummary()
     {
         reeBar[nf]  = reeBar_sum[nf]/(double)(nt-NTCHECK);
         ree2Bar[nf] = ree2Bar_sum[nf]/(double)(nt-NTCHECK);
+        
+        for(nf2=0;nf2<NFil;nf2++)
+        {
+            reeFilBar[nf][nf2] = reeFilBar_sum[nf][nf2]/(double)(nt-NTCHECK);
+            ree2FilBar[nf][nf2] = ree2FilBar_sum[nf][nf2]/(double)(nt-NTCHECK);
+        }
 
         for(iy=0;iy<iSiteTotal[nf];iy++)
         {
@@ -146,29 +162,41 @@ void finalizeSummary()
         {
             
             fprintf(fList, " %ld %f %f %f %f %f",
-                    N[nf],              // 7 + (6 + 7*iSiteTotal + 2)*nf
-                    ksStatistic[nf],    // 8 + (6 + 7*iSiteTotal + 2)*nf
-                    reeBar[nf],         // 9 + (6 + 7*iSiteTotal + 2)*nf
-                    ree2Bar[nf],        // 10 + (6 + 7*iSiteTotal + 2)*nf
-                    rMBar[nf],          // 11 + (6 + 7*iSiteTotal + 2)*nf
-                    rM2Bar[nf]);        // 12 + (6 + 7*iSiteTotal + 2)*nf
+                    N[nf],              // 7 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    ksStatistic[nf],    // 8 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    reeBar[nf],         // 9 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    ree2Bar[nf],        // 10 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    rMBar[nf],          // 11 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    rM2Bar[nf]);        // 12 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
             
             for (iy=0;iy<iSiteTotal[nf];iy++)
             {
                 fprintf(fList, " %ld %e %e %e %e %f %f",
-                    iSite[nf][iy],              // 13 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
-                    POcclude[nf][iy],           // 14 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
-                    1-POcclude[nf][iy],         // 15 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
-                    PMembraneOcclude[nf][iy],   // 16 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
-                    Prvec0[nf][iy],             // 17 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
-                    rMiSiteBar[nf][iy],         // 18 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
-                    rM2iSiteBar[nf][iy]);       // 19 + 7*iBind + (6 + 7*iSiteTotal + 2)*nf
+                    iSite[nf][iy],              // 13 + 7*iBind + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    POcclude[nf][iy],           // 14 + 7*iBind + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    1-POcclude[nf][iy],         // 15 + 7*iBind + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    PMembraneOcclude[nf][iy],   // 16 + 7*iBind + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    Prvec0[nf][iy],             // 17 + 7*iBind + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    rMiSiteBar[nf][iy],         // 18 + 7*iBind + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+                    rM2iSiteBar[nf][iy]);       // 19 + 7*iBind + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
             }
 
             
             fprintf(fList, " %e %e",
                     POccludeBase[nf],           // 20 + 7*iSiteTotal + (6 + 7*iSiteTotal + 2)*nf
                     1-POccludeBase[nf]);        // 21 + 7*iSiteTotal + (6 + 7*iSiteTotal + 2)*nf
+            
+            for(nf2=0;nf2<NFil;nf2++)
+            {
+                fprintf(fList, " %f",
+                    reeBarFil[nf][nf2]);        // 22 + 7*iSiteTotal + nf2 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+            }
+            
+            for(nf2=0;nf2<NFil;nf2++)
+            {
+                fprintf(fList, " %f",
+                        ree2BarFil[nf][nf2]);   // 23 + 7*iSiteTotal + NFil + nf2 + (6 + 7*iSiteTotal + 2 + NFil + NFil)*nf
+            }
             
 //            for (ib=0;ib<bSiteTotal[nf];ib++)
 //            {
@@ -254,6 +282,18 @@ void dataRecording()
                         (r[nf][Ncurrent-1][1]-rBase[nf][1])*(r[nf][Ncurrent-1][1]-rBase[nf][1])+
                         (r[nf][Ncurrent-1][2]-rBase[nf][2])*(r[nf][Ncurrent-1][2]-rBase[nf][2]));
     }
+    
+    // distance between ends of filaments
+    for(nf=0;nf<NFil;nf++)
+    {
+        for(nf2=0;nf2<NFil;nf2++)
+        {
+            Ncurrent = N[nf];
+            reeFil[nf][nf2] = sqrt((r[nf][Ncurrent-1][0]-r[nf2][Ncurrent-1][0])*(r[nf][Ncurrent-1][0]-r[nf2][Ncurrent-1][0])+
+                                  (r[nf][Ncurrent-1][1]-r[nf2][Ncurrent-1][1])*(r[nf][Ncurrent-1][1]-r[nf2][Ncurrent-1][1])+
+                                  (r[nf][Ncurrent-1][2]-r[nf2][Ncurrent-1][2])*(r[nf][Ncurrent-1][2]-r[nf2][Ncurrent-1][2]));
+        }
+    }
 	
     // distance from base to iSite
     for(nf=0;nf<NFil;nf++)
@@ -321,53 +361,59 @@ void dataRecording()
         {
 
             fprintf(fList, " %f %f %f %f",
-                    ree[nf],                // 8 + (4 + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf
+                    ree[nf],                // 8 + (4 + NFil + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf
                     rM[nf],                 // 9
                     rH[nf],                 // 10
                     ksStatistic[nf]);       // 11
             
+            for(nf2=0;nf2<NFil;nf2++)
+            {
+                fprintf(fList, " %f",
+                        reeFil[nf][nf2]);   // 12 + nf2
+            }
+            
             for(iy=0;iy<iSiteTotal[nf];iy++)
             {
                 fprintf(fList, " %ld %ld %ld",
-                        stericOcclusion[nf][iy],                // 12 + 3*iy
-                        membraneOcclusion[nf][iy],              // 13 + 3*iy
-                        membraneAndSegmentOcclusion[nf][iy]);   // 14 + 3*iy
+                        stericOcclusion[nf][iy],                // 13 + (NFil-1) + 3*iy
+                        membraneOcclusion[nf][iy],              // 14 + (NFil-1) + 3*iy
+                        membraneAndSegmentOcclusion[nf][iy]);   // 15 + (NFil-1) + 3*iy
             }
             
-            fprintf(fList, " %ld", stericOcclusionBase[nf]);    // 15 + 3*(iSiteTotal[nf]-1)
+            fprintf(fList, " %ld", stericOcclusionBase[nf]);    // 16 + (NFil-1) + 3*(iSiteTotal[nf]-1)
             
             if (VISUALIZE)
             {
                  
                 fprintf(fList, " %f %f %f",
-                        rBase[nf][0],   // 16 + 3*(iSiteTotal[nf]-1)
-                        rBase[nf][1],   // 17 + 3*(iSiteTotal[nf]-1)
-                        rBase[nf][2]);  // 18 + 3*(iSiteTotal[nf]-1)
+                        rBase[nf][0],   // 17 + (NFil-1) + 3*(iSiteTotal[nf]-1)
+                        rBase[nf][1],   // 18 + (NFil-1) + 3*(iSiteTotal[nf]-1)
+                        rBase[nf][2]);  // 19 + (NFil-1) + 3*(iSiteTotal[nf]-1)
                  
                 for (i=0;i<N[nf];i++)
                 {
                     fprintf(fList, " %f %f %f",
-                            r[nf][i][0],    // 19 + 3*(iSiteTotal[nf]-1) + 3*i
-                            r[nf][i][1],    // 20 + 3*(iSiteTotal[nf]-1) + 3*i
-                            r[nf][i][2]);   // 21 + 3*(iSiteTotal[nf]-1) + 3*i
+                            r[nf][i][0],    // 20 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*i
+                            r[nf][i][1],    // 21 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*i
+                            r[nf][i][2]);   // 22 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*i
                 }
                  
                 for (iy=0;iy<iSiteTotal[nf];iy++)
                 {
                     fprintf(fList, " %f %f %f",
-                            iLigandCenter[nf][iy][0],    // 22 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
-                            iLigandCenter[nf][iy][1],    // 23 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
-                            iLigandCenter[nf][iy][2]);   // 24 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
+                            iLigandCenter[nf][iy][0],    // 23 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
+                            iLigandCenter[nf][iy][1],    // 24 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
+                            iLigandCenter[nf][iy][2]);   // 25 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*iy
                 }
                 if(BASEBOUND)
                 {
                         fprintf(fList," %f %f %f",
-                                baseCenter[0],      // 25 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
-                                baseCenter[1],      // 26 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
-                                baseCenter[2]);     // 27 + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
+                                baseCenter[0],      // 26 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
+                                baseCenter[1],      // 27 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
+                                baseCenter[2]);     // 28 + (NFil-1) + 3*(iSiteTotal[nf]-1) + 3*(N[nf]-1) + 3*(iSiteTotal[nf]-1)
                 }
             }
-        } // end of filament loop (all output location numbers + (4 + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf )
+        } // end of filament loop (all output location numbers + (4 + NFil + 3*iSiteTotal[nf] + 1 + 3 + 3*N[nf] + 3*iSiteTotal[nf])*nf )
             
             fprintf(fList, "\n");
             fclose(fList);
@@ -383,6 +429,17 @@ void dataRecording()
             reeBar_sum[nf]   += ree[nf];
             ree2Bar_sum[nf]  += ree[nf]*ree[nf];
         }
+        
+        for(nf=0;nf<NFil;nf++)
+        {
+            for(nf2=0;nf2<NFil;nf2++)
+            {
+                reeFilBar_sum[nf][nf2]   += reeFil[nf][nf2];
+                ree2FilBar_sum[nf][nf2]  += reeFil[nf][nf2]*reeFil[nf][nf2];
+            }
+        }
+        
+        
         
         for(nf=0;nf<NFil;nf++)
         {

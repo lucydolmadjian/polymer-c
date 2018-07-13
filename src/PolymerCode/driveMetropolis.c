@@ -52,6 +52,8 @@ double c0, c1, irLigand;
 
 double ree[NFILMAX], rM[NFILMAX], rM2[NFILMAX], rMiSite[NFILMAX][NMAX], rM2iSite[NFILMAX][NMAX], rH[NFILMAX];
 
+double reeFil[NFILMAX][NFILMAX];
+
 long iseed;
 
 double phi[NFILMAX][NMAX], theta[NFILMAX][NMAX], psi[NFILMAX][NMAX];
