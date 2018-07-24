@@ -29,6 +29,6 @@ hpc:
 
 copyrepo:
 
-	git -C ~/Documents/PolymerGit log -1 --pretty=format:%H > "CommitUsedHash.txt"
+	git -C ~/Documents/polymer-c log -1 --pretty=format:%H > "CommitUsedHash.txt"
 
-	cp -r ~/Documents/PolymerGit/src/PolymerCode/ .
+	cp -r ~/Documents/polymer-c/src/PolymerCode/ .
